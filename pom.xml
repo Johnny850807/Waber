@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>tw.waterball.ddd</groupId>
+    <artifactId>benchmark-waber</artifactId>
+    <packaging>pom</packaging>
+    <version>${revision}</version>
+
+    <properties>
+        <revision>1.0-SNAPSHOT</revision>
+    </properties>
+    <modules>
+        <module>waber-user</module>
+        <module>waber-match</module>
+        <module>waber-journey</module>
+        <module>waber-pricing</module>
+        <module>spring-boot</module>
+        <module>commons</module>
+        <module>model</module>
+        <module>api</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>tw.waterball.ddd</groupId>
+                <artifactId>waber-driver</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd</groupId>
+                <artifactId>waber-user</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd</groupId>
+                <artifactId>waber-match</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd</groupId>
+                <artifactId>waber-journey</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd</groupId>
+                <artifactId>waber-pricing</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd</groupId>
+                <artifactId>commons</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd</groupId>
+                <artifactId>model</artifactId>
+                <version>${revision}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
