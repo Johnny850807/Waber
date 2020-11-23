@@ -13,7 +13,7 @@
         <revision>1.0-SNAPSHOT</revision>
     </properties>
     <modules>
-        <module>waber-user</module>
+        <module>waber-userData</module>
         <module>waber-match</module>
         <module>waber-journey</module>
         <module>waber-pricing</module>
@@ -32,7 +32,7 @@
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>waber-user</artifactId>
+                <artifactId>waber-userData</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

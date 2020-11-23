@@ -1,6 +1,9 @@
 package tw.waterball.ddd.model.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tw.waterball.ddd.model.AggregateRoot;
 import tw.waterball.ddd.model.geo.Location;
 
@@ -11,7 +14,9 @@ import javax.validation.constraints.Size;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@Setter
 @Getter
+@NoArgsConstructor
 public class User extends AggregateRoot {
     protected int id;
 
@@ -39,7 +44,4 @@ public class User extends AggregateRoot {
         this.password = password;
     }
 
-    public void setLatestLocation(Location latestLocation) {
-        this.latestLocation = latestLocation;
-    }
 }

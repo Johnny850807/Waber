@@ -1,6 +1,7 @@
 package tw.waterball.ddd.model.user;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
@@ -10,6 +11,7 @@ import tw.waterball.ddd.model.match.MatchPreferences;
  * @author - johnny850807@gmail.com (Waterball)
  */
 @Getter
+@NoArgsConstructor
 public class Passenger extends User {
     private Match match;
 

@@ -9,7 +9,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>waber-user</artifactId>
+    <artifactId>waber-userData</artifactId>
 
     <dependencies>
         <dependency>

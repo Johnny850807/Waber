@@ -1,6 +1,7 @@
 package tw.waterball.ddd.model.user;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tw.waterball.ddd.model.match.Match;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 @Setter
 @Getter
+@NoArgsConstructor
 public class Driver extends User {
     @NotNull
     private CarType carType;

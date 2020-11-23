@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.waber.passenger.repositories.PassengerRepository;
 
+import javax.inject.Named;
+
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@Named
 public class SignUpToBePassenger extends PassengerUsaCase {
 
     public SignUpToBePassenger(PassengerRepository passengerRepository) {
