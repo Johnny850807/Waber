@@ -9,12 +9,22 @@
         <version>${revision}</version>
     </parent>
     <packaging>pom</packaging>
-    <artifactId>api</artifactId>
+    <groupId>tw.waterball.ddd.api</groupId>
+    <artifactId>parent</artifactId>
 
     <modules>
-        <module>userData</module>
+        <module>api-user</module>
     </modules>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>tw.waterball.ddd</groupId>
+                <artifactId>api-user</artifactId>
+                <version>${revision}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 
 </project>

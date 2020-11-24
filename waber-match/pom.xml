@@ -6,7 +6,7 @@
     <parent>
         <artifactId>benchmark-waber</artifactId>
         <groupId>tw.waterball.ddd</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>waber-match</artifactId>
@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-userData</artifactId>
+            <artifactId>waber-user</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>

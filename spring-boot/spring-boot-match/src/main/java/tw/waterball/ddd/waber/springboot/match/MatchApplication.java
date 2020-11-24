@@ -1,16 +1,14 @@
-package tw.waterball.ddd.waber.springboot.user;
+package tw.waterball.ddd.waber.springboot.match;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import tw.waterball.ddd.waber.springboot.commons.annotations.WaberApplication;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
-@EnableEurekaClient
 @WaberApplication
-public class UserApplication {
+public class MatchApplication {
     public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class, args);
+        SpringApplication.run(MatchApplication.class, args);
     }
 }

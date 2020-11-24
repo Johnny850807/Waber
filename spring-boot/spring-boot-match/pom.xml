@@ -4,17 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>benchmark-waber</artifactId>
-        <groupId>tw.waterball.ddd</groupId>
+        <artifactId>parent</artifactId>
+        <groupId>tw.waterball.ddd.spring-boot</groupId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>waber-user</artifactId>
+    <artifactId>spring-boot-match</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>tw.waterball.ddd</groupId>
-            <artifactId>model</artifactId>
+            <groupId>tw.waterball.ddd.spring-boot</groupId>
+            <artifactId>spring-boot-commons</artifactId>
         </dependency>
     </dependencies>
 
