@@ -1,14 +1,13 @@
-package tw.waterball.ddd.waber.springboot.match.repositories.jpa;
+package tw.waterball.ddd.waber.springboot.user.repositories.jpa;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import tw.waterball.ddd.model.match.Activity;
-import tw.waterball.ddd.model.user.Driver;
+import lombok.Setter;
+import tw.waterball.ddd.model.associations.Many;
+import tw.waterball.ddd.model.user.Activity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,27 +15,37 @@ import java.util.stream.Collectors;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
-@Entity
+@Entity @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActivityData {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Integer id;
-    public String name;
-    public Set<Integer> participantDriverIds = new HashSet<>();
+    private Integer id;
+    private String name;
+
+    @ManyToMany
+    public Set<UserData> participantDrivers = new HashSet<>();
+
+    public ActivityData(String name) {
+        this.name = name;
+    }
 
     public static ActivityData fromEntity(Activity activity) {
         return new ActivityData(activity.getId(), activity.getName(),
                 activity.getParticipantDrivers().stream()
-                        .map(Driver::getId).collect(Collectors.toSet()));
+                        .map(UserData::fromEntity).collect(Collectors.toSet()));
     }
 
     public static Activity toEntity(ActivityData data) {
-        Activity activity = new Activity(data.id, data.name);
-        data.participantDriverIds.stream()
-                .map(Driver::new)
-                .forEach(activity::participate);
+        Activity activity = new Activity(data.getId(), data.getName());
+        activity.setParticipantDrivers(
+                Many.lazyOn(() ->
+                        data.getParticipantDrivers().stream()
+                                .map(UserData::toDriver)
+                                .collect(Collectors.toSet())
+                )
+        );
         return activity;
     }
 }

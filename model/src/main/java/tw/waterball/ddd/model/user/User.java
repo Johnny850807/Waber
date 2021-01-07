@@ -1,10 +1,9 @@
 package tw.waterball.ddd.model.user;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tw.waterball.ddd.model.AggregateRoot;
+import tw.waterball.ddd.model.base.AggregateRoot;
 import tw.waterball.ddd.model.geo.Location;
 
 import javax.validation.constraints.Email;
@@ -17,8 +16,7 @@ import javax.validation.constraints.Size;
 @Setter
 @Getter
 @NoArgsConstructor
-public class User extends AggregateRoot {
-    protected int id;
+public class User extends AggregateRoot<Integer> {
 
     @Size(min = 1, max = 10)
     protected String name;
@@ -31,11 +29,16 @@ public class User extends AggregateRoot {
 
     protected Location latestLocation;
 
-    public User(int id, String name, String email, String password) {
+    public User(int id) {
+        this.id = id;
+    }
+
+    public User(int id, String name, String email, String password, Location latestLocation) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.latestLocation = latestLocation;
     }
 
     public User(String name, String email, String password) {

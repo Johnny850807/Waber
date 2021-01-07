@@ -1,10 +1,10 @@
-package tw.waterball.ddd.waber.springboot.match.repositories;
+package tw.waterball.ddd.waber.springboot.user.repositories;
 
 import org.springframework.stereotype.Component;
-import tw.waterball.ddd.model.match.Activity;
-import tw.waterball.ddd.waber.match.repositories.ActivityRepository;
-import tw.waterball.ddd.waber.springboot.match.repositories.jpa.ActivityData;
-import tw.waterball.ddd.waber.springboot.match.repositories.jpa.JpaActivityDataPort;
+import tw.waterball.ddd.model.user.Activity;
+import tw.waterball.ddd.waber.passenger.repositories.ActivityRepository;
+import tw.waterball.ddd.waber.springboot.user.repositories.jpa.ActivityData;
+import tw.waterball.ddd.waber.springboot.user.repositories.jpa.JpaActivityDataPort;
 
 import java.util.Optional;
 
@@ -13,22 +13,23 @@ import java.util.Optional;
  */
 @Component
 public class SpringBootActivityRepository implements ActivityRepository {
-    private JpaActivityDataPort jpaActivityDataPort;
+    private JpaActivityDataPort dataPort;
 
-    public SpringBootActivityRepository(JpaActivityDataPort jpaActivityDataPort) {
-        this.jpaActivityDataPort = jpaActivityDataPort;
+    public SpringBootActivityRepository(JpaActivityDataPort dataPort) {
+        this.dataPort = dataPort;
     }
 
     @Override
     public Optional<Activity> findByName(String name) {
-        return jpaActivityDataPort.findByName(name)
+        return dataPort.findByName(name)
                 .map(ActivityData::toEntity);
     }
 
     @Override
     public Activity save(Activity activity) {
-        ActivityData data = jpaActivityDataPort.save(ActivityData.fromEntity(activity));
-        activity.setId(data.id);
+        ActivityData data = dataPort.save(ActivityData.fromEntity(activity));
+        activity.setId(data.getId());
         return activity;
     }
+
 }

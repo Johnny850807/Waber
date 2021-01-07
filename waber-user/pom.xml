@@ -16,6 +16,10 @@
             <groupId>tw.waterball.ddd</groupId>
             <artifactId>model</artifactId>
         </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>commons</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

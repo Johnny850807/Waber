@@ -1,51 +1,42 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
-import org.springframework.http.HttpStatus;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.model.geo.Location;
-import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.User;
-import tw.waterball.ddd.waber.driver.usecases.SignUpToBeDriver;
-import tw.waterball.ddd.waber.passenger.usecases.SignUpToBePassenger;
+import tw.waterball.ddd.waber.user.repositories.UserRepository;
+import tw.waterball.ddd.waber.user.usecases.SignIn;
 import tw.waterball.ddd.waber.user.usecases.UpdateLatestLocation;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
-@RequestMapping("/api/users")
 @RestController
+@RequestMapping("/api/users")
+@AllArgsConstructor
 public class UserController {
-    private SignUpToBeDriver signUpToBeDriver;
-    private SignUpToBePassenger signUpToBePassenger;
+    private SignIn signIn;
     private UpdateLatestLocation updateLatestLocation;
+    private UserRepository userRepository;
 
-    public UserController(SignUpToBeDriver signUpToBeDriver,
-                          SignUpToBePassenger signUpToBePassenger,
-                          UpdateLatestLocation updateLatestLocation) {
-        this.signUpToBeDriver = signUpToBeDriver;
-        this.signUpToBePassenger = signUpToBePassenger;
-        this.updateLatestLocation = updateLatestLocation;
+
+    @GetMapping("/{userId}")
+    public User getUser(@PathVariable int userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
     }
 
-    @PostMapping
-    public User signUp(@RequestParam("type") String type,
-                       @RequestBody SignUpParams params) {
-        type = type.toLowerCase();
-        if (type.equals("passenger")) {
-            return signUpToBePassenger.execute(new SignUpToBePassenger.Request(
-                    params.name, params.email, params.password));
-        } else if (type.equals("driver")) {
-            Driver.CarType carType = Driver.CarType.valueOf(params.carType.toUpperCase());
-            return signUpToBeDriver.execute(new SignUpToBeDriver.Request(
-                    params.name, params.email, params.password, carType
-            ));
-        } else {
-            throw new IllegalArgumentException("Passenger type " + type + " not supported.");
-        }
+    @PostMapping("/signIn")
+    public User signIn(@RequestBody SignInParams params) {
+        return signIn.execute(new SignIn.Request(params.email, params.password));
     }
 
-    public static class SignUpParams {
-        public String name, email, password, carType;
+    public static class SignInParams {
+        public String email, password;
     }
 
     @PutMapping("/{userId}/location")
@@ -58,8 +49,4 @@ public class UserController {
     }
 
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public void handleException() {
-    }
 }

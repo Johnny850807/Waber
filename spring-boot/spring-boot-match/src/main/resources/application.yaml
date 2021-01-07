@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: match-service
+  h2:
+    console:
+      enabled: true
+
+server:
+  port: 8081
+
+match:
+  schedule:
+    corePool: 8
+    rescheduleDelayTimeInMs: 3000

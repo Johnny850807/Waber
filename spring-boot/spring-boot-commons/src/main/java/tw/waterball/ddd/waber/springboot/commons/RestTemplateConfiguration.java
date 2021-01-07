@@ -1,4 +1,4 @@
-package tw.waterball.ddd.waber.springboot.commons.annotations;
+package tw.waterball.ddd.waber.springboot.commons;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;

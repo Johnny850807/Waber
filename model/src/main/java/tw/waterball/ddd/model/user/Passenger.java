@@ -2,10 +2,11 @@ package tw.waterball.ddd.model.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
+
+import java.util.Locale;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -15,8 +16,8 @@ import tw.waterball.ddd.model.match.MatchPreferences;
 public class Passenger extends User {
     private Match match;
 
-    public Passenger(int id, String name, String email, String password) {
-        super(id, name, email, password);
+    public Passenger(int id, String name, String email, String password, Location latestLocation) {
+        super(id, name, email, password, latestLocation);
     }
 
     public Passenger(String name, String email, String password) {
@@ -28,16 +29,8 @@ public class Passenger extends User {
         return match;
     }
 
-    public void cancelMatching() {
-        if (isMatching()) {
-            match.cancel();
-            match = null;
-        }
-    }
-
     public boolean isMatching() {
         return match != null;
     }
-
 
 }

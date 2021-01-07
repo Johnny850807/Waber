@@ -1,44 +1,40 @@
-package tw.waterball.ddd.waber.springboot.user.repositories.data;
+package tw.waterball.ddd.waber.springboot.user.repositories.jpa;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
+import tw.waterball.ddd.model.user.User;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
 @Entity
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserData {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Integer id;
-    public String name;
-    public String email;
-    public String password;
-    public Driver.CarType carType;
-    public double latitude;
-    public double longitude;
-    public boolean isDriver;
+    private Integer id;
+    private String name;
+    private String email;
+    private String password;
+    private Driver.CarType carType;
+    private double latitude;
+    private double longitude;
+    private boolean isDriver;
 
-    public static Driver toDriver(UserData data) {
-        return new Driver(data.id,
-                data.name, data.email, data.password, data.carType);
+
+
+    public static UserData fromEntity(User user) {
+        return user instanceof Driver ? fromEntity((Driver) user)
+                : fromEntity((Passenger) user);
     }
-
-    public static Passenger toPassenger(UserData data) {
-        return new Passenger(data.id, data.name, data.email, data.password);
-    }
-
 
     public static UserData fromEntity(Driver driver) {
         return UserData.builder()
@@ -60,4 +56,19 @@ public class UserData {
                 .isDriver(false)
                 .build();
     }
+
+    public User toEntity() {
+        return isDriver() ? toDriver() : toPassenger();
+    }
+
+    public Driver toDriver() {
+        return new Driver(getId(),
+                getName(), getEmail(), getPassword(), getCarType(),
+                new Location(getLatitude(), getLongitude()));
+    }
+
+    public Passenger toPassenger() {
+        return new Passenger(getId(), getName(), getEmail(), getPassword(), new Location(getLatitude(), getLongitude()));
+    }
+
 }
