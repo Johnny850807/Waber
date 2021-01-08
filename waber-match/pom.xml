@@ -17,10 +17,6 @@
             <artifactId>model</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-match</artifactId>
-        </dependency>
-        <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
             <artifactId>api-match</artifactId>
             <version>1.0-SNAPSHOT</version>

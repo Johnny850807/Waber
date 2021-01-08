@@ -26,7 +26,7 @@ public class MatchingUseCase {
     private final long rescheduleDelayTimeInMs;
 
     public Match execute(StartMatchingRequest req) {
-        Match match = req.passenger.startMatching(req.matchPreferences);
+        Match match = Match.start(req.passenger, req.matchPreferences);
         Match savedMatch = matchRepository.save(match);
         scheduleMatchingJob(savedMatch, req.drivers);
         return savedMatch;

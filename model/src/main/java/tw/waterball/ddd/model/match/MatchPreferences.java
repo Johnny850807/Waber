@@ -17,4 +17,5 @@ public class MatchPreferences {
     private Location startLocation;
     private Driver.CarType carType;
     private String activityName;
+
 }

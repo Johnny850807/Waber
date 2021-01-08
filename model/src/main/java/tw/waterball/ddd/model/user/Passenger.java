@@ -4,9 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
-import tw.waterball.ddd.model.match.MatchPreferences;
-
-import java.util.Locale;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -22,15 +19,6 @@ public class Passenger extends User {
 
     public Passenger(String name, String email, String password) {
         super(name, email, password);
-    }
-
-    public Match startMatching(MatchPreferences matchPreferences) {
-        this.match = Match.start(this, matchPreferences);
-        return match;
-    }
-
-    public boolean isMatching() {
-        return match != null;
     }
 
 }

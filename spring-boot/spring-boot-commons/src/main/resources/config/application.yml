@@ -1,0 +1,6 @@
+waber:
+  client:
+    user-service:
+      scheme: "http"
+      host: "localhost"
+      port: 80

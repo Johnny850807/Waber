@@ -1,7 +1,10 @@
 package tw.waterball.ddd.api.match;
 
-import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import lombok.Builder;
+import lombok.AllArgsConstructor;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
@@ -10,6 +13,8 @@ import tw.waterball.ddd.model.user.Driver;
  * @author - johnny850807@gmail.com (Waterball)
  */
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MatchView {
     public int id;
     public int passengerId;
@@ -28,7 +33,9 @@ public class MatchView {
                 .build();
     }
 
+    @NoArgsConstructor
     @AllArgsConstructor
+    @EqualsAndHashCode
     public static class DriverView {
         public Integer id;
         public String name;
