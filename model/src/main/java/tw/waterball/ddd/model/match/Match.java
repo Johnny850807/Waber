@@ -1,6 +1,7 @@
 package tw.waterball.ddd.model.match;
 
 import tw.waterball.ddd.events.MatchCompleteEvent;
+import tw.waterball.ddd.model.associations.Many;
 import tw.waterball.ddd.model.associations.One;
 import tw.waterball.ddd.model.associations.ZeroOrOne;
 import tw.waterball.ddd.model.base.AggregateRoot;
@@ -38,6 +39,10 @@ public class Match extends AggregateRoot<Integer> {
     private Match(Passenger passenger, MatchPreferences preferences) {
         this.passenger.resolveAssociation(passenger);
         this.preferences = preferences;
+    }
+
+    public void perform(Many<Driver> drivers, DistanceCalculator distanceCalculator) {
+        perform(drivers.iterator(), distanceCalculator);
     }
 
     public void perform(Iterator<Driver> drivers, DistanceCalculator distanceCalculator) {
@@ -88,7 +93,12 @@ public class Match extends AggregateRoot<Integer> {
         return driver;
     }
 
-    public Optional<Driver> getDriver() {
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    public Driver getDriver() {
+        return getDriverOptional().get();
+    }
+
+    public Optional<Driver> getDriverOptional() {
         return driver.get();
     }
 

@@ -10,12 +10,9 @@ import javax.inject.Named;
  * @author - johnny850807@gmail.com (Waterball)
  */
 @Named
+@AllArgsConstructor
 public class SignUpToBeDriver {
     private UserRepository userRepository;
-
-    public SignUpToBeDriver(UserRepository driverRepository) {
-        this.userRepository = driverRepository;
-    }
 
     public Driver execute(Request req) {
         Driver driver = new Driver(req.name, req.email, req.password, req.carType);

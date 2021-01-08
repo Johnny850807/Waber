@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.springboot.commons;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +17,9 @@ public class ServiceDriverConfiguration {
 
     @Bean
     @Microservice
-    public UserServiceDriver userServiceDriver(WaberProperties waberProperties,
+    public UserServiceDriver userServiceDriver(ObjectMapper objectMapper,
+                                               WaberProperties waberProperties,
                                                RestTemplate restTemplate) {
-        return new RestUserServiceDriver(waberProperties.getClient().getUserService(), restTemplate);
+        return new RestUserServiceDriver(objectMapper, waberProperties.getClient().getUserService(), restTemplate);
     }
 }

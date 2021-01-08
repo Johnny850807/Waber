@@ -22,15 +22,19 @@ public class MatchView {
     public boolean completed;
     public MatchPreferences matchPreferences;
 
-    public static MatchView fromEntity(Match match) {
+    public static MatchView toViewModel(Match match) {
         return MatchView.builder()
                 .id(match.getId())
                 .passengerId(match.getId())
-                .driver(match.getDriver()
+                .driver(match.getDriverOptional()
                         .map(DriverView::fromEntity).orElse(null))
                 .completed(match.isCompleted())
                 .matchPreferences(match.getPreferences())
                 .build();
+    }
+
+    public boolean isCompleted() {
+        return this.completed;
     }
 
     @NoArgsConstructor

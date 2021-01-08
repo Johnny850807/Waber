@@ -1,8 +1,6 @@
 package tw.waterball.ddd.waber.springboot.match.controllers;
 
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.api.user.UserServiceDriver;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
@@ -14,13 +12,11 @@ import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 import tw.waterball.ddd.waber.match.usecases.MatchingUseCase;
 import tw.waterball.ddd.waber.match.usecases.MatchingUseCase.StartMatchingRequest;
+import tw.waterball.ddd.waber.springboot.match.presenters.MatchViewPresenter;
 
-import java.util.List;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
-import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -45,8 +41,9 @@ public class MatchController {
                                @RequestBody MatchPreferences matchPreferences) {
         Passenger passenger = userServiceDriver.getPassenger(passengerId);
         Many<Driver> drivers = Many.lazyOn(() -> userServiceDriver.filterDrivers(matchPreferences));
-        Match match = matchingUseCase.execute(new StartMatchingRequest(passenger, drivers, matchPreferences));
-        return MatchView.fromEntity(match);
+        var presenter = new MatchViewPresenter();
+        matchingUseCase.execute(new StartMatchingRequest(passenger, drivers, matchPreferences), presenter);
+        return presenter.getMatchView();
     }
 
     @GetMapping("/{matchId}")
@@ -56,7 +53,7 @@ public class MatchController {
         Optional<Integer> driverId = match.getDriverAssociation().getId();
         Driver driver = driverId.map(userServiceDriver::getDriver).orElse(null);
         match.setDriver(driver);
-        return MatchView.fromEntity(match);
+        return MatchView.toViewModel(match);
     }
 
 }

@@ -3,18 +3,20 @@ package tw.waterball.ddd.waber.springboot.match.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
-import org.apache.http.util.Asserts;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import tw.waterball.ddd.api.match.MatchView;
+import tw.waterball.ddd.api.user.FakeUserServiceDriver;
 import tw.waterball.ddd.api.user.UserServiceDriver;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
@@ -23,15 +25,19 @@ import tw.waterball.ddd.stubs.UserStubs;
 import tw.waterball.ddd.waber.springboot.match.MatchApplication;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.IntStream;
 
-import static java.util.Collections.singletonList;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static java.util.Collections.singleton;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static tw.waterball.ddd.commons.utils.SneakyUtils.sneakyThrows;
 
-@SpringBootTest(classes = MatchApplication.class)
+@SpringBootTest(classes = {MatchApplication.class, MatchControllerTest.TestConfig.class})
 @AutoConfigureMockMvc
 public class MatchControllerTest {
     private Driver driver = UserStubs.NORMAL_DRIVER;
@@ -40,15 +46,24 @@ public class MatchControllerTest {
             passenger.getLatestLocation(), driver.getCarType(), null);
 
     @Autowired
+    FakeUserServiceDriver userServiceDriver;
+    @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-    @MockBean
-    UserServiceDriver userServiceDriver;
+
+    @Configuration
+    public static class TestConfig {
+        @Primary
+        @Bean
+        public FakeUserServiceDriver fakeUserServiceDriver() {
+            return new FakeUserServiceDriver();
+        }
+    }
 
     @BeforeEach
-    void setup() {
-        when(userServiceDriver.getPassenger(passenger.getId())).thenReturn(passenger);
+    public void setup() {
+        userServiceDriver.addPassenger(passenger);
     }
 
     @Test
@@ -58,10 +73,6 @@ public class MatchControllerTest {
         shouldMatchThatDriver(matchView);
     }
 
-    private void givenOneDriver() {
-        when(userServiceDriver.filterDrivers(any())).thenReturn(singletonList(driver));
-        when(userServiceDriver.getDriver(driver.getId())).thenReturn(driver);
-    }
 
     private MatchView startMatching() throws Exception {
         String jsonBody = objectMapper.writeValueAsString(preferences);
@@ -74,17 +85,46 @@ public class MatchControllerTest {
 
     @SuppressWarnings("BusyWait")
     private void shouldMatchThatDriver(MatchView matchView) throws Exception {
-        MatchView pollMatch;
+        final int timeCountdown = 10000;
+        MatchView pollMatch = pollCompletedMatch(timeCountdown, matchView);
+        if (!pollMatch.completed) {
+            throw new AssertionError("The match can't be completed within " + timeCountdown + "ms.");
+        }
+        Assertions.assertEquals(
+                MatchView.DriverView.fromEntity(driver), pollMatch.driver, "The matched driver is incorrect.");
+    }
 
+    @Test
+    void GivenOneDriver_WhenStartMatchingInParallel_ShouldHaveOnlyOneMatchCompleted() {
+        givenOneDriver();
+
+        List<MatchView> matchViews = Collections.synchronizedList(new LinkedList<>());
+        IntStream.range(0, 8).parallel()
+                .mapToObj((i) -> sneakyThrows(this::startMatching))
+                .map(matchView -> sneakyThrows(() -> pollCompletedMatch(8000, matchView)))
+                .forEach(matchViews::add);
+
+        long completionCount = matchViews.stream()
+                .filter(MatchView::isCompleted)
+                .count();
+
+        assertEquals(1, completionCount, "Race Condition: Found multiple match-completion but there is only one driver.");
+    }
+
+    private MatchView pollCompletedMatch(long timeCountdown, MatchView matchView) throws Exception {
+        MatchView pollMatch;
         do {
             Thread.sleep(800);
+            timeCountdown -= 800;
             pollMatch = getBody(mockMvc.perform(get("/api/users/{passengerId}/match/{matchId}",
                     passenger.getId(), matchView.id))
                     .andExpect(status().isOk()), MatchView.class);
-        } while (!pollMatch.completed);
+        } while (!pollMatch.completed && timeCountdown >= 0);
+        return pollMatch;
+    }
 
-        Assertions.assertEquals(
-                MatchView.DriverView.fromEntity(driver), pollMatch.driver, "The matched driver is incorrect.");
+    private void givenOneDriver() {
+        userServiceDriver.addDriver(driver);
     }
 
     private <T> T getBody(ResultActions resultActions, Class<T> type) throws UnsupportedEncodingException, JsonProcessingException {

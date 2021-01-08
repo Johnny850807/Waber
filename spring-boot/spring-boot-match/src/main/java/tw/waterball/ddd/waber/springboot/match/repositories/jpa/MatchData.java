@@ -2,7 +2,6 @@ package tw.waterball.ddd.waber.springboot.match.repositories.jpa;
 
 import lombok.*;
 import tw.waterball.ddd.model.match.Match;
-import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 
 import javax.persistence.*;
@@ -27,9 +26,9 @@ public class MatchData {
     public static MatchData fromEntity(Match match) {
             return MatchData.builder()
                     .id(match.getId())
-                    .driverId(match.getDriver()
+                    .driverId(match.getDriverOptional()
                             .map(Driver::getId).orElse(null))
-                    .driverName(match.getDriver().map(Driver::getName).orElse(null))
+                    .driverName(match.getDriverOptional().map(Driver::getName).orElse(null))
                     .passengerId(match.getPassenger().getId())
                     .matchPreferences(MatchPreferencesData.fromEntity(match.getPreferences()))
                     .build();

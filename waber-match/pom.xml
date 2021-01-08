@@ -18,6 +18,10 @@
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
+            <artifactId>api-user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd.api</groupId>
             <artifactId>api-match</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>

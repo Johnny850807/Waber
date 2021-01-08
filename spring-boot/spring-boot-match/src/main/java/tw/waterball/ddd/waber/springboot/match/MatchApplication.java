@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import tw.waterball.ddd.api.user.UserServiceDriver;
 import tw.waterball.ddd.model.Jobs;
 import tw.waterball.ddd.model.geo.DistanceCalculator;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
@@ -37,11 +38,13 @@ public class MatchApplication {
     }
 
     @Bean
-    public MatchingUseCase matchingUseCase(Jobs matchingJobs,
+    public MatchingUseCase matchingUseCase(UserServiceDriver userServiceDriver,
+                                           Jobs matchingJobs,
                                            MatchRepository matchRepository,
                                            DistanceCalculator distanceCalculator,
                                            @Value("${match.schedule.rescheduleDelayTimeInMs}") long rescheduleDelayTimeInMs) {
-        return new MatchingUseCase(matchingJobs, matchRepository, distanceCalculator, rescheduleDelayTimeInMs);
+        return new MatchingUseCase(userServiceDriver, matchingJobs, matchRepository,
+                distanceCalculator, rescheduleDelayTimeInMs);
     }
 
 }

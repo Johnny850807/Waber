@@ -15,11 +15,16 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 public class Driver extends User {
+    private Status status = Status.AVAILABLE;
     @NotNull
     private CarType carType;
 
     public enum CarType {
         Normal, Business, Sport
+    }
+
+    public enum Status {
+        AVAILABLE, MATCHED
     }
 
     public Driver(int id) {
@@ -36,4 +41,10 @@ public class Driver extends User {
         this.carType = carType;
     }
 
+    public void setStatus(Status status) {
+        if (this.status == Status.MATCHED && status == Status.MATCHED) {
+            throw new DriverHasBeenMatchedException();
+        }
+        this.status = status;
+    }
 }
