@@ -1,33 +1,43 @@
-package tw.waterball.ddd.model.match;
+package tw.waterball.ddd.model.user;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import tw.waterball.ddd.model.AggregateRoot;
-import tw.waterball.ddd.model.user.Driver;
+import tw.waterball.ddd.model.base.AggregateRoot;
+import tw.waterball.ddd.model.associations.Many;
 
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
 @Getter
 @NoArgsConstructor
-public class Activity extends AggregateRoot {
-    private int id;
-
+public class Activity extends AggregateRoot<Integer> {
     @Size(min = 1, max = 10)
     private String name;
 
-    private Set<Driver> participantDrivers = new HashSet<>();
+    private Many<Driver> participantDrivers = new Many<>();
 
     public Activity(int id, String name) {
         this.id = id;
         this.name = name;
     }
+
     public Activity(String name) {
         this.name = name;
+    }
+
+    public boolean hasParticipant(Driver driver) {
+        return getParticipantDrivers().contains(driver);
+    }
+
+    public Collection<Driver> getParticipantDrivers() {
+        return participantDrivers.get();
+    }
+
+    public void setParticipantDrivers(Many<Driver> participantDrivers) {
+        this.participantDrivers = participantDrivers;
     }
 
     public void participate(Driver driver) {

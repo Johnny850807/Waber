@@ -14,17 +14,40 @@
 
     <modules>
         <module>api-user</module>
+        <module>api-match</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
+                <artifactId>model</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd.api</groupId>
                 <artifactId>api-user</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd.api</groupId>
+                <artifactId>api-match</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+            <version>2.3.2.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>model</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -3,6 +3,7 @@ package tw.waterball.ddd.model.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
 
 import javax.validation.constraints.NotNull;
@@ -14,17 +15,24 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 public class Driver extends User {
+    private Status status = Status.AVAILABLE;
     @NotNull
     private CarType carType;
 
-    private Match match;
-
     public enum CarType {
-        NORMAL, BUSINESS, SPORT
+        Normal, Business, Sport
     }
 
-    public Driver(int id, String name, String email, String password, CarType carType) {
-        super(id, name, email, password);
+    public enum Status {
+        AVAILABLE, MATCHED
+    }
+
+    public Driver(int id) {
+        super(id);
+    }
+
+    public Driver(int id, String name, String email, String password, CarType carType, Location latestLocation) {
+        super(id, name, email, password, latestLocation);
         this.carType = carType;
     }
 
@@ -33,7 +41,10 @@ public class Driver extends User {
         this.carType = carType;
     }
 
-    public boolean isMatched() {
-        return match != null;
+    public void setStatus(Status status) {
+        if (this.status == Status.MATCHED && status == Status.MATCHED) {
+            throw new DriverHasBeenMatchedException();
+        }
+        this.status = status;
     }
 }

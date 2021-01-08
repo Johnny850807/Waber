@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spring-boot-userData</artifactId>
+    <artifactId>spring-boot-user</artifactId>
 
     <dependencies>
         <dependency>

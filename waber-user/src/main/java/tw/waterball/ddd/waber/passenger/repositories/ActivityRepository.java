@@ -1,6 +1,6 @@
-package tw.waterball.ddd.waber.match.repositories;
+package tw.waterball.ddd.waber.passenger.repositories;
 
-import tw.waterball.ddd.model.match.Activity;
+import tw.waterball.ddd.model.user.Activity;
 
 import java.util.Optional;
 
@@ -12,4 +12,5 @@ public interface ActivityRepository {
     Optional<Activity> findByName(String name);
 
     Activity save(Activity activity);
+
 }

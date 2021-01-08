@@ -16,6 +16,18 @@
             <groupId>tw.waterball.ddd.spring-boot</groupId>
             <artifactId>spring-boot-commons</artifactId>
         </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd.api</groupId>
+            <artifactId>api-user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd.api</groupId>
+            <artifactId>api-match</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>waber-match</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
