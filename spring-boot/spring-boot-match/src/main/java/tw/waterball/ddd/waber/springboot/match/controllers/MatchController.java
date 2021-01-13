@@ -2,7 +2,7 @@ package tw.waterball.ddd.waber.springboot.match.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.api.match.MatchView;
-import tw.waterball.ddd.api.user.UserServiceDriver;
+import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.associations.Many;
 import tw.waterball.ddd.model.match.Match;

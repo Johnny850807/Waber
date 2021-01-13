@@ -13,19 +13,18 @@ public class Driving extends TripState {
         super(TripStateType.DRIVING, trip);
     }
 
-
     @Override
     public void startDriving(Location destination) {
-
+        trip.setDestination(destination);
     }
 
     @Override
     public void refusePassenger() {
-
+        // TODO
     }
 
     @Override
     public void arrive() {
-
+        trip.setState(new Arrived(trip));
     }
 }

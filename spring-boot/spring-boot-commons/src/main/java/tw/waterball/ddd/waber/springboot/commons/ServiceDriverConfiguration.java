@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.match.RestMatchServiceDriver;
-import tw.waterball.ddd.api.user.RestUserServiceDriver;
-import tw.waterball.ddd.api.user.UserServiceDriver;
+import tw.waterball.ddd.waber.api.payment.RestUserServiceDriver;
+import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.waber.springboot.commons.profiles.Microservice;
 
 /**

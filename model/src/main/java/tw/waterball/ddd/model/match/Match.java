@@ -35,6 +35,7 @@ public class Match extends AggregateRoot<Integer> {
         driver.resolveId(driverId);
         this.preferences = preferences;
     }
+
     public Match(Integer id, int passengerId, Driver driver, MatchPreferences preferences) {
         super(id);
         passenger.resolveId(passengerId);
@@ -102,6 +103,10 @@ public class Match extends AggregateRoot<Integer> {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public Driver getDriver() {
         return getDriverOptional().get();
+    }
+
+    public int getDriverId() {
+        return (int) driver.getId().get();
     }
 
     public Optional<Driver> getDriverOptional() {

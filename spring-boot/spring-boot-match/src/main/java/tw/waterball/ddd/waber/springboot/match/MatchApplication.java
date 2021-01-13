@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import tw.waterball.ddd.api.user.UserServiceDriver;
+import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.model.Jobs;
 import tw.waterball.ddd.model.geo.DistanceCalculator;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;

@@ -76,6 +76,11 @@
                 <artifactId>api-trip</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd.api</groupId>
+                <artifactId>api-payment</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -20,5 +20,9 @@
             <groupId>tw.waterball.ddd</groupId>
             <artifactId>model</artifactId>
         </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd.api</groupId>
+            <artifactId>api-trip</artifactId>
+        </dependency>
     </dependencies>
 </project>

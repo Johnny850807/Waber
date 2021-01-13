@@ -6,12 +6,12 @@ import tw.waterball.ddd.model.geo.Location;
  * @author - johnny850807@gmail.com (Waterball)
  */
 public abstract class TripState {
-    public TripStateType type;
-    protected Trip journey;
+    protected TripStateType type;
+    protected Trip trip;
 
     public TripState(TripStateType type, Trip trip) {
         this.type = type;
-        this.journey = trip;
+        this.trip = trip;
     }
 
     public TripStateType getType() {

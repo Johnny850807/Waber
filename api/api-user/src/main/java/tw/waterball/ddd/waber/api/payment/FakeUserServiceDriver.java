@@ -1,11 +1,10 @@
-package tw.waterball.ddd.api.user;
+package tw.waterball.ddd.waber.api.payment;
 
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.DriverHasBeenMatchedException;
 import tw.waterball.ddd.model.user.Passenger;
 
-import javax.inject.Named;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;

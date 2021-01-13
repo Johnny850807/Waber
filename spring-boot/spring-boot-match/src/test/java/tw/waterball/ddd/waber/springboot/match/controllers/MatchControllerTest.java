@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import tw.waterball.ddd.api.match.MatchView;
-import tw.waterball.ddd.api.user.FakeUserServiceDriver;
+import tw.waterball.ddd.waber.api.payment.FakeUserServiceDriver;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;

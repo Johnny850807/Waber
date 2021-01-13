@@ -15,14 +15,17 @@ public class Picking extends TripState {
 
     @Override
     public void startDriving(Location destination) {
-
+        trip.setDestination(destination);
+        trip.setState(new Driving(trip));
     }
+
     @Override
     public void refusePassenger() {
-
+        // TODO
     }
+
     @Override
     public void arrive() {
-
+        throw new IllegalStateException("Can only 'arrive' from driving state.");
     }
 }

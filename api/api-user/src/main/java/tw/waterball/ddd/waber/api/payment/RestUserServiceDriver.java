@@ -1,4 +1,4 @@
-package tw.waterball.ddd.api.user;
+package tw.waterball.ddd.waber.api.payment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;

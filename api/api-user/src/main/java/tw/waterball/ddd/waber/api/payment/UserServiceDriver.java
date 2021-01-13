@@ -1,4 +1,4 @@
-package tw.waterball.ddd.api.user;
+package tw.waterball.ddd.waber.api.payment;
 
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
