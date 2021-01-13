@@ -6,7 +6,7 @@
 
 
     <parent>
-        <artifactId>benchmark-waber</artifactId>
+        <artifactId>waber</artifactId>
         <groupId>tw.waterball.ddd</groupId>
         <version>${revision}</version>
     </parent>

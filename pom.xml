@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>tw.waterball.ddd</groupId>
-    <artifactId>benchmark-waber</artifactId>
+    <artifactId>waber</artifactId>
     <packaging>pom</packaging>
     <version>${revision}</version>
 
@@ -15,7 +15,7 @@
     <modules>
         <module>waber-user</module>
         <module>waber-match</module>
-        <module>waber-journey</module>
+        <module>waber-trip</module>
         <module>waber-pricing</module>
         <module>spring-boot</module>
         <module>commons</module>
@@ -42,7 +42,7 @@
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>waber-journey</artifactId>
+                <artifactId>waber-trip</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -60,6 +60,7 @@
                 <artifactId>model</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <!--TODO think a way to import it from api.parent BOM-->
             <dependency>
                 <groupId>tw.waterball.ddd.api</groupId>
                 <artifactId>api-user</artifactId>
@@ -68,6 +69,11 @@
             <dependency>
                 <groupId>tw.waterball.ddd.api</groupId>
                 <artifactId>api-match</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd.api</groupId>
+                <artifactId>api-trip</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

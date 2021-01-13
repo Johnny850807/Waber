@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>parent</artifactId>
+        <groupId>tw.waterball.ddd.spring-boot</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>spring-boot-trip</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>tw.waterball.ddd.spring-boot</groupId>
+            <artifactId>spring-boot-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd.api</groupId>
+            <artifactId>api-trip</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>waber-trip</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd.spring-boot</groupId>
+            <artifactId>test-kit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+
+    </dependencies>
+</project>

@@ -29,8 +29,6 @@ public class UserData {
     private double longitude;
     private boolean isDriver;
 
-
-
     public static UserData fromEntity(User user) {
         return user instanceof Driver ? fromEntity((Driver) user)
                 : fromEntity((Passenger) user);

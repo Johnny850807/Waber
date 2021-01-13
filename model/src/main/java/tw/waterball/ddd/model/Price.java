@@ -5,7 +5,22 @@ import lombok.Value;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
-@Value
 public class Price {
-    private int price;
+    private Double price;
+
+    public static Price unsolved() {
+        return new Price(null);
+    }
+
+    public Price(Double price) {
+        this.price = price;
+    }
+
+    public boolean isResolved() {
+        return price != null;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
 }

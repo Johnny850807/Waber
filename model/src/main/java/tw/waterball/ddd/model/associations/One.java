@@ -16,20 +16,33 @@ public class One<T extends Entity> implements Association<T> {
     }
 
     public One(T value) {
-        this.value = value;
+        this(value, null);
     }
 
     public One(T value, Supplier<T> lazyInitializer) {
         this.value = value;
+        this.id = value.getId();
         this.lazyInitializer = lazyInitializer;
+    }
+
+    private One(Object id) {
+        resolveId(id);
     }
 
     public One(Supplier<T> lazyInitializer) {
         this.lazyInitializer = lazyInitializer;
     }
 
+    public static <T extends Entity> One<T> associate(Object id) {
+        return new One<>(id);
+    }
+
     public static <T extends Entity> One<T> lazyOn(Supplier<T> lazyInitializer) {
         return new One<>(lazyInitializer);
+    }
+
+    public static <T extends Entity> One<T> of(T t) {
+        return new One<>(t);
     }
 
     public void reset() {

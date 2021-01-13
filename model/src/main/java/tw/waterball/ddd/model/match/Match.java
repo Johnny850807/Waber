@@ -35,6 +35,12 @@ public class Match extends AggregateRoot<Integer> {
         driver.resolveId(driverId);
         this.preferences = preferences;
     }
+    public Match(Integer id, int passengerId, Driver driver, MatchPreferences preferences) {
+        super(id);
+        passenger.resolveId(passengerId);
+        this.driver.resolveAssociation(driver);
+        this.preferences = preferences;
+    }
 
     private Match(Passenger passenger, MatchPreferences preferences) {
         this.passenger.resolveAssociation(passenger);
@@ -108,5 +114,13 @@ public class Match extends AggregateRoot<Integer> {
 
     public Passenger getPassenger() {
         return passenger.get();
+    }
+
+    public int getPassengerId() {
+        return passenger.getId();
+    }
+
+    public One<Passenger> getPassengerAssociation() {
+        return passenger;
     }
 }

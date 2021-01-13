@@ -25,7 +25,7 @@ public class MatchView {
     public static MatchView toViewModel(Match match) {
         return MatchView.builder()
                 .id(match.getId())
-                .passengerId(match.getId())
+                .passengerId(match.getPassengerAssociation().getId())
                 .driver(match.getDriverOptional()
                         .map(DriverView::fromEntity).orElse(null))
                 .completed(match.isCompleted())
@@ -35,6 +35,14 @@ public class MatchView {
 
     public boolean isCompleted() {
         return this.completed;
+    }
+
+    public Match toEntity() {
+        return new Match(id, passengerId, driver.id, matchPreferences);
+    }
+
+    public int getId() {
+        return id;
     }
 
     @NoArgsConstructor

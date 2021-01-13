@@ -6,11 +6,13 @@
         <module>spring-boot-user</module>
         <module>spring-boot-commons</module>
         <module>spring-boot-match</module>
+        <module>spring-boot-trip</module>
+        <module>test-kit</module>
         <module>service-registry</module>
     </modules>
     <parent>
         <groupId>tw.waterball.ddd</groupId>
-        <artifactId>benchmark-waber</artifactId>
+        <artifactId>waber</artifactId>
         <version>${revision}</version>
     </parent>
     <packaging>pom</packaging>
@@ -138,6 +140,11 @@
             <dependency>
                 <groupId>tw.waterball.ddd.spring-boot</groupId>
                 <artifactId>spring-boot-commons</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd.spring-boot</groupId>
+                <artifactId>test-kit</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

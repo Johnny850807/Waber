@@ -10,7 +10,7 @@ import tw.waterball.ddd.commons.model.BaseUrl;
  * @author Waterball (johnny850807@gmail.com)
  */
 @Getter @Setter
-@ConfigurationProperties
+@ConfigurationProperties("waber")
 public class WaberProperties {
     @NestedConfigurationProperty
     private Client client;
@@ -20,6 +20,8 @@ public class WaberProperties {
     public static class Client {
         @NestedConfigurationProperty
         private BaseUrl userService;
+        @NestedConfigurationProperty
+        private BaseUrl matchService;
     }
 }
 

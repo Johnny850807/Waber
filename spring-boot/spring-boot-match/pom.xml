@@ -28,6 +28,11 @@
             <groupId>tw.waterball.ddd</groupId>
             <artifactId>waber-match</artifactId>
         </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd.spring-boot</groupId>
+            <artifactId>test-kit</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

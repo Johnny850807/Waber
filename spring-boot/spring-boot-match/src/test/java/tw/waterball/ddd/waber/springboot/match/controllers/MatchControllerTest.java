@@ -1,45 +1,36 @@
 package tw.waterball.ddd.waber.springboot.match.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.context.ContextConfiguration;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.api.user.FakeUserServiceDriver;
-import tw.waterball.ddd.api.user.UserServiceDriver;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.stubs.UserStubs;
 import tw.waterball.ddd.waber.springboot.match.MatchApplication;
+import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static java.util.Collections.singleton;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static tw.waterball.ddd.commons.utils.SneakyUtils.sneakyThrows;
 
-@SpringBootTest(classes = {MatchApplication.class, MatchControllerTest.TestConfig.class})
-@AutoConfigureMockMvc
-public class MatchControllerTest {
+@ContextConfiguration(classes = {MatchApplication.class, MatchControllerTest.TestConfig.class})
+public class MatchControllerTest extends AbstractSpringBootTest {
     private Driver driver = UserStubs.NORMAL_DRIVER;
     private Passenger passenger = UserStubs.NORMAL_PASSENGER;
     private MatchPreferences preferences = new MatchPreferences(
@@ -47,10 +38,6 @@ public class MatchControllerTest {
 
     @Autowired
     FakeUserServiceDriver userServiceDriver;
-    @Autowired
-    MockMvc mockMvc;
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Configuration
     public static class TestConfig {
@@ -125,11 +112,6 @@ public class MatchControllerTest {
 
     private void givenOneDriver() {
         userServiceDriver.addDriver(driver);
-    }
-
-    private <T> T getBody(ResultActions resultActions, Class<T> type) throws UnsupportedEncodingException, JsonProcessingException {
-        return objectMapper.readValue(resultActions
-                .andReturn().getResponse().getContentAsString(Charsets.UTF_8), type);
     }
 
 }

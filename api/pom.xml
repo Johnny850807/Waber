@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>benchmark-waber</artifactId>
+        <artifactId>waber</artifactId>
         <groupId>tw.waterball.ddd</groupId>
         <version>${revision}</version>
     </parent>
@@ -15,6 +15,7 @@
     <modules>
         <module>api-user</module>
         <module>api-match</module>
+        <module>api-trip</module>
     </modules>
 
     <dependencyManagement>
@@ -32,6 +33,11 @@
             <dependency>
                 <groupId>tw.waterball.ddd.api</groupId>
                 <artifactId>api-match</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>tw.waterball.ddd.api</groupId>
+                <artifactId>api-trip</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>
