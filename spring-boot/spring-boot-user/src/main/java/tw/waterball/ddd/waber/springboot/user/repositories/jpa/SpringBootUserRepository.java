@@ -2,11 +2,8 @@ package tw.waterball.ddd.waber.springboot.user.repositories.jpa;
 
 import org.springframework.stereotype.Component;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
-import tw.waterball.ddd.model.associations.One;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.User;
-import tw.waterball.ddd.waber.springboot.user.repositories.jpa.JpaUserDataPort;
-import tw.waterball.ddd.waber.springboot.user.repositories.jpa.UserData;
 import tw.waterball.ddd.waber.user.repositories.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -33,7 +30,7 @@ public class SpringBootUserRepository implements UserRepository {
 
     @Override
     public User save(User user) {
-        UserData data = jpaUserDataPort.save(UserData.fromEntity(user));
+        UserData data = jpaUserDataPort.save(UserData.toData(user));
         user.setId(data.getId());
         return user;
     }
@@ -66,5 +63,10 @@ public class SpringBootUserRepository implements UserRepository {
         } catch (EntityNotFoundException err) {
             throw new NotFoundException(err);
         }
+    }
+
+    @Override
+    public void clearAll() {
+        jpaUserDataPort.deleteAll();
     }
 }

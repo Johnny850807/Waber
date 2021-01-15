@@ -32,4 +32,9 @@ public class SpringBootActivityRepository implements ActivityRepository {
         return activity;
     }
 
+    @Override
+    public void clearAll() {
+        dataPort.deleteAll();
+    }
+
 }

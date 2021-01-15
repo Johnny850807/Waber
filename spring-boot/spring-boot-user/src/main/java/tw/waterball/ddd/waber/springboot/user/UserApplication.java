@@ -10,8 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
-@EnableEurekaClient
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "tw.waterball.ddd")
 public class UserApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserApplication.class, args);

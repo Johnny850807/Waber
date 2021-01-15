@@ -22,4 +22,6 @@ public interface UserRepository {
 
     User associateById(int id);
 
+    void clearAll();
+
 }

@@ -7,6 +7,7 @@
         <module>spring-boot-commons</module>
         <module>spring-boot-match</module>
         <module>spring-boot-trip</module>
+        <module>spring-boot-payment</module>
         <module>test-kit</module>
         <module>service-registry</module>
     </modules>

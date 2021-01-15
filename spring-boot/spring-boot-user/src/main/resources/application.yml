@@ -1,0 +1,9 @@
+server:
+  port: 80
+
+spring:
+  application:
+    name: user-service
+
+waber:
+  activities: ValentinesDay

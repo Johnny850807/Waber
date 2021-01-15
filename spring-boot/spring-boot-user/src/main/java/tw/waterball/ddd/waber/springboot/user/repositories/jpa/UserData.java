@@ -15,6 +15,8 @@ import javax.persistence.*;
 @Builder
 @Getter
 @Setter
+@EqualsAndHashCode
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserData {
@@ -29,12 +31,12 @@ public class UserData {
     private double longitude;
     private boolean isDriver;
 
-    public static UserData fromEntity(User user) {
-        return user instanceof Driver ? fromEntity((Driver) user)
-                : fromEntity((Passenger) user);
+    public static UserData toData(User user) {
+        return user instanceof Driver ? toData((Driver) user)
+                : toData((Passenger) user);
     }
 
-    public static UserData fromEntity(Driver driver) {
+    public static UserData toData(Driver driver) {
         return UserData.builder()
                 .id(driver.getId())
                 .name(driver.getName())
@@ -45,7 +47,7 @@ public class UserData {
                 .build();
     }
 
-    public static UserData fromEntity(Passenger passenger) {
+    public static UserData toData(Passenger passenger) {
         return UserData.builder()
                 .id(passenger.getId())
                 .name(passenger.getName())

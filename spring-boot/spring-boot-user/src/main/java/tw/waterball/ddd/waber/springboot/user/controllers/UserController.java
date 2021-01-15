@@ -1,6 +1,7 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.User;
@@ -17,12 +18,16 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/users")
-@AllArgsConstructor
 public class UserController {
     private SignIn signIn;
     private UpdateLatestLocation updateLatestLocation;
     private UserRepository userRepository;
 
+    public UserController(SignIn signIn, UpdateLatestLocation updateLatestLocation, UserRepository userRepository) {
+        this.signIn = signIn;
+        this.updateLatestLocation = updateLatestLocation;
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/{userId}")
     public User getUser(@PathVariable int userId) {
@@ -35,6 +40,7 @@ public class UserController {
         return signIn.execute(new SignIn.Request(params.email, params.password));
     }
 
+    @AllArgsConstructor @NoArgsConstructor
     public static class SignInParams {
         public String email, password;
     }

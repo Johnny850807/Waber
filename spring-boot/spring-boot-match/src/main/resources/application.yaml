@@ -1,3 +1,6 @@
+server:
+  port: 80
+
 spring:
   application:
     name: match-service
@@ -5,4 +8,5 @@ spring:
 match:
   schedule:
     corePool: 8
-    rescheduleDelayTimeInMs: 3000
+  rescheduleDelayTimeInMs: 3000
+

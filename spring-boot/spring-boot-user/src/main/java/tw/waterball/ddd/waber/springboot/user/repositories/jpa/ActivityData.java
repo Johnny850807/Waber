@@ -34,7 +34,7 @@ public class ActivityData {
     public static ActivityData fromEntity(Activity activity) {
         return new ActivityData(activity.getId(), activity.getName(),
                 activity.getParticipantDrivers().stream()
-                        .map(UserData::fromEntity).collect(Collectors.toSet()));
+                        .map(UserData::toData).collect(Collectors.toSet()));
     }
 
     public static Activity toEntity(ActivityData data) {

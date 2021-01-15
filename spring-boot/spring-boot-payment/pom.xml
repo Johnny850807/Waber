@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>parent</artifactId>
         <groupId>tw.waterball.ddd.spring-boot</groupId>
         <version>${revision}</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spring-boot-match</artifactId>
+    <artifactId>spring-boot-payment</artifactId>
 
     <dependencies>
         <dependency>
@@ -17,21 +17,8 @@
             <artifactId>spring-boot-commons</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-user</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-match</artifactId>
-        </dependency>
-        <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-match</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>tw.waterball.ddd.spring-boot</groupId>
-            <artifactId>test-kit</artifactId>
-            <scope>test</scope>
+            <artifactId>waber-user</artifactId>
         </dependency>
     </dependencies>
 
@@ -46,8 +33,9 @@
                         <goals>
                             <goal>repackage</goal>
                         </goals>
+
                         <configuration>
-                            <mainClass>tw.waterball.ddd.waber.springboot.match.MatchApplication</mainClass>
+                            <mainClass>tw.waterball.ddd.waber.springboot.payment.PaymentApplication</mainClass>
                         </configuration>
                     </execution>
                 </executions>

@@ -16,7 +16,7 @@
         <module>waber-user</module>
         <module>waber-match</module>
         <module>waber-trip</module>
-        <module>waber-pricing</module>
+        <module>waber-payment</module>
         <module>spring-boot</module>
         <module>commons</module>
         <module>model</module>
