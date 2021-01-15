@@ -1,7 +1,5 @@
 package tw.waterball.ddd.model.geo;
 
-import javax.inject.Named;
-
 /**
  * @author Waterball (johnny850807@gmail.com)
  */

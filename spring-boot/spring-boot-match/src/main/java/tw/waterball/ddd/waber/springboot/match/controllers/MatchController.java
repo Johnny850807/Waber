@@ -12,7 +12,7 @@ import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 import tw.waterball.ddd.waber.match.usecases.MatchingUseCase;
 import tw.waterball.ddd.waber.match.usecases.MatchingUseCase.StartMatchingRequest;
-import tw.waterball.ddd.waber.springboot.match.presenters.MatchViewPresenter;
+import tw.waterball.ddd.waber.springboot.match.presenters.MatchPresenter;
 
 import java.util.Optional;
 
@@ -22,7 +22,7 @@ import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
-@RequestMapping("/api/users/{passengerId}/match")
+@RequestMapping("/api/users/{passengerId}/matches")
 @RestController
 public class MatchController {
     private MatchingUseCase matchingUseCase;
@@ -42,7 +42,7 @@ public class MatchController {
                                    @RequestBody MatchPreferences matchPreferences) {
         Passenger passenger = userServiceDriver.getPassenger(passengerId);
         Many<Driver> drivers = Many.lazyOn(() -> userServiceDriver.filterDrivers(matchPreferences));
-        var presenter = new MatchViewPresenter();
+        var presenter = new MatchPresenter();
         matchingUseCase.execute(new StartMatchingRequest(passenger, drivers, matchPreferences), presenter);
         return presenter.getMatchView();
     }

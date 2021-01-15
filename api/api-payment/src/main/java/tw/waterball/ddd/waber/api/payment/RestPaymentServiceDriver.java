@@ -28,7 +28,7 @@ public class RestPaymentServiceDriver implements PaymentServiceDriver {
     private RestTemplate api;
 
     @Override
-    public PaymentView createPayment(int passengerId, int matchId, String tripId) {
+    public PaymentView checkoutPayment(int passengerId, int matchId, String tripId) {
         return api.postForEntity(
                 paymentServiceBaseUrl.withPath("/api/users/{passengerId}/match/{matchId}/trip/{tripId}/payment"),
                 null,

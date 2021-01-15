@@ -3,6 +3,7 @@ package tw.waterball.ddd.api.trip;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import tw.waterball.ddd.model.geo.Location;
+import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.Trip;
 import tw.waterball.ddd.model.trip.TripState;
 import tw.waterball.ddd.model.trip.TripStateType;
@@ -28,5 +29,12 @@ public class TripView {
     public static TripView toViewModel(Trip trip) {
         return new TripView(trip.getId(), trip.getMatchAssociation().getId(),
                 trip.getDestination(), trip.getState());
+    }
+
+    public Trip toEntity(Match match) {
+        Trip trip = new Trip(match);
+        trip.setDestination(destination);
+        trip.setState(state.toState(trip));
+        return trip;
     }
 }

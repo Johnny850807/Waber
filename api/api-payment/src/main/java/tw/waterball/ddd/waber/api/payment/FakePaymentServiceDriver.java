@@ -25,7 +25,7 @@ public class FakePaymentServiceDriver implements PaymentServiceDriver {
     }
 
     @Override
-    public PaymentView createPayment(int passengerId, int matchId, String tripId) {
+    public PaymentView checkoutPayment(int passengerId, int matchId, String tripId) {
         return payments.get(tripId);
     }
 }

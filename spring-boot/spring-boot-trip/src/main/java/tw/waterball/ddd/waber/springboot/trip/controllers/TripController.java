@@ -13,7 +13,7 @@ import tw.waterball.ddd.waber.trip.usecases.StartTrip;
  * @author Waterball (johnny850807@gmail.com)
  */
 @AllArgsConstructor
-@RequestMapping("/api/users/{passengerId}/match/{matchId}/trips")
+@RequestMapping("/api/users/{passengerId}/matches/{matchId}/trips")
 @RestController
 public class TripController {
     private StartTrip startTrip;

@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.api.payment;
 
+import tw.waterball.ddd.model.payment.Payment;
 import tw.waterball.ddd.model.payment.Price;
 
 /**
@@ -12,5 +13,9 @@ public class PaymentView {
     public PaymentView(String tripId, Price price) {
         this.tripId = tripId;
         this.price = price;
+    }
+
+    public static PaymentView toViewModel(Payment payment) {
+        return null;
     }
 }

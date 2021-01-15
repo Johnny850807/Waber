@@ -1,6 +1,7 @@
 package tw.waterball.ddd.model.associations;
 
 import tw.waterball.ddd.model.base.Entity;
+import tw.waterball.ddd.model.trip.Trip;
 
 import java.util.function.Supplier;
 
@@ -43,6 +44,10 @@ public class One<T extends Entity> implements Association<T> {
 
     public static <T extends Entity> One<T> of(T t) {
         return new One<>(t);
+    }
+
+    public static One<Trip> empty() {
+        return new One<>();
     }
 
     public void reset() {

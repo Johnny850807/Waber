@@ -2,10 +2,7 @@ package tw.waterball.ddd.waber.springboot.trip.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,21 +12,17 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import tw.waterball.ddd.api.match.FakeMatchServiceDriver;
-import tw.waterball.ddd.api.trip.FakeTripServiceDriver;
 import tw.waterball.ddd.api.trip.TripView;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
-import tw.waterball.ddd.model.payment.Price;
 import tw.waterball.ddd.model.trip.Trip;
 import tw.waterball.ddd.model.trip.TripStateType;
 import tw.waterball.ddd.model.trip.states.Arrived;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.stubs.UserStubs;
-import tw.waterball.ddd.waber.api.payment.FakePaymentServiceDriver;
 import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
-import tw.waterball.ddd.waber.api.payment.PaymentView;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 import tw.waterball.ddd.waber.springboot.trip.TripApplication;
 import tw.waterball.ddd.waber.springboot.trip.repositories.jpa.SpringBootTripRepository;
@@ -104,7 +97,7 @@ class TripControllerTest extends AbstractSpringBootTest {
         Trip trip = tripRepository.findById(this.tripView.id).orElseThrow();
         assertEquals(TripStateType.ARRIVED, trip.getState().getType());
 
-        verify(paymentServiceDriver).createPayment(passenger.getId(), match.getId(), trip.getId());
+        verify(paymentServiceDriver).checkoutPayment(passenger.getId(), match.getId(), trip.getId());
     }
 
     @Test
@@ -138,7 +131,7 @@ class TripControllerTest extends AbstractSpringBootTest {
 
     private void arrive() throws Exception {
         mockMvc.perform(
-                patch("/api/users/{passengerId}/match/{matchId}/trips/{tripId}/arrive",
+                patch("/api/users/{passengerId}/matches/{matchId}/trips/{tripId}/arrive",
                         passenger.getId(), match.getId(), tripView.id))
                 .andExpect(status().isOk());
     }
@@ -146,7 +139,7 @@ class TripControllerTest extends AbstractSpringBootTest {
 
     private void startDriving(Location destination) throws Exception {
         mockMvc.perform(
-                patch("/api/users/{passengerId}/match/{matchId}/trips/{tripId}/drive",
+                patch("/api/users/{passengerId}/matches/{matchId}/trips/{tripId}/drive",
                         passenger.getId(), match.getId(), tripView.id)
                         .content(toJson(destination))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -155,7 +148,7 @@ class TripControllerTest extends AbstractSpringBootTest {
 
     private void startTrip() throws Exception {
         this.tripView = getBody(mockMvc.perform(
-                post("/api/users/{passengerId}/match/{matchId}/trips",
+                post("/api/users/{passengerId}/matches/{matchId}/trips",
                         passenger.getId(), match.getId()))
                 .andExpect(status().isOk()), TripView.class);
     }

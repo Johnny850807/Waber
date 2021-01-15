@@ -98,7 +98,7 @@ public class MatchControllerTest extends AbstractSpringBootTest {
     private MatchView startMatching() throws Exception {
         String jsonBody = objectMapper.writeValueAsString(preferences);
         return getBody(
-                mockMvc.perform(post("/api/users/{passengerId}/match", passenger.getId())
+                mockMvc.perform(post("/api/users/{passengerId}/matches", passenger.getId())
                         .content(jsonBody)
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().is2xxSuccessful()), MatchView.class);
@@ -115,7 +115,7 @@ public class MatchControllerTest extends AbstractSpringBootTest {
     }
 
     private MatchView getMatch(int matchId) throws Exception {
-        return getBody(mockMvc.perform(get("/api/users/{passengerId}/match/{matchId}",
+        return getBody(mockMvc.perform(get("/api/users/{passengerId}/matches/{matchId}",
                 passenger.getId(), matchId))
                 .andExpect(status().isOk()), MatchView.class);
     }

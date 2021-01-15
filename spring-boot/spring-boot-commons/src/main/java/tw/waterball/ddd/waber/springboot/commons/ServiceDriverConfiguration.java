@@ -13,11 +13,11 @@ import tw.waterball.ddd.waber.springboot.commons.profiles.Microservice;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-@Microservice
 @Configuration
 public class ServiceDriverConfiguration {
 
     @Bean
+    @Microservice
     public UserServiceDriver userServiceDriver(ObjectMapper objectMapper,
                                                WaberProperties waberProperties,
                                                RestTemplate restTemplate) {
@@ -26,8 +26,15 @@ public class ServiceDriverConfiguration {
 
 
     @Bean
+    @Microservice
+    public TripServiceDriver matchServiceDriver(WaberProperties waberProperties,
+                                                 RestTemplate restTemplate) {
+        return new RestMatchServiceDriver(waberProperties.getClient().getMatchService(), restTemplate);
+    }
+    @Bean
+    @Microservice
     public MatchServiceDriver matchServiceDriver(WaberProperties waberProperties,
-                                                RestTemplate restTemplate) {
+                                                 RestTemplate restTemplate) {
         return new RestMatchServiceDriver(waberProperties.getClient().getMatchService(), restTemplate);
     }
 }
