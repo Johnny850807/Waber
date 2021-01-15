@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  mongodb:
+    image: mongo
+    networks:
+      - waber
+    command: --bind_ip 0.0.0.0
+    volumes:
+      - db-data:/data/db
+  rabbitmq:
+    image: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: waber
+      RABBITMQ_DEFAULT_PASS: waber
+      RABBITMQ_DEFAULT_VHOST: /waber
+    networks:
+      - waber
+  user-svc:
+    build: spring-boot/spring-boot-user
+    ports:
+      - "8000:80"
+    networks:
+      - waber
+  match-svc:
+    build: spring-boot/spring-boot-match
+    ports:
+      - "8001:80"
+    networks:
+      - waber
+  trip-svc:
+    build: spring-boot/spring-boot-trip
+    ports:
+      - "8002:80"
+    networks:
+      - waber
+  payment-svc:
+    build: spring-boot/spring-boot-payment
+    ports:
+      - "8003:80"
+    networks:
+      - waber
+
+volumes:
+  db-data:
+networks:
+  waber:
