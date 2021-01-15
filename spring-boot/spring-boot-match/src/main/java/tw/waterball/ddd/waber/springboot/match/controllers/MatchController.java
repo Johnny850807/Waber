@@ -17,6 +17,7 @@ import tw.waterball.ddd.waber.springboot.match.presenters.MatchViewPresenter;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
+import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -38,7 +39,7 @@ public class MatchController {
 
     @PostMapping
     public MatchView startMatching(@PathVariable int passengerId,
-                               @RequestBody MatchPreferences matchPreferences) {
+                                   @RequestBody MatchPreferences matchPreferences) {
         Passenger passenger = userServiceDriver.getPassenger(passengerId);
         Many<Driver> drivers = Many.lazyOn(() -> userServiceDriver.filterDrivers(matchPreferences));
         var presenter = new MatchViewPresenter();
@@ -47,13 +48,14 @@ public class MatchController {
     }
 
     @GetMapping("/{matchId}")
-    public MatchView getMatch(@PathVariable int matchId) {
+    public MatchView getMatch(@PathVariable int passengerId,
+                              @PathVariable int matchId) {
         Match match = matchRepository.findById(matchId)
                 .orElseThrow(NotFoundException::new);
         Optional<Integer> driverId = match.getDriverAssociation().getId();
-        Driver driver = driverId.map(userServiceDriver::getDriver).orElse(null);
-        match.setDriver(driver);
-        return MatchView.toViewModel(match);
+        driverId.map(userServiceDriver::getDriver)
+                .ifPresent(match::setDriver);
+        return toViewModel(match);
     }
 
 }

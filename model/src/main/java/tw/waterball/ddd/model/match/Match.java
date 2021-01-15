@@ -7,7 +7,6 @@ import tw.waterball.ddd.model.associations.ZeroOrOne;
 import tw.waterball.ddd.model.base.AggregateRoot;
 import tw.waterball.ddd.model.geo.DistanceCalculator;
 import tw.waterball.ddd.model.geo.Location;
-import tw.waterball.ddd.model.geo.Route;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 
@@ -16,6 +15,7 @@ import java.util.Iterator;
 import java.util.Optional;
 
 import static tw.waterball.ddd.commons.utils.StreamUtils.iterate;
+import static tw.waterball.ddd.model.geo.Route.from;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -61,8 +61,8 @@ public class Match extends AggregateRoot<Integer> {
     private Comparator<Driver> minimumDistanceDriver(DistanceCalculator distanceCalculator) {
         return (driver1, driver2) -> {
             Location start = preferences.getStartLocation();
-            double distance1 = distanceCalculator.calculate(Route.from(start).to(driver1.getLatestLocation()));
-            double distance2 = distanceCalculator.calculate(Route.from(start).to(driver2.getLatestLocation()));
+            double distance1 = distanceCalculator.calculate(from(start).to(driver1.getLocation()));
+            double distance2 = distanceCalculator.calculate(from(start).to(driver2.getLocation()));
             return (int) (distance1 - distance2);
         };
     }

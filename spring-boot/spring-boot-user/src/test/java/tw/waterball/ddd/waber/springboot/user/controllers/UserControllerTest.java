@@ -38,7 +38,7 @@ public class UserControllerTest extends AbstractUserApplicationTest {
         updateLocation(driver.getId(), location);
 
         User user = getUser(driver.getId());
-        assertEquals(location, user.getLatestLocation());
+        assertEquals(location, user.getLocation());
     }
 
     private void updateLocation(int userId, Location location) throws Exception {

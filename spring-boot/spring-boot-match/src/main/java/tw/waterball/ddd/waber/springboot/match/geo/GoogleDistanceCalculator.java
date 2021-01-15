@@ -8,7 +8,6 @@ import javax.inject.Named;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
-@Named
 public class GoogleDistanceCalculator implements DistanceCalculator {
     @Override
     public double calculate(Route route) {

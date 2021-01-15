@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +35,7 @@ public class MatchControllerTest extends AbstractSpringBootTest {
     private Driver driver = UserStubs.NORMAL_DRIVER;
     private Passenger passenger = UserStubs.NORMAL_PASSENGER;
     private MatchPreferences preferences = new MatchPreferences(
-            passenger.getLatestLocation(), driver.getCarType(), null);
+            passenger.getLocation(), driver.getCarType(), null);
 
     @Autowired
     FakeUserServiceDriver userServiceDriver;
@@ -61,15 +62,6 @@ public class MatchControllerTest extends AbstractSpringBootTest {
     }
 
 
-    private MatchView startMatching() throws Exception {
-        String jsonBody = objectMapper.writeValueAsString(preferences);
-        return getBody(
-                mockMvc.perform(post("/api/users/{passengerId}/match", passenger.getId())
-                        .content(jsonBody)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().is2xxSuccessful()), MatchView.class);
-    }
-
     @SuppressWarnings("BusyWait")
     private void shouldMatchThatDriver(MatchView matchView) throws Exception {
         final int timeCountdown = 10000;
@@ -95,23 +87,37 @@ public class MatchControllerTest extends AbstractSpringBootTest {
                 .filter(MatchView::isCompleted)
                 .count();
 
+        assertNotEquals(0, completionCount);
         assertEquals(1, completionCount, "Race Condition: Found multiple match-completion but there is only one driver.");
-    }
-
-    private MatchView pollCompletedMatch(long timeCountdown, MatchView matchView) throws Exception {
-        MatchView pollMatch;
-        do {
-            Thread.sleep(800);
-            timeCountdown -= 800;
-            pollMatch = getBody(mockMvc.perform(get("/api/users/{passengerId}/match/{matchId}",
-                    passenger.getId(), matchView.id))
-                    .andExpect(status().isOk()), MatchView.class);
-        } while (!pollMatch.completed && timeCountdown >= 0);
-        return pollMatch;
     }
 
     private void givenOneDriver() {
         userServiceDriver.addDriver(driver);
+    }
+
+    private MatchView startMatching() throws Exception {
+        String jsonBody = objectMapper.writeValueAsString(preferences);
+        return getBody(
+                mockMvc.perform(post("/api/users/{passengerId}/match", passenger.getId())
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().is2xxSuccessful()), MatchView.class);
+    }
+
+    private MatchView pollCompletedMatch(long timeCountdown, MatchView matchView) throws Exception {
+        MatchView pollResult;
+        do {
+            Thread.sleep(800);
+            timeCountdown -= 800;
+            pollResult = getMatch(matchView.id);
+        } while (!pollResult.completed && timeCountdown >= 0);
+        return pollResult;
+    }
+
+    private MatchView getMatch(int matchId) throws Exception {
+        return getBody(mockMvc.perform(get("/api/users/{passengerId}/match/{matchId}",
+                passenger.getId(), matchId))
+                .andExpect(status().isOk()), MatchView.class);
     }
 
 }

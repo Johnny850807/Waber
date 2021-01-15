@@ -8,5 +8,3 @@ waber:
       scheme: "http"
       host: "localhost"
       port: 80
-  distance:
-    strategy: "linear"

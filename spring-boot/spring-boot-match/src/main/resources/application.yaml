@@ -8,5 +8,5 @@ spring:
 match:
   schedule:
     corePool: 8
-  rescheduleDelayTimeInMs: 3000
+    rescheduleDelayTimeInMs: 3000
 

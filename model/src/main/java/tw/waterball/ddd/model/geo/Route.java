@@ -11,8 +11,8 @@ import lombok.Value;
  */
 @Value
 public class Route {
-    private Location from;
-    private Location to;
+    public Location from;
+    public Location to;
 
     public static Route.Builder from(Location from) {
         return new Route.Builder(from);

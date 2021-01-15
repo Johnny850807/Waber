@@ -1,12 +1,15 @@
 package tw.waterball.ddd.model.geo;
 
+import javax.inject.Named;
+
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
 public class LinearDistanceCalculator implements DistanceCalculator {
     @Override
     public double calculate(Route route) {
-        // TODO
-        return 0;
+        double a = Math.abs(route.from.getLatitude() - route.to.getLatitude());
+        double b = Math.abs(route.from.getLongitude() - route.to.getLongitude());
+        return Math.sqrt(a*a + b*b);
     }
 }

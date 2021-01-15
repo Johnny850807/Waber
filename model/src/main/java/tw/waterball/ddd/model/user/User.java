@@ -27,18 +27,18 @@ public class User extends AggregateRoot<Integer> {
     @NotBlank
     protected String password;
 
-    protected Location latestLocation;
+    protected Location location;
 
     public User(int id) {
         this.id = id;
     }
 
-    public User(int id, String name, String email, String password, Location latestLocation) {
+    public User(int id, String name, String email, String password, Location location) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.latestLocation = latestLocation;
+        this.location = location;
     }
 
     public User(String name, String email, String password) {
