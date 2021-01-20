@@ -7,7 +7,15 @@ services:
       - waber
     command: --bind_ip 0.0.0.0
     volumes:
-      - db-data:/data/db
+      - mongo-db-data:/data/db
+  mysql:
+    image: mysql
+    networks:
+      - waber
+    environment:
+      MYSQL_ROOT_PASSWORD: 1qaz2wsx
+    volumes:
+      - mysql-db-data:/data/db
   rabbitmq:
     image: rabbitmq
     environment:
@@ -22,26 +30,35 @@ services:
       - "8000:80"
     networks:
       - waber
+    environment:
+      spring.profiles.active: microservice
   match-svc:
     build: spring-boot/spring-boot-match
     ports:
       - "8001:80"
     networks:
       - waber
+    environment:
+      spring.profiles.active: microservice
   trip-svc:
     build: spring-boot/spring-boot-trip
     ports:
       - "8002:80"
     networks:
       - waber
+    environment:
+      spring.profiles.active: microservice
   payment-svc:
     build: spring-boot/spring-boot-payment
     ports:
       - "8003:80"
     networks:
       - waber
+    environment:
+      spring.profiles.active: microservice
 
 volumes:
-  db-data:
+  mongo-db-data:
+  mysql-db-data:
 networks:
   waber:
