@@ -7,5 +7,4 @@ spring:
     name: payment-service
   data:
     mongodb:
-      database: waber_payment
-
+      uri: mongodb://localhost:27017/waber_payment

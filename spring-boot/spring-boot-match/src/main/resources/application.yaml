@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: ${waber.client.mysql.scheme}://${waber.client.mysql.host}:${waber.client.mysql.port}/${waber.client.mysql.database}
+    url: jdbc:mysql://localhost:3306/waber_match
     username: root
     password: 1qaz2wsx
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,7 +21,4 @@ waber:
     schedule:
       corePool: 8
       rescheduleDelayTimeInMs: 3000
-  client:
-    mysql:
-      database: waber_match
 

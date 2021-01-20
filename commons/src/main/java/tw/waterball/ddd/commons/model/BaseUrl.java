@@ -2,13 +2,17 @@ package tw.waterball.ddd.commons.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class BaseUrl {
     private String scheme;
     private String host;

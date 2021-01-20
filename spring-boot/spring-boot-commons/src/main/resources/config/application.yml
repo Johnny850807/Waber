@@ -2,16 +2,17 @@ waber:
   client:
     user-service:
       scheme: http
-      host: localhost
+      host: user-service
       port: 80
     match-service:
       scheme: http
-      host: localhost
+      host: match-service
       port: 80
-    mysql:
-      scheme: jdbc:mysql
-      host: localhost
-      port: 3306
-    mongo:
-      host: localhost
-      port: 27017
+    trip-service:
+      scheme: http
+      host: trip-service
+      port: 80
+    payment-service:
+      scheme: http
+      host: payment-service
+      port: 80

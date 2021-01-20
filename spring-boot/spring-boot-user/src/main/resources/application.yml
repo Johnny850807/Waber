@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: ${waber.client.mysql.scheme}://${waber.client.mysql.host}:${waber.client.mysql.port}/${waber.client.mysql.database}
+    url: jdbc:mysql://localhost:3306/waber_user
     username: root
     password: 1qaz2wsx
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,6 +17,3 @@ spring:
 
 waber:
   activities: ValentinesDay
-  client:
-    mysql:
-      database: waber_user

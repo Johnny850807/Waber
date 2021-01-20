@@ -24,38 +24,52 @@ services:
       RABBITMQ_DEFAULT_VHOST: /waber
     networks:
       - waber
-  user-svc:
+  user-service:
     build: spring-boot/spring-boot-user
     ports:
       - "8000:80"
     networks:
       - waber
+    depends_on:
+      - mysql
     environment:
       spring.profiles.active: microservice
-  match-svc:
+      spring.datasource.url: jdbc:mysql://mysql:3306/waber_match
+  match-service:
     build: spring-boot/spring-boot-match
     ports:
       - "8001:80"
     networks:
       - waber
+    depends_on:
+      - mysql
+      - rabbitmq
     environment:
       spring.profiles.active: microservice
-  trip-svc:
+      spring.datasource.url: jdbc:mysql://mysql:3306/waber_match
+  trip-service:
     build: spring-boot/spring-boot-trip
     ports:
       - "8002:80"
     networks:
       - waber
+    depends_on:
+      - mongodb
+      - rabbitmq
     environment:
       spring.profiles.active: microservice
-  payment-svc:
+      spring.data.mongodb.uri: mongodb://mongodb:27017/waber_trip
+  payment-service:
     build: spring-boot/spring-boot-payment
     ports:
       - "8003:80"
     networks:
       - waber
+    depends_on:
+      - mongodb
     environment:
       spring.profiles.active: microservice
+      spring.data.mongodb.uri: mongodb://mongodb:27017/waber_payment
 
 volumes:
   mongo-db-data:

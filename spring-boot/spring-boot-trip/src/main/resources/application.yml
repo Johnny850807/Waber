@@ -5,4 +5,4 @@ spring:
     name: trip-service
   data:
     mongodb:
-      database: waber_trip
+      uri: mongodb://localhost:27017/waber_trip

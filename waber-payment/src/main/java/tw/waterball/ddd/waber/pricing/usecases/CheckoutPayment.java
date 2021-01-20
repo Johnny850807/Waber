@@ -16,13 +16,21 @@ import javax.inject.Named;
  * @author Waterball (johnny850807@gmail.com)
  */
 @Named
-@AllArgsConstructor
 public class CheckoutPayment {
     private PricingStrategy pricingStrategy;
     private MatchServiceDriver matchServiceDriver;
     private TripServiceDriver tripServiceDriver;
     private PaymentRepository paymentRepository;
 
+    public CheckoutPayment(PricingStrategy pricingStrategy,
+                           MatchServiceDriver matchServiceDriver,
+                           TripServiceDriver tripServiceDriver,
+                           PaymentRepository paymentRepository) {
+        this.pricingStrategy = pricingStrategy;
+        this.matchServiceDriver = matchServiceDriver;
+        this.tripServiceDriver = tripServiceDriver;
+        this.paymentRepository = paymentRepository;
+    }
 
     public void execute(Request request, Presenter presenter) {
         Trip trip = getTrip(request);

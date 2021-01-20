@@ -1,9 +1,6 @@
 package tw.waterball.ddd.waber.match.usecases;
 
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.model.Jobs;
 import tw.waterball.ddd.model.associations.Many;
 import tw.waterball.ddd.model.geo.DistanceCalculator;
@@ -12,6 +9,7 @@ import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.DriverHasBeenMatchedException;
 import tw.waterball.ddd.model.user.Passenger;
+import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 
 import java.util.concurrent.TimeUnit;
@@ -21,7 +19,6 @@ import java.util.concurrent.TimeUnit;
  */
 @AllArgsConstructor
 public class MatchingUseCase {
-    private final Logger logger = LogManager.getLogger();
     private final UserServiceDriver userServiceDriver;
     private final Jobs matchingJobs;
     private final MatchRepository matchRepository;

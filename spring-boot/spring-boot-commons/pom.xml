@@ -24,5 +24,9 @@
             <groupId>tw.waterball.ddd.api</groupId>
             <artifactId>api-trip</artifactId>
         </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd.api</groupId>
+            <artifactId>api-payment</artifactId>
+        </dependency>
     </dependencies>
 </project>

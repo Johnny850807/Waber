@@ -22,6 +22,10 @@ public class WaberProperties {
         private BaseUrl userService;
         @NestedConfigurationProperty
         private BaseUrl matchService;
+        @NestedConfigurationProperty
+        private BaseUrl tripService;
+        @NestedConfigurationProperty
+        private BaseUrl paymentService;
     }
 }
 
