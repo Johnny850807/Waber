@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import tw.waterball.ddd.api.match.FakeMatchServiceDriver;
 import tw.waterball.ddd.api.trip.TripView;
@@ -23,6 +24,7 @@ import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.stubs.UserStubs;
 import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
+import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 import tw.waterball.ddd.waber.springboot.trip.TripApplication;
 import tw.waterball.ddd.waber.springboot.trip.repositories.jpa.SpringBootTripRepository;
@@ -39,8 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 import static tw.waterball.ddd.api.trip.TripView.toViewModel;
 
-@ContextConfiguration(classes = {TripApplication.class, TripControllerTest.TestConfig.class})
-@AutoConfigureMockMvc
+@ActiveProfiles(FakeServiceDrivers.NAME)
+@ContextConfiguration(classes = TripApplication.class)
 class TripControllerTest extends AbstractSpringBootTest {
     Passenger passenger = UserStubs.NORMAL_PASSENGER;
     Driver driver = UserStubs.NORMAL_DRIVER;
@@ -55,16 +57,6 @@ class TripControllerTest extends AbstractSpringBootTest {
     @Autowired
     SpringBootTripRepository tripRepository;
 
-
-    @Configuration
-    public static class TestConfig {
-        @Primary
-        @Bean
-        public FakeMatchServiceDriver fakeMatchServiceDriver() {
-            return new FakeMatchServiceDriver();
-        }
-
-    }
 
     @AfterEach
     void cleanUp() {

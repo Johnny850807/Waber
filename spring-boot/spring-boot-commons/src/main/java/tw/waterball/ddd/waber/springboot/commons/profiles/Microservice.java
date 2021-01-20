@@ -16,6 +16,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Profile("microservice")
+@Profile(Microservice.NAME)
 public @interface Microservice {
+    String NAME = "microservice";
 }

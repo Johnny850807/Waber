@@ -12,6 +12,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Profile("fakeServiceDrivers")
+@Profile(FakeServiceDrivers.NAME)
 public @interface FakeServiceDrivers {
+    String NAME = "fakeServiceDrivers";
 }

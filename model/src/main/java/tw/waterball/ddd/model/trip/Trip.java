@@ -20,10 +20,11 @@ public class Trip extends AggregateRoot<String> {
         this.match = One.of(match);
     }
 
-    public Trip(Match match, TripState state) {
+    public Trip(String id, Match match) {
+        this.id = id;
         this.match = One.of(match);
-        this.state = state;
     }
+
 
     public Trip(String tripId, int matchId, Location destination, TripStateType type) {
         this.id = tripId;

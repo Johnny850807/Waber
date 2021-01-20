@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "tw.waterball.ddd")
 public class PaymentApplication {
     public static void main(String[] args) {
         SpringApplication.run(PaymentApplication.class, args);

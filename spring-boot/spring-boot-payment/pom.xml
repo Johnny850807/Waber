@@ -18,7 +18,16 @@
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-user</artifactId>
+            <artifactId>waber-payment</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd.api</groupId>
+            <artifactId>api-payment</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd.spring-boot</groupId>
+            <artifactId>test-kit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

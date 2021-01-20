@@ -19,7 +19,6 @@ import java.util.concurrent.ScheduledExecutorService;
  * @author - johnny850807@gmail.com (Waterball)
  */
 @EnableAspectJAutoProxy
-@EnableEurekaClient
 @SpringBootApplication(scanBasePackages = "tw.waterball.ddd")
 public class MatchApplication {
     public static void main(String[] args) {

@@ -31,8 +31,9 @@ public class TripView {
                 trip.getDestination(), trip.getState());
     }
 
-    public Trip toEntity(Match match) {
+    public Trip toEntityWithMatch(Match match) {
         Trip trip = new Trip(match);
+        trip.setId(id);
         trip.setDestination(destination);
         trip.setState(state.toState(trip));
         return trip;

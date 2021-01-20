@@ -31,7 +31,7 @@ public class CheckoutPayment {
     private Trip getTrip(Request request) {
         MatchView matchView = matchServiceDriver.getMatch(request.passengerId, request.matchId);
         TripView tripView = tripServiceDriver.getTrip(request.tripId);
-        return tripView.toEntity(matchView.toEntity());
+        return tripView.toEntityWithMatch(matchView.toEntity());
     }
 
     @AllArgsConstructor

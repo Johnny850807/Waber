@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.waber.api.payment.FakeUserServiceDriver;
@@ -15,6 +16,7 @@ import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.stubs.UserStubs;
+import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 import tw.waterball.ddd.waber.springboot.match.MatchApplication;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 
@@ -30,7 +32,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static tw.waterball.ddd.commons.utils.SneakyUtils.sneakyThrows;
 
-@ContextConfiguration(classes = {MatchApplication.class, MatchControllerTest.TestConfig.class})
+@ActiveProfiles(FakeServiceDrivers.NAME)
+@ContextConfiguration(classes = MatchApplication.class)
 public class MatchControllerTest extends AbstractSpringBootTest {
     private Driver driver = UserStubs.NORMAL_DRIVER;
     private Passenger passenger = UserStubs.NORMAL_PASSENGER;
@@ -40,14 +43,6 @@ public class MatchControllerTest extends AbstractSpringBootTest {
     @Autowired
     FakeUserServiceDriver userServiceDriver;
 
-    @Configuration
-    public static class TestConfig {
-        @Primary
-        @Bean
-        public FakeUserServiceDriver fakeUserServiceDriver() {
-            return new FakeUserServiceDriver();
-        }
-    }
 
     @BeforeEach
     public void setup() {
@@ -78,7 +73,7 @@ public class MatchControllerTest extends AbstractSpringBootTest {
         givenOneDriver();
 
         List<MatchView> matchViews = Collections.synchronizedList(new LinkedList<>());
-        IntStream.range(0, 8).parallel()
+        IntStream.range(0, 4).parallel()
                 .mapToObj((i) -> sneakyThrows(this::startMatching))
                 .map(matchView -> sneakyThrows(() -> pollCompletedMatch(8000, matchView)))
                 .forEach(matchViews::add);
@@ -87,7 +82,7 @@ public class MatchControllerTest extends AbstractSpringBootTest {
                 .filter(MatchView::isCompleted)
                 .count();
 
-        assertNotEquals(0, completionCount);
+        assertNotEquals(0, completionCount, "The only driver should be matched.");
         assertEquals(1, completionCount, "Race Condition: Found multiple match-completion but there is only one driver.");
     }
 

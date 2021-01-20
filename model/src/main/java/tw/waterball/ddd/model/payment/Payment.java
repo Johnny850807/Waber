@@ -31,6 +31,10 @@ public class Payment {
         return totalPrice;
     }
 
+    public String getTripId() {
+        return trip.getId();
+    }
+
     public One<Trip> getTripAssociation() {
         return trip;
     }

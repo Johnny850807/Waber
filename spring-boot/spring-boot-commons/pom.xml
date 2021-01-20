@@ -15,17 +15,14 @@
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
             <artifactId>api-user</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
             <artifactId>api-match</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
             <artifactId>api-trip</artifactId>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 </project>
