@@ -1,9 +1,3 @@
-spring:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
 waber:
   client:
     user-service:
@@ -18,3 +12,6 @@ waber:
       scheme: jdbc:mysql
       host: localhost
       port: 3306
+    mongo:
+      host: localhost
+      port: 27017

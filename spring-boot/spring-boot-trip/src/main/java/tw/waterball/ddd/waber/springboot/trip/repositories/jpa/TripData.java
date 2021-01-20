@@ -1,13 +1,13 @@
 package tw.waterball.ddd.waber.springboot.trip.repositories.jpa;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.trip.Trip;
 import tw.waterball.ddd.model.trip.TripState;
 import tw.waterball.ddd.model.trip.TripStateType;
 
-import javax.persistence.*;
 
 /**
  * @author Waterball (johnny850807@gmail.com)

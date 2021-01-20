@@ -25,6 +25,10 @@
             <artifactId>api-payment</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
             <groupId>tw.waterball.ddd.spring-boot</groupId>
             <artifactId>test-kit</artifactId>
             <scope>test</scope>

@@ -8,6 +8,7 @@ import tw.waterball.ddd.api.trip.TripView;
 import tw.waterball.ddd.model.payment.Payment;
 import tw.waterball.ddd.model.payment.PricingStrategy;
 import tw.waterball.ddd.model.trip.Trip;
+import tw.waterball.ddd.waber.pricing.repositories.PaymentRepository;
 
 import javax.inject.Named;
 
@@ -20,11 +21,14 @@ public class CheckoutPayment {
     private PricingStrategy pricingStrategy;
     private MatchServiceDriver matchServiceDriver;
     private TripServiceDriver tripServiceDriver;
+    private PaymentRepository paymentRepository;
+
 
     public void execute(Request request, Presenter presenter) {
         Trip trip = getTrip(request);
-        Payment payment = new Payment(pricingStrategy);
-        payment.checkout(trip);
+        Payment payment = new Payment();
+        payment.checkout(trip, pricingStrategy);
+        payment = paymentRepository.save(payment);
         presenter.present(payment);
     }
 

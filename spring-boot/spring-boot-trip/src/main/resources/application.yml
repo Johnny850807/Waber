@@ -3,3 +3,6 @@ server:
 spring:
   application:
     name: trip-service
+  data:
+    mongodb:
+      database: waber_trip
