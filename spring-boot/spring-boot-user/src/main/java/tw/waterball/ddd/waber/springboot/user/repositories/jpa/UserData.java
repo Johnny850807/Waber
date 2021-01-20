@@ -8,9 +8,12 @@ import tw.waterball.ddd.model.user.User;
 
 import javax.persistence.*;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@Table(name = "user")
 @Entity
 @Builder
 @Getter
@@ -21,7 +24,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class UserData {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = IDENTITY)
     private Integer id;
     private String name;
     private String email;

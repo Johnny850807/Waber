@@ -27,7 +27,7 @@ public class MatchApplication {
 
     @Bean
     public ScheduledExecutorService scheduledExecutorService(
-            @Value("${match.schedule.corePool}") int corePoolSize) {
+            @Value("${waber.match.schedule.corePool}") int corePoolSize) {
         return Executors.newScheduledThreadPool(corePoolSize);
     }
 
@@ -41,7 +41,7 @@ public class MatchApplication {
                                            Jobs matchingJobs,
                                            MatchRepository matchRepository,
                                            DistanceCalculator distanceCalculator,
-                                           @Value("${match.schedule.rescheduleDelayTimeInMs}") long rescheduleDelayTimeInMs) {
+                                           @Value("${waber.match.schedule.rescheduleDelayTimeInMs}") long rescheduleDelayTimeInMs) {
         return new MatchingUseCase(userServiceDriver, matchingJobs, matchRepository,
                 distanceCalculator, rescheduleDelayTimeInMs);
     }

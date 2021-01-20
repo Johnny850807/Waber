@@ -1,10 +1,20 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
 waber:
   client:
     user-service:
-      scheme: "http"
-      host: "localhost"
+      scheme: http
+      host: localhost
       port: 80
     match-service:
-      scheme: "http"
-      host: "localhost"
+      scheme: http
+      host: localhost
       port: 80
+    mysql:
+      scheme: jdbc:mysql
+      host: localhost
+      port: 3306

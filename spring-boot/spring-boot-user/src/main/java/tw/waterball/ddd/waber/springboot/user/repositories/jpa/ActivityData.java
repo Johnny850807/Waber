@@ -12,15 +12,18 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@Table(name = "activity")
 @Entity @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActivityData {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = IDENTITY)
     private Integer id;
     private String name;
 

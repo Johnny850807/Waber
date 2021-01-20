@@ -2,11 +2,22 @@ server:
   port: 80
 
 spring:
+  datasource:
+    url: ${waber.client.mysql.scheme}://${waber.client.mysql.host}:${waber.client.mysql.port}/${waber.client.mysql.database}
+    username: root
+    password: 1qaz2wsx
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
   application:
     name: match-service
 
-match:
-  schedule:
-    corePool: 8
-    rescheduleDelayTimeInMs: 3000
+waber:
+  match:
+    schedule:
+      corePool: 8
+      rescheduleDelayTimeInMs: 3000
+  client:
+    mysql:
+      database: waber_match
 
