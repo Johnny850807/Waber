@@ -15,6 +15,7 @@ import java.util.Collection;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@CrossOrigin
 @RequestMapping("/api/activities")
 @RestController
 @AllArgsConstructor

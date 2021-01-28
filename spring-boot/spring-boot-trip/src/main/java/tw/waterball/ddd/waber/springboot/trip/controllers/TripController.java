@@ -12,6 +12,7 @@ import tw.waterball.ddd.waber.trip.usecases.StartTrip;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
+@CrossOrigin
 @AllArgsConstructor
 @RequestMapping("/api/users/{passengerId}/matches/{matchId}/trips")
 @RestController
@@ -19,7 +20,6 @@ public class TripController {
     private StartTrip startTrip;
     private StartDriving startDriving;
     private Arrive arrive;
-
 
     @PostMapping
     public TripView startTrip(@PathVariable int passengerId,

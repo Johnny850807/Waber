@@ -22,6 +22,7 @@ import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@CrossOrigin
 @RequestMapping("/api/users/{passengerId}/matches")
 @RestController
 public class MatchController {

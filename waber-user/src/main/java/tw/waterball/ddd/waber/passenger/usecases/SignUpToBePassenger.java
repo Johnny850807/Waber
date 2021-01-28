@@ -17,6 +17,7 @@ public class SignUpToBePassenger {
 
     public Passenger execute(Request req) {
         Passenger passenger = new Passenger(req.name, req.email, req.password);
+        passenger.validate();
         return (Passenger) userRepository.save(passenger);
     }
 

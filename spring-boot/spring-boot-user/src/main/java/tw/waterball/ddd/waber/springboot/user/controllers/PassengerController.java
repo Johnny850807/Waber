@@ -1,10 +1,7 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.waber.driver.usecases.SignUpToBeDriver;
@@ -13,6 +10,7 @@ import tw.waterball.ddd.waber.passenger.usecases.SignUpToBePassenger;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@CrossOrigin
 @RequestMapping("/api/passengers")
 @RestController
 @AllArgsConstructor

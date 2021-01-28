@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -27,6 +28,11 @@ public class UserController {
         this.signIn = signIn;
         this.updateLatestLocation = updateLatestLocation;
         this.userRepository = userRepository;
+    }
+
+    @GetMapping("/health")
+    public String healthCheck() {
+        return "OK";
     }
 
     @GetMapping("/{userId}")

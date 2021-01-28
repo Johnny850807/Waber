@@ -1,10 +1,7 @@
 package tw.waterball.ddd.waber.springboot.trip.controllers;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.api.trip.TripView;
 import tw.waterball.ddd.waber.springboot.trip.repositories.jpa.SpringBootTripRepository;
 
@@ -14,6 +11,7 @@ import java.util.stream.Collectors;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
+@CrossOrigin
 @AllArgsConstructor
 @RequestMapping("/api/users/{userId}/trips")
 @RestController

@@ -1,6 +1,8 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
 import lombok.AllArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.commons.model.ErrorMessage;
@@ -15,6 +17,7 @@ import java.util.Collection;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@CrossOrigin
 @RequestMapping("/api/drivers")
 @RestController
 @AllArgsConstructor
