@@ -21,6 +21,13 @@ public class TripController {
     private StartDriving startDriving;
     private Arrive arrive;
 
+
+    @GetMapping("/health")
+    public String health(@PathVariable int passengerId,
+                         @PathVariable int matchId) {
+        return "OK";
+    }
+
     @PostMapping
     public TripView startTrip(@PathVariable int passengerId,
                               @PathVariable int matchId) {

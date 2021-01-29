@@ -38,6 +38,11 @@ public class MatchController {
         this.userServiceDriver = userServiceDriver;
     }
 
+    @GetMapping("/health")
+    public String health(@PathVariable int passengerId) {
+        return "OK";
+    }
+
     @PostMapping
     public MatchView startMatching(@PathVariable int passengerId,
                                    @RequestBody MatchPreferences matchPreferences) {
