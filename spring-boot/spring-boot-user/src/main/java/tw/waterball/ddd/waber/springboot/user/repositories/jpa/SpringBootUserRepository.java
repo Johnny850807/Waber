@@ -3,6 +3,7 @@ package tw.waterball.ddd.waber.springboot.user.repositories.jpa;
 import org.springframework.stereotype.Component;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.geo.Location;
+import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.User;
 import tw.waterball.ddd.waber.user.repositories.UserRepository;
 
@@ -23,6 +24,13 @@ public class SpringBootUserRepository implements UserRepository {
     }
 
     @Override
+    public List<Driver> findAllDrivers() {
+        return jpaUserDataPort.findAllByDriverIsTrue()
+                .stream().map(UserData::toDriver)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<User> findById(int userId) {
         return jpaUserDataPort.findById(userId)
                 .map(UserData::toEntity);
@@ -39,6 +47,13 @@ public class SpringBootUserRepository implements UserRepository {
     public List<User> findAllByIds(Iterable<Integer> userIds) {
         return jpaUserDataPort.findAllById(userIds)
                 .stream().map(UserData::toEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Driver> findAllDriversByCarType(Driver.CarType carType) {
+        return jpaUserDataPort.findAllByCarType(carType)
+                .stream().map(UserData::toDriver)
                 .collect(Collectors.toList());
     }
 

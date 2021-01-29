@@ -1,5 +1,6 @@
 package tw.waterball.ddd.model.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,8 @@ public class User extends AggregateRoot<Integer> {
     protected String email;
 
     @NotBlank
+    // TODO directly couple with jackson, should use ViewModel to hide the password
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     protected String password;
 
     protected Location location;

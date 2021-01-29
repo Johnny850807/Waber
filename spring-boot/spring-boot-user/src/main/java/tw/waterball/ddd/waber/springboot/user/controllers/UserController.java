@@ -9,10 +9,6 @@ import tw.waterball.ddd.waber.user.repositories.UserRepository;
 import tw.waterball.ddd.waber.user.usecases.SignIn;
 import tw.waterball.ddd.waber.user.usecases.UpdateLatestLocation;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */

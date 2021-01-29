@@ -39,10 +39,9 @@ public class DriverController {
         public Driver.CarType carType;
     }
 
-
     @GetMapping
-    public Collection<Driver> queryDrivers(@RequestParam String activityName,
-                                           @RequestParam Driver.CarType carType) {
+    public Collection<Driver> queryDrivers(@RequestParam(required = false) String activityName,
+                                           @RequestParam(required = false) Driver.CarType carType) {
         return queryDrivers.execute(new QueryDrivers.Request(activityName, carType));
     }
 

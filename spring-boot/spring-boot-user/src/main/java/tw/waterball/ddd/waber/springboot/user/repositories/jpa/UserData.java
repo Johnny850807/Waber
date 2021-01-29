@@ -32,7 +32,7 @@ public class UserData {
     private Driver.CarType carType;
     private double latitude;
     private double longitude;
-    private boolean isDriver;
+    private boolean driver;
 
     public static UserData toData(User user) {
         return user instanceof Driver ? toData((Driver) user)
@@ -46,7 +46,7 @@ public class UserData {
                 .email(driver.getEmail())
                 .password(driver.getPassword())
                 .carType(driver.getCarType())
-                .isDriver(true)
+                .driver(true)
                 .build();
     }
 
@@ -56,7 +56,7 @@ public class UserData {
                 .name(passenger.getName())
                 .email(passenger.getEmail())
                 .password(passenger.getPassword())
-                .isDriver(false)
+                .driver(false)
                 .build();
     }
 

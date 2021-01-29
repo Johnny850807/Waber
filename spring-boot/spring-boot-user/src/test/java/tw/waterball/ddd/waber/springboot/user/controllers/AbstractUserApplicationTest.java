@@ -1,6 +1,7 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,6 +14,7 @@ import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 import tw.waterball.ddd.waber.springboot.user.UserApplication;
 import tw.waterball.ddd.waber.user.repositories.UserRepository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,19 +39,18 @@ public abstract class AbstractUserApplicationTest extends AbstractSpringBootTest
     }
 
     protected Driver signUpDriver() throws Exception {
-        this.driver = getBody(mockMvc.perform(post("/api/drivers")
+        Driver newDriver = getBody(mockMvc.perform(post("/api/drivers")
                 .content(toJson(driver))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()), Driver.class);
-        return driver;
+        return newDriver;
     }
 
     protected Passenger signUpPassenger() throws Exception {
-        this.passenger = getBody(mockMvc.perform(post("/api/passengers")
+        return getBody(mockMvc.perform(post("/api/passengers")
                 .content(toJson(passenger))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()), Passenger.class);
-        return passenger;
     }
 
     protected User getUser(int userId) throws Exception {

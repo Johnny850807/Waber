@@ -20,7 +20,7 @@ public class UserControllerTest extends AbstractUserApplicationTest {
 
     @Test
     void GivenPassengerSignedUp_WhenSignIn_ShouldSucceed() throws Exception {
-        passenger = signUpPassenger();
+        signUpPassenger();
 
         SignInParams signInParams = new SignInParams(passenger.getEmail(), passenger.getPassword());
         Passenger actual = signIn(signInParams);
