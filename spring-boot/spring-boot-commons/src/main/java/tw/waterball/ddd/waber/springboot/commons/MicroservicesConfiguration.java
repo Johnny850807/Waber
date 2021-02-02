@@ -18,10 +18,9 @@ import tw.waterball.ddd.waber.springboot.commons.profiles.Microservice;
 public class MicroservicesConfiguration {
 
     @Bean
-    public RestUserServiceDriver restUserServiceDriver(ObjectMapper objectMapper,
-                                                       WaberProperties waberProperties,
+    public RestUserServiceDriver restUserServiceDriver(WaberProperties waberProperties,
                                                        RestTemplate restTemplate) {
-        return new RestUserServiceDriver(objectMapper, waberProperties.getClient().getUserService(), restTemplate);
+        return new RestUserServiceDriver(waberProperties.getClient().getUserService(), restTemplate);
     }
 
     @Bean

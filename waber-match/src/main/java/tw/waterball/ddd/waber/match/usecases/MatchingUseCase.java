@@ -1,6 +1,7 @@
 package tw.waterball.ddd.waber.match.usecases;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import tw.waterball.ddd.model.Jobs;
 import tw.waterball.ddd.model.associations.Many;
 import tw.waterball.ddd.model.geo.DistanceCalculator;
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@Slf4j
 @AllArgsConstructor
 public class MatchingUseCase {
     private final UserServiceDriver userServiceDriver;
@@ -35,7 +37,7 @@ public class MatchingUseCase {
 
     private void scheduleMatchingJob(Match match, Many<Driver> drivers) {
         matchingJobs.scheduleWithFixedDelay(match.getId(),
-                () -> matchDriver(match, drivers), 0, rescheduleDelayTimeInMs, TimeUnit.MICROSECONDS);
+                () -> matchDriver(match, drivers), 0, rescheduleDelayTimeInMs, TimeUnit.MILLISECONDS);
     }
 
     private void matchDriver(Match match, Many<Driver> drivers) {
@@ -46,10 +48,15 @@ public class MatchingUseCase {
                     userServiceDriver.setDriverStatus(match.getDriver().getId(), Driver.Status.MATCHED);
                     matchRepository.save(match);
                     matchingJobs.cancelJob(match.getId());
+                    log.info("Matched Driver: {}.", match.getDriver().getName());
                 } catch (DriverHasBeenMatchedException err) {
                     match.cancel();
+                    log.info(err.getMessage());
                 }
+            } else {
+                log.info("The match is still pending...");
             }
+
             drivers.reset();
         });
     }
@@ -64,10 +71,17 @@ public class MatchingUseCase {
     }
 
     private void syncByJobId(int matchId, Runnable runnable) {
-        synchronized (matchingJobs.getJob(matchId)) {
+        try {
             if (matchingJobs.containsJob(matchId)) {
-                runnable.run();
+                synchronized (matchingJobs.getJob(matchId)) {
+                    if (matchingJobs.containsJob(matchId)) {
+                        runnable.run();
+                    }
+                }
             }
+        } catch (Exception err) {
+            log.error(err.getMessage(), err);
+            matchingJobs.cancelJob(matchId);
         }
     }
 

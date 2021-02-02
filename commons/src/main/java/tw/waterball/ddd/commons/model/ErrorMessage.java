@@ -41,7 +41,9 @@ public class ErrorMessage {
 
     public void throwException() throws RuntimeException {
         try {
-            throw errorType.getDeclaredConstructor(String.class).newInstance(message);
+            if (errorType != null) {
+                throw errorType.getDeclaredConstructor(String.class).newInstance(message);
+            }
         } catch (NoSuchMethodException| IllegalAccessException| InvocationTargetException| InstantiationException err) {
             try {
                 throw errorType.getDeclaredConstructor().newInstance();

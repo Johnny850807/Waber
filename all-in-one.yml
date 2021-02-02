@@ -41,7 +41,7 @@ services:
       - "traefik.http.routers.user-service.entrypoints=web"
       - "traefik.http.routers.user-service.service=user-service"
       - "traefik.http.services.user-service.loadbalancer.server.port=80"
-      - "traefik.http.routers.user-service.priority=0"
+      - "traefik.http.routers.user-service.priority=1"
   match-service:
     build: spring-boot/spring-boot-match
     networks:
@@ -58,7 +58,7 @@ services:
       - "traefik.http.routers.match-service.entrypoints=web"
       - "traefik.http.routers.match-service.service=match-service"
       - "traefik.http.services.match-service.loadbalancer.server.port=80"
-      - "traefik.http.routers.user-service.priority=1"
+      - "traefik.http.routers.match-service.priority=2"
   trip-service:
     build: spring-boot/spring-boot-trip
     networks:

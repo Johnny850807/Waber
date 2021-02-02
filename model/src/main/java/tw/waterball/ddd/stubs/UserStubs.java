@@ -11,5 +11,6 @@ public class UserStubs {
     public static Passenger NORMAL_PASSENGER = new Passenger(20, "User", "user@email.com",
             "password", new Location(400, 50));
     public static Driver NORMAL_DRIVER = new Driver(10, "Driver", "driver@email.com", "password",
-                                           Driver.CarType.Business, new Location(300, 50));
+            Driver.CarType.Business,
+            new Location(300, 50), Driver.Status.AVAILABLE);
 }

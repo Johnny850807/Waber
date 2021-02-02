@@ -21,7 +21,7 @@ public class QueryDrivers {
     private UserRepository userRepository;
 
     public Collection<Driver> execute(Request req) {
-        if (req.activityName != null) {
+        if (req.activityName != null && !req.activityName.trim().isEmpty()) {
             Activity activity = activityRepository.findByName(req.activityName)
                     .orElseThrow(NotFoundException::new);
             return activity.getParticipantDrivers().stream()

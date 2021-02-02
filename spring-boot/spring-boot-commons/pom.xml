@@ -28,5 +28,9 @@
             <groupId>tw.waterball.ddd.api</groupId>
             <artifactId>api-payment</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
     </dependencies>
 </project>

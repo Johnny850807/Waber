@@ -4,7 +4,8 @@ package tw.waterball.ddd.model.user;
  * @author Waterball (johnny850807@gmail.com)
  */
 public class DriverHasBeenMatchedException extends RuntimeException {
-    public DriverHasBeenMatchedException() {
+    public DriverHasBeenMatchedException(Driver driver) {
+        super("The driver " + driver.getName() + " has been matched.");
     }
 
     public DriverHasBeenMatchedException(String message) {

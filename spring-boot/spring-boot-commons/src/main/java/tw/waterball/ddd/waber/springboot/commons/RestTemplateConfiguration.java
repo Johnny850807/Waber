@@ -9,6 +9,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import tw.waterball.ddd.commons.model.ErrorMessage;
@@ -25,10 +26,11 @@ import java.util.List;
 public class RestTemplateConfiguration {
     @Bean
     @LoadBalanced
-    public RestTemplate restTemplate(List<ResponseErrorHandler> responseErrorHandlers) {
+    public RestTemplate restTemplate(ResponseErrorHandler responseErrorHandler) {
         var builder = new RestTemplateBuilder();
-        responseErrorHandlers.forEach(builder::errorHandler);
-        return builder.build();
+        return builder.requestFactory(HttpComponentsClientHttpRequestFactory::new)
+                .errorHandler(responseErrorHandler)
+                .build();
     }
 
     @Bean

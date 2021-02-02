@@ -1,6 +1,5 @@
 package tw.waterball.ddd.waber.api.payment;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpEntity;
@@ -25,7 +24,6 @@ import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
  */
 @AllArgsConstructor
 public class RestUserServiceDriver implements UserServiceDriver {
-    private ObjectMapper objectMapper;
     private BaseUrl userServiceBaseUrl;
     private RestTemplate api;
 
@@ -51,13 +49,13 @@ public class RestUserServiceDriver implements UserServiceDriver {
         return asList(requireNonNull(drivers));
     }
 
-    @SneakyThrows
     @Override
     public void setDriverStatus(int driverId, Driver.Status status) throws DriverHasBeenMatchedException {
-        var httpEntity = new HttpEntity<>(status.toString());
-        httpEntity.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+        var headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+        var httpEntity = new HttpEntity<>(status.toString(), headers);
 
         api.exchange(userServiceBaseUrl.withPath("/api/drivers/" + driverId),
-                 HttpMethod.PATCH, httpEntity, String.class);
+                HttpMethod.PATCH, httpEntity, String.class);
     }
 }

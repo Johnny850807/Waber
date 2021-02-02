@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.springboot.match.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
@@ -22,6 +23,7 @@ import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@Slf4j
 @CrossOrigin
 @RequestMapping("/api/users/{passengerId}/matches")
 @RestController

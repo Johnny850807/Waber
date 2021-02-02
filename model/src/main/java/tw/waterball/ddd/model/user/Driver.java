@@ -31,9 +31,10 @@ public class Driver extends User {
         super(id);
     }
 
-    public Driver(int id, String name, String email, String password, CarType carType, Location latestLocation) {
+    public Driver(int id, String name, String email, String password, CarType carType, Location latestLocation, Status status) {
         super(id, name, email, password, latestLocation);
         this.carType = carType;
+        this.status = status;
     }
 
     public Driver(String name, String email, String password, CarType carType) {
@@ -43,7 +44,7 @@ public class Driver extends User {
 
     public void setStatus(Status status) {
         if (this.status == Status.MATCHED && status == Status.MATCHED) {
-            throw new DriverHasBeenMatchedException();
+            throw new DriverHasBeenMatchedException(this);
         }
         this.status = status;
     }
