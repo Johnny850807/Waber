@@ -22,11 +22,11 @@ public class EventBus {
         subscribers.add(subscriber);
     }
 
-    public void publish(Object event) {
+    public void publish(Event event) {
         subscribers.forEach(subscriber -> subscriber.onEvent(event));
     }
 
     public interface Subscriber {
-        void onEvent(Object obj);
+        void onEvent(Event event);
     }
 }

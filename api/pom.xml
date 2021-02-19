@@ -17,6 +17,7 @@
         <module>api-match</module>
         <module>api-trip</module>
         <module>api-payment</module>
+        <module>api-events</module>
     </modules>
 
     <dependencyManagement>

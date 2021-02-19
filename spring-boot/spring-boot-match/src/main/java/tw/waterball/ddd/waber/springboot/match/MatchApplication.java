@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.model.Jobs;
 import tw.waterball.ddd.model.geo.DistanceCalculator;
 import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
@@ -40,9 +41,10 @@ public class MatchApplication {
                                            Jobs matchingJobs,
                                            MatchRepository matchRepository,
                                            DistanceCalculator distanceCalculator,
+                                           EventBus eventBus,
                                            @Value("${waber.match.schedule.rescheduleDelayTimeInMs}") long rescheduleDelayTimeInMs) {
         return new MatchingUseCase(userServiceDriver, matchingJobs, matchRepository,
-                distanceCalculator, rescheduleDelayTimeInMs);
+                distanceCalculator, rescheduleDelayTimeInMs, eventBus);
     }
 
 }

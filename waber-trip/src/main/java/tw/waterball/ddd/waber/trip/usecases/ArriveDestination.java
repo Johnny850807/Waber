@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
+import tw.waterball.ddd.events.EventBus;
+import tw.waterball.ddd.events.TripArrivedEvent;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.Trip;
 import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
+import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.waber.trip.repositories.TripRepository;
 
 import javax.inject.Named;
@@ -16,17 +19,18 @@ import javax.inject.Named;
  */
 @Named
 @AllArgsConstructor
-public class Arrive {
+public class ArriveDestination {
     private MatchServiceDriver matchServiceDriver;
     private PaymentServiceDriver paymentServiceDriver;
     private TripRepository tripRepository;
 
-    public void execute(Request req) {
+    public void execute(Request req, EventBus eventBus) {
         Match match = getMatch(req);
         Trip trip = tripRepository.findById(req.tripId).orElseThrow(NotFoundException::new);
         trip.getMatchAssociation().resolveAssociation(match);
         trip.arrive();
         tripRepository.save(trip);
+        eventBus.publish(new TripArrivedEvent(match, trip));
         paymentServiceDriver.checkoutPayment(req.passengerId, req.matchId, trip.getId());
     }
 

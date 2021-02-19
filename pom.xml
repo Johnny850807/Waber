@@ -82,6 +82,11 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
+                <groupId>tw.waterball.ddd.api</groupId>
+                <artifactId>api-events</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
                 <version>3.3.3</version>

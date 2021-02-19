@@ -12,6 +12,9 @@ public interface MatchRepository {
 
     Optional<Match> findById(int matchId);
 
+    Optional<Match> findPassengerCurrentMatch(int passengerId);
+
+
     Match associateById(int matchId);
 
 }

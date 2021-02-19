@@ -32,9 +32,11 @@ services:
     - "8011:8011"
     depends_on:
       - mysql
+      - rabbitmq
     environment:
       spring.profiles.active: microservice
       spring.datasource.url: jdbc:mysql://mysql:3306/waber_user
+      spring.rabbitmq.host: rabbitmq
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.user-service.rule=PathPrefix(`/api/users`) || PathPrefix(`/api/passengers`) || PathPrefix(`/api/drivers`)"
@@ -52,6 +54,7 @@ services:
     environment:
       spring.profiles.active: microservice
       spring.datasource.url: jdbc:mysql://mysql:3306/waber_match
+      spring.rabbitmq.host: rabbitmq
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.match-service.rule=PathPrefix(`/api/users/{passengerId:[0-9]+}/matches`)"
@@ -69,6 +72,7 @@ services:
     environment:
       spring.profiles.active: microservice
       spring.data.mongodb.uri: mongodb://mongodb:27017/waber_trip
+      spring.rabbitmq.host: rabbitmq
   payment-service:
     build: spring-boot/spring-boot-payment
     networks:
@@ -78,6 +82,7 @@ services:
     environment:
       spring.profiles.active: microservice
       spring.data.mongodb.uri: mongodb://mongodb:27017/waber_payment
+      spring.rabbitmq.host: rabbitmq
   traefik:
     image: traefik:v2.3
     command:

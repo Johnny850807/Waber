@@ -10,11 +10,12 @@ import tw.waterball.ddd.model.geo.Location;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
-@Setter
 @Getter
 @NoArgsConstructor
 public class User extends AggregateRoot<Integer> {
@@ -48,6 +49,22 @@ public class User extends AggregateRoot<Integer> {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
 }

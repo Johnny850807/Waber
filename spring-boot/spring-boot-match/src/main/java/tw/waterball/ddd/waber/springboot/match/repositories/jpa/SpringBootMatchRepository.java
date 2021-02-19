@@ -31,6 +31,12 @@ public class SpringBootMatchRepository implements MatchRepository {
     }
 
     @Override
+    public Optional<Match> findPassengerCurrentMatch(int passengerId) {
+        return dataPort.findFirstByPassengerIdOrderByCreatedDateDesc(passengerId)
+                .map(MatchData::toEntity);
+    }
+
+    @Override
     public Match associateById(int matchId) {
         try {
             return dataPort.getOne(matchId).toEntity();

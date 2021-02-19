@@ -9,6 +9,8 @@ import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 
+import java.util.Date;
+
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
@@ -21,6 +23,7 @@ public class MatchView {
     public DriverView driver;
     public boolean completed;
     public MatchPreferences matchPreferences;
+    public Date createdDate;
 
     public static MatchView toViewModel(Match match) {
         return MatchView.builder()
@@ -30,6 +33,7 @@ public class MatchView {
                         .map(DriverView::fromEntity).orElse(null))
                 .completed(match.isCompleted())
                 .matchPreferences(match.getPreferences())
+                .createdDate(match.getCreatedDate())
                 .build();
     }
 
@@ -38,7 +42,7 @@ public class MatchView {
     }
 
     public Match toEntity() {
-        return new Match(id, passengerId, driver.id, matchPreferences);
+        return new Match(id, passengerId, driver.id, matchPreferences, createdDate);
     }
 
     public int getId() {

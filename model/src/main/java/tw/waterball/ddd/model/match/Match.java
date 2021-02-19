@@ -1,6 +1,5 @@
 package tw.waterball.ddd.model.match;
 
-import tw.waterball.ddd.events.MatchCompleteEvent;
 import tw.waterball.ddd.model.associations.Many;
 import tw.waterball.ddd.model.associations.One;
 import tw.waterball.ddd.model.associations.ZeroOrOne;
@@ -11,6 +10,7 @@ import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -24,16 +24,18 @@ public class Match extends AggregateRoot<Integer> {
     private MatchPreferences preferences;
     private One<Passenger> passenger = new One<>();
     private ZeroOrOne<Driver> driver = new ZeroOrOne<>();
+    private Date createdDate = new Date();
 
     public static Match start(Passenger passenger, MatchPreferences preferences) {
         return new Match(passenger, preferences);
     }
 
-    public Match(Integer id, int passengerId, Integer driverId, MatchPreferences preferences) {
+    public Match(Integer id, int passengerId, Integer driverId, MatchPreferences preferences, Date createdDate) {
         super(id);
         passenger.resolveId(passengerId);
         driver.resolveId(driverId);
         this.preferences = preferences;
+        this.createdDate = createdDate;
     }
 
     public Match(Integer id, int passengerId, Driver driver, MatchPreferences preferences) {
@@ -71,9 +73,8 @@ public class Match extends AggregateRoot<Integer> {
         driver.reset();
     }
 
-    public MatchCompleteEvent complete(Driver driver) {
+    public void complete(Driver driver) {
         this.driver.resolveAssociation(driver);
-        return new MatchCompleteEvent(passenger.get().getId(), driver);
     }
 
     public void setDriver(Driver driver) {
@@ -127,5 +128,9 @@ public class Match extends AggregateRoot<Integer> {
 
     public One<Passenger> getPassengerAssociation() {
         return passenger;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
     }
 }

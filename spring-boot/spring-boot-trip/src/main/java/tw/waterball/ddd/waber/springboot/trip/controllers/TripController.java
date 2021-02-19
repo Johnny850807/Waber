@@ -3,9 +3,10 @@ package tw.waterball.ddd.waber.springboot.trip.controllers;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.api.trip.TripView;
+import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.waber.springboot.trip.presenters.TripPresenter;
-import tw.waterball.ddd.waber.trip.usecases.Arrive;
+import tw.waterball.ddd.waber.trip.usecases.ArriveDestination;
 import tw.waterball.ddd.waber.trip.usecases.StartDriving;
 import tw.waterball.ddd.waber.trip.usecases.StartTrip;
 
@@ -19,7 +20,8 @@ import tw.waterball.ddd.waber.trip.usecases.StartTrip;
 public class TripController {
     private StartTrip startTrip;
     private StartDriving startDriving;
-    private Arrive arrive;
+    private ArriveDestination arriveDestination;
+    private EventBus eventBus;
 
 
     @GetMapping("/health")
@@ -48,7 +50,8 @@ public class TripController {
     public void arrive(@PathVariable int passengerId,
                        @PathVariable int matchId,
                        @PathVariable String tripId) {
-        arrive.execute(new Arrive.Request(passengerId, matchId, tripId));
+        arriveDestination.execute(new ArriveDestination.Request(passengerId, matchId, tripId),
+                eventBus);
     }
 
 

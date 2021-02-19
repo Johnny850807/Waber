@@ -6,6 +6,8 @@ import tw.waterball.ddd.model.user.Driver;
 
 import javax.persistence.*;
 
+import java.util.Date;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 /**
@@ -26,6 +28,7 @@ public class MatchData {
     private Integer driverId;
     @Embedded
     private MatchPreferencesData matchPreferences;
+    private Date createdDate;
 
     public static MatchData fromEntity(Match match) {
         return MatchData.builder()
@@ -34,10 +37,13 @@ public class MatchData {
                         .map(Driver::getId).orElse(null))
                 .passengerId(match.getPassenger().getId())
                 .matchPreferences(MatchPreferencesData.fromEntity(match.getPreferences()))
+                .createdDate(match.getCreatedDate())
                 .build();
     }
 
     public Match toEntity() {
-        return new Match(getId(), getPassengerId(), getDriverId(), getMatchPreferences().toEntity());
+        return new Match(getId(), getPassengerId(),
+                getDriverId(), getMatchPreferences().toEntity(),
+                createdDate);
     }
 }

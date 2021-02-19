@@ -2,6 +2,8 @@ package tw.waterball.ddd.waber.match.usecases;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import tw.waterball.ddd.events.EventBus;
+import tw.waterball.ddd.events.MatchCompleteEvent;
 import tw.waterball.ddd.model.Jobs;
 import tw.waterball.ddd.model.associations.Many;
 import tw.waterball.ddd.model.geo.DistanceCalculator;
@@ -26,6 +28,7 @@ public class MatchingUseCase {
     private final MatchRepository matchRepository;
     private final DistanceCalculator distanceCalculator;
     private final long rescheduleDelayTimeInMs;
+    private final EventBus eventBus;
 
 
     public void execute(StartMatchingRequest req, Presenter presenter) {
@@ -48,6 +51,7 @@ public class MatchingUseCase {
                     userServiceDriver.setDriverStatus(match.getDriver().getId(), Driver.Status.MATCHED);
                     matchRepository.save(match);
                     matchingJobs.cancelJob(match.getId());
+                    eventBus.publish(new MatchCompleteEvent(match));
                     log.info("Matched Driver: {}.", match.getDriver().getName());
                 } catch (DriverHasBeenMatchedException err) {
                     match.cancel();

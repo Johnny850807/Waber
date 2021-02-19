@@ -1,3 +1,11 @@
+spring:
+  rabbitmq:
+    virtual-host: /waber
+    username: waber
+    password: waber
+    host: localhost
+    port: 5672
+
 waber:
   client:
     user-service:
