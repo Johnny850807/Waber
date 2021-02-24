@@ -28,12 +28,12 @@ public class RestTemplateConfiguration {
     @Bean
     @LoadBalanced
     public RestTemplate restTemplate(ResponseErrorHandler responseErrorHandler,
-                                     MappingJackson2HttpMessageConverter myJacksonHttpMessageConverter) {
+                                     ObjectMapper objectMapper) {
         var builder = new RestTemplateBuilder();
         RestTemplate restTemplate = builder.requestFactory(HttpComponentsClientHttpRequestFactory::new)
                 .errorHandler(responseErrorHandler)
                 .build();
-        restTemplate.getMessageConverters().add(0, myJacksonHttpMessageConverter);
+        restTemplate.getMessageConverters().add(0, new MappingJackson2HttpMessageConverter(objectMapper));
         return restTemplate;
     }
 

@@ -19,6 +19,7 @@ import tw.waterball.ddd.waber.springboot.match.presenters.MatchPresenter;
 import tw.waterball.ddd.waber.springboot.match.repositories.jpa.MatchData;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 
@@ -31,10 +32,9 @@ import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 @RestController
 @AllArgsConstructor
 public class MatchController {
-    private MatchingUseCase matchingUseCase;
-    private MatchRepository matchRepository;
-    private UserServiceDriver userServiceDriver;
-
+    private final MatchingUseCase matchingUseCase;
+    private final MatchRepository matchRepository;
+    private final UserServiceDriver userServiceDriver;
 
     @PostMapping
     public MatchView startMatching(@PathVariable int userId,
@@ -49,10 +49,10 @@ public class MatchController {
     @GetMapping("/current")
     public MatchView getMatch(@PathVariable int userId) {
         User user = userServiceDriver.getUser(userId);
-        Optional<Match> foundMatch = user instanceof Passenger ?
-                matchRepository.findPassengerCurrentMatch(userId) :
-                matchRepository.findDriverCurrentMatch(userId);
-        return foundMatch
+        Supplier<Optional<Match>> findMatch = user instanceof Passenger ?
+                () -> matchRepository.findPassengerCurrentMatch(userId) :
+                () -> matchRepository.findDriverCurrentMatch(userId);
+        return findMatch.get()
                 .map(this::toMatchView)
                 .orElseThrow(NotFoundException::new);
     }

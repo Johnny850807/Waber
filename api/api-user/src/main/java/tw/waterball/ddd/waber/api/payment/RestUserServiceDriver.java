@@ -30,12 +30,20 @@ public class RestUserServiceDriver implements UserServiceDriver {
 
     @Override
     public Driver getDriver(int driverId) {
-        return (Driver) getUser(driverId);
+        User user = getUser(driverId);
+        if (!(user instanceof Driver)) {
+            throw new IllegalStateException("User (id=" + driverId + ") is not a driver.");
+        }
+        return (Driver) user;
     }
 
     @Override
     public Passenger getPassenger(int passengerId) {
-        return (Passenger) getUser(passengerId);
+        User user = getUser(passengerId);
+        if (!(user instanceof Passenger)) {
+            throw new IllegalStateException("User (id=" + passengerId + ") is not a passenger.");
+        }
+        return (Passenger) user;
     }
 
     @Override
