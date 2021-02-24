@@ -1,6 +1,7 @@
 package tw.waterball.ddd.waber.springboot.broker.brokers;
 
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -11,10 +12,11 @@ import tw.waterball.ddd.events.UserLocationUpdatedEvent;
  * @author Waterball (johnny850807@gmail.com)
  */
 @Slf4j
-@Controller
 @AllArgsConstructor
+@Controller
 public class UserLocationBrokers {
-    private SimpMessagingTemplate simpMessaging;
+    private final SimpMessagingTemplate simpMessaging;
+
 
     @RabbitListener(queues = "/users/location")
     public void listenToMatch(UserLocationUpdatedEvent event) {
@@ -22,4 +24,5 @@ public class UserLocationBrokers {
         String destination = String.format("/users/%d/location", event.getUserId());
         simpMessaging.convertAndSend(destination, event);
     }
+
 }

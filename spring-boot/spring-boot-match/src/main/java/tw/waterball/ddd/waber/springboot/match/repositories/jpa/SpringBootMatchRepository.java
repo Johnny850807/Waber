@@ -7,7 +7,10 @@ import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -16,6 +19,16 @@ import java.util.Optional;
 @AllArgsConstructor
 public class SpringBootMatchRepository implements MatchRepository {
     private JpaMatchDataPort dataPort;
+
+    @Override
+    public List<Match> saveAll(Match ...matches) {
+        List<MatchData> data = dataPort.saveAll(Arrays.stream(matches)
+                .map(MatchData::fromEntity).collect(Collectors.toList()));
+        for (int i = 0; i < data.size(); i++) {
+            matches[i].setId(data.get(i).getId());
+        }
+        return Arrays.asList(matches);
+    }
 
     @Override
     public Match save(Match match) {

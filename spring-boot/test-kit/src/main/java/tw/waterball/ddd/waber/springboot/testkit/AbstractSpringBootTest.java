@@ -27,6 +27,7 @@ public abstract class AbstractSpringBootTest {
     @Autowired
     protected MockMvc mockMvc;
 
+
     @SneakyThrows
     protected String toJson(Object obj) {
         return objectMapper.writeValueAsString(obj);

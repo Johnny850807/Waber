@@ -3,31 +3,28 @@ version: "3"
 services:
   mongodb:
     image: mongo
-    networks:
-      - waber
     command: --bind_ip 0.0.0.0
     volumes:
       - mongo-db-data:/data/db
   mysql:
     image: mysql
-    networks:
-      - waber
     environment:
       MYSQL_ROOT_PASSWORD: 1qaz2wsx
+    ports:
+    - "3306:3306"
     volumes:
       - mysql-db-data:/var/lib/mysql
+      - "./init-databases.sql:/data/application/init-db.sql"
+    command:
+      - "--init-file=/data/application/init-db.sql"
   rabbitmq:
     image: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: waber
       RABBITMQ_DEFAULT_PASS: waber
       RABBITMQ_DEFAULT_VHOST: /waber
-    networks:
-      - waber
   user-service:
     build: spring-boot/spring-boot-user
-    networks:
-      - waber
     ports:
     - "8011:8011"
     depends_on:
@@ -46,8 +43,6 @@ services:
       - "traefik.http.routers.user-service.priority=1"
   match-service:
     build: spring-boot/spring-boot-match
-    networks:
-      - waber
     depends_on:
       - mysql
       - rabbitmq
@@ -64,8 +59,6 @@ services:
       - "traefik.http.routers.match-service.priority=2"
   trip-service:
     build: spring-boot/spring-boot-trip
-    networks:
-      - waber
     depends_on:
       - mongodb
       - rabbitmq
@@ -75,14 +68,24 @@ services:
       spring.rabbitmq.host: rabbitmq
   payment-service:
     build: spring-boot/spring-boot-payment
-    networks:
-      - waber
     depends_on:
       - mongodb
     environment:
       spring.profiles.active: microservice
       spring.data.mongodb.uri: mongodb://mongodb:27017/waber_payment
       spring.rabbitmq.host: rabbitmq
+  broker:
+    build: spring-boot/spring-boot-broker
+    depends_on:
+      - rabbitmq
+    environment:
+      spring.rabbitmq.host: rabbitmq
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.broker.rule=PathPrefix(`/topic`)"
+      - "traefik.http.routers.broker.entrypoints=web"
+      - "traefik.http.routers.broker.service=broker"
+      - "traefik.http.services.broker.loadbalancer.server.port=80"
   traefik:
     image: traefik:v2.3
     command:
@@ -95,17 +98,10 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - waber
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one
     ports:
-      - "6831:6831/udp"
       - "16686:16686"
-    networks:
-      - waber
 volumes:
   mongo-db-data:
   mysql-db-data:
-networks:
-  waber:

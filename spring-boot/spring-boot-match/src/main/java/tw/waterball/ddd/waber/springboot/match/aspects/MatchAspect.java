@@ -34,13 +34,10 @@ public class MatchAspect {
     public void logResponse(JoinPoint joinPoint) {
         Match match = (Match) joinPoint.getThis();
         Passenger passenger = match.getPassenger();
-        Optional<Driver> driverOptional = match.getDriverOptional();
-        if (match.isCompleted()) {
-            logger.info("Successfully Completed Match(id={}): Passenger {} --> Driver {} : ",
-                    match.getId(), passenger.getName(), driverOptional.get().getName());
-        } else {
-            logger.info("Temporarily Pending Match(id={}): Passenger {} --> Driver {} : ",
-                    match.getId(), passenger.getName(), driverOptional.get().getName());
-        }
+        match.getDriverOptional()
+                .ifPresentOrElse((driver) -> logger.info("Successfully Completed Match(id={}): Passenger {} --> Driver {} : ",
+                        match.getId(), passenger.getName(), driver.getName()),
+                        () -> logger.info("Pending Match(id={}): Passenger {}.",
+                                match.getId(), passenger.getName()));
     }
 }

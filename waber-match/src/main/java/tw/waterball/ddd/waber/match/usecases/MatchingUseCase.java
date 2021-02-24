@@ -33,8 +33,8 @@ public class MatchingUseCase {
 
     public void execute(StartMatchingRequest req, Presenter presenter) {
         Match match = Match.start(req.passenger, req.matchPreferences);
-        Match savedMatch = matchRepository.save(match);
-        scheduleMatchingJob(savedMatch, req.drivers);
+        matchRepository.saveAll(match);
+        scheduleMatchingJob(match, req.drivers);
         presenter.present(match);
     }
 

@@ -1,8 +1,11 @@
 package tw.waterball.ddd.waber.springboot.match.controllers;
 
+import com.github.fridujo.rabbitmq.mock.MockConnectionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,16 +36,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static tw.waterball.ddd.commons.utils.SneakyUtils.sneakyThrows;
 
 @ActiveProfiles(FakeServiceDrivers.NAME)
-@ContextConfiguration(classes = MatchApplication.class)
+@ContextConfiguration(classes = {MatchApplication.class, MatchControllerTest.TestConfig.class})
 public class MatchControllerTest extends AbstractSpringBootTest {
-    private Driver driver = UserStubs.NORMAL_DRIVER;
-    private Passenger passenger = UserStubs.NORMAL_PASSENGER;
-    private MatchPreferences preferences = new MatchPreferences(
+    private final Driver driver = UserStubs.NORMAL_DRIVER;
+    private final Passenger passenger = UserStubs.NORMAL_PASSENGER;
+    private final MatchPreferences preferences = new MatchPreferences(
             passenger.getLocation(), driver.getCarType(), null);
 
     @Autowired
     FakeUserServiceDriver userServiceDriver;
 
+    @Configuration
+    public static class TestConfig {
+        @Bean
+        @Primary
+        public ConnectionFactory mockRabbitMqConnectionFactory() {
+            return new CachingConnectionFactory(new MockConnectionFactory());
+        }
+    }
 
     @BeforeEach
     public void setup() {
