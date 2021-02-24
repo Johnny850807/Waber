@@ -11,4 +11,5 @@ import java.util.Optional;
 @Repository
 public interface JpaMatchDataPort extends JpaRepository<MatchData, Integer> {
     Optional<MatchData> findFirstByPassengerIdOrderByCreatedDateDesc(int passengerId);
+    Optional<MatchData> findFirstByDriverIdOrderByCreatedDateDesc(int driverId);
 }

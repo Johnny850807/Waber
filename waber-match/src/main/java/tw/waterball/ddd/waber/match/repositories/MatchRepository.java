@@ -16,6 +16,7 @@ public interface MatchRepository {
     Optional<Match> findById(int matchId);
 
     Optional<Match> findPassengerCurrentMatch(int passengerId);
+    Optional<Match> findDriverCurrentMatch(int driverId);
 
 
     Match associateById(int matchId);

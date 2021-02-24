@@ -4,6 +4,7 @@ import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.DriverHasBeenMatchedException;
 import tw.waterball.ddd.model.user.Passenger;
+import tw.waterball.ddd.model.user.User;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,5 +56,14 @@ public class FakeUserServiceDriver implements UserServiceDriver {
         return drivers.values().stream()
                 .filter(d -> d.getCarType() == matchPreferences.getCarType())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public User getUser(int userId) {
+        Driver driver = drivers.get(userId);
+        if (driver == null) {
+            return passengers.get(userId);
+        }
+        return driver;
     }
 }

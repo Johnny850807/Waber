@@ -11,14 +11,14 @@ import tw.waterball.ddd.model.match.Match;
 @Getter
 @NoArgsConstructor
 public class Passenger extends User {
-    private Match match;
+    public static final String TYPE = "Passenger";
 
     public Passenger(int id, String name, String email, String password, Location latestLocation) {
-        super(id, name, email, password, latestLocation);
+        super(TYPE, id, name, email, password, latestLocation);
     }
 
     public Passenger(String name, String email, String password) {
-        super(name, email, password);
+        super(TYPE, name, email, password);
     }
 
 }

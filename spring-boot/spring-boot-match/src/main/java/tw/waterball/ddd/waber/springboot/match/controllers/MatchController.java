@@ -10,11 +10,13 @@ import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
+import tw.waterball.ddd.model.user.User;
 import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 import tw.waterball.ddd.waber.match.usecases.MatchingUseCase;
 import tw.waterball.ddd.waber.match.usecases.MatchingUseCase.StartMatchingRequest;
 import tw.waterball.ddd.waber.springboot.match.presenters.MatchPresenter;
+import tw.waterball.ddd.waber.springboot.match.repositories.jpa.MatchData;
 
 import java.util.Optional;
 
@@ -25,7 +27,7 @@ import static tw.waterball.ddd.api.match.MatchView.toViewModel;
  */
 @Slf4j
 @CrossOrigin
-@RequestMapping("/api/users/{passengerId}/matches")
+@RequestMapping("/api/users/{userId}/matches")
 @RestController
 @AllArgsConstructor
 public class MatchController {
@@ -33,15 +35,11 @@ public class MatchController {
     private MatchRepository matchRepository;
     private UserServiceDriver userServiceDriver;
 
-    @GetMapping("/health")
-    public String health(@PathVariable int passengerId) {
-        return "OK";
-    }
 
     @PostMapping
-    public MatchView startMatching(@PathVariable int passengerId,
+    public MatchView startMatching(@PathVariable int userId,
                                    @RequestBody MatchPreferences matchPreferences) {
-        Passenger passenger = userServiceDriver.getPassenger(passengerId);
+        Passenger passenger = userServiceDriver.getPassenger(userId);
         Many<Driver> drivers = Many.lazyOn(() -> userServiceDriver.filterDrivers(matchPreferences));
         var presenter = new MatchPresenter();
         matchingUseCase.execute(new StartMatchingRequest(passenger, drivers, matchPreferences), presenter);
@@ -49,14 +47,18 @@ public class MatchController {
     }
 
     @GetMapping("/current")
-    public MatchView getMatch(@PathVariable int passengerId) {
-        return matchRepository.findPassengerCurrentMatch(passengerId)
+    public MatchView getMatch(@PathVariable int userId) {
+        User user = userServiceDriver.getUser(userId);
+        Optional<Match> foundMatch = user instanceof Passenger ?
+                matchRepository.findPassengerCurrentMatch(userId) :
+                matchRepository.findDriverCurrentMatch(userId);
+        return foundMatch
                 .map(this::toMatchView)
                 .orElseThrow(NotFoundException::new);
     }
 
     @GetMapping("/{matchId}")
-    public MatchView getMatch(@PathVariable int passengerId,
+    public MatchView getMatch(@PathVariable int userId,
                               @PathVariable int matchId) {
         return matchRepository.findById(matchId)
                 .map(this::toMatchView)

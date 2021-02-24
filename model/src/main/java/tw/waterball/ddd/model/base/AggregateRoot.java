@@ -13,12 +13,12 @@ public abstract class AggregateRoot<ID> extends Entity<ID> {
         super(id);
     }
 
-    public boolean isValid() {
+    public boolean valid() {
         return ValidationUtils.isValid(this);
     }
 
     public void validate() {
-        if (!isValid()) {
+        if (!valid()) {
             throw new IllegalStateException("Invalid Aggregate.");
         }
     }

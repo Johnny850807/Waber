@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 public class Driver extends User {
+    public static final String TYPE = "Driver";
     private Status status = Status.AVAILABLE;
     @NotNull
     private CarType carType;
@@ -28,17 +29,17 @@ public class Driver extends User {
     }
 
     public Driver(int id) {
-        super(id);
+        super(TYPE, id);
     }
 
     public Driver(int id, String name, String email, String password, CarType carType, Location latestLocation, Status status) {
-        super(id, name, email, password, latestLocation);
+        super(TYPE, id, name, email, password, latestLocation);
         this.carType = carType;
         this.status = status;
     }
 
     public Driver(String name, String email, String password, CarType carType) {
-        super(name, email, password);
+        super(TYPE, name, email, password);
         this.carType = carType;
     }
 

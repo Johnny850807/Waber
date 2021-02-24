@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import tw.waterball.ddd.commons.model.ErrorMessage;
@@ -26,11 +27,14 @@ import java.util.List;
 public class RestTemplateConfiguration {
     @Bean
     @LoadBalanced
-    public RestTemplate restTemplate(ResponseErrorHandler responseErrorHandler) {
+    public RestTemplate restTemplate(ResponseErrorHandler responseErrorHandler,
+                                     MappingJackson2HttpMessageConverter myJacksonHttpMessageConverter) {
         var builder = new RestTemplateBuilder();
-        return builder.requestFactory(HttpComponentsClientHttpRequestFactory::new)
+        RestTemplate restTemplate = builder.requestFactory(HttpComponentsClientHttpRequestFactory::new)
                 .errorHandler(responseErrorHandler)
                 .build();
+        restTemplate.getMessageConverters().add(0, myJacksonHttpMessageConverter);
+        return restTemplate;
     }
 
     @Bean

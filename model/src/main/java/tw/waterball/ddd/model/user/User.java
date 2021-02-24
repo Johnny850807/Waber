@@ -18,7 +18,9 @@ import java.util.Arrays;
  */
 @Getter
 @NoArgsConstructor
-public class User extends AggregateRoot<Integer> {
+public abstract class User extends AggregateRoot<Integer> {
+
+    protected String type;
 
     @Size(min = 1, max = 10)
     protected String name;
@@ -27,17 +29,17 @@ public class User extends AggregateRoot<Integer> {
     protected String email;
 
     @NotBlank
-    // TODO directly couple with jackson, should use ViewModel to hide the password
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     protected String password;
 
     protected Location location;
 
-    public User(int id) {
+    public User(String type, int id) {
+        this.type = type;
         this.id = id;
     }
 
-    public User(int id, String name, String email, String password, Location location) {
+    public User(String type, int id, String name, String email, String password, Location location) {
+        this.type = type;
         this.id = id;
         this.name = name;
         this.email = email;
@@ -45,7 +47,8 @@ public class User extends AggregateRoot<Integer> {
         this.location = location;
     }
 
-    public User(String name, String email, String password) {
+    public User(String type, String name, String email, String password) {
+        this.type = type;
         this.name = name;
         this.email = email;
         this.password = password;

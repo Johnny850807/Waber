@@ -12,6 +12,7 @@ import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.DriverHasBeenMatchedException;
 import tw.waterball.ddd.model.user.Passenger;
+import tw.waterball.ddd.model.user.User;
 
 import java.util.List;
 
@@ -24,19 +25,17 @@ import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
  */
 @AllArgsConstructor
 public class RestUserServiceDriver implements UserServiceDriver {
-    private BaseUrl userServiceBaseUrl;
-    private RestTemplate api;
+    private final BaseUrl userServiceBaseUrl;
+    private final RestTemplate api;
 
     @Override
     public Driver getDriver(int driverId) {
-        return api.getForEntity(userServiceBaseUrl.withPath("/api/users/" + driverId),
-                Driver.class).getBody();
+        return (Driver) getUser(driverId);
     }
 
     @Override
     public Passenger getPassenger(int passengerId) {
-        return api.getForEntity(userServiceBaseUrl.withPath("/api/users/" + passengerId),
-                Passenger.class).getBody();
+        return (Passenger) getUser(passengerId);
     }
 
     @Override
@@ -47,6 +46,12 @@ public class RestUserServiceDriver implements UserServiceDriver {
                         .queryParam("carType", matchPreferences.getCarType())
                         .toUriString(), Driver[].class).getBody();
         return asList(requireNonNull(drivers));
+    }
+
+    @Override
+    public User getUser(int userId) {
+        return api.getForEntity(userServiceBaseUrl.withPath("/api/users/" + userId),
+                User.class).getBody();
     }
 
     @Override

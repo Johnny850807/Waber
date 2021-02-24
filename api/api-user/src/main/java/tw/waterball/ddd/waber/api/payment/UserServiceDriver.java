@@ -4,6 +4,7 @@ import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.DriverHasBeenMatchedException;
 import tw.waterball.ddd.model.user.Passenger;
+import tw.waterball.ddd.model.user.User;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface UserServiceDriver {
     Passenger getPassenger(int passengerId);
 
     List<Driver> filterDrivers(MatchPreferences matchPreferences);
+
+    User getUser(int userId);
 }

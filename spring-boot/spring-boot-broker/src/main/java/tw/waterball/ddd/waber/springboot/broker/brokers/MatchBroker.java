@@ -27,10 +27,11 @@ public class MatchBroker {
 
     @RabbitListener(queues = "/matches/complete")
     public void listenToMatch(MatchCompleteEvent event) {
-        log.info("Event: {}.", event);
         String driverMatchesDestination = String.format("/topic/drivers/%d/matches", event.getDriverId());
         String passengerMatchesDestination = String.format("/topic/passengers/%d/matches", event.getPassengerId());
+        log.info("Event: {}, Broadcast to => {}", event, driverMatchesDestination);
         simpMessaging.convertAndSend(driverMatchesDestination, event);
+        log.info("Event: {}, Broadcast to => {}", event, passengerMatchesDestination);
         simpMessaging.convertAndSend(passengerMatchesDestination, event);
     }
 }

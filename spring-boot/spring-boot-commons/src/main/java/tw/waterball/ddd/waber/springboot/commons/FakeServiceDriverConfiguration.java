@@ -14,7 +14,6 @@ import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 @Configuration
 public class FakeServiceDriverConfiguration {
 
-
     @Bean
     public FakeUserServiceDriver fakeUserServiceDriver() {
         return new FakeUserServiceDriver();

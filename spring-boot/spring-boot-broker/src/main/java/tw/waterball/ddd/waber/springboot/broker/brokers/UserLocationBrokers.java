@@ -26,8 +26,8 @@ public class UserLocationBrokers {
 
     @RabbitListener(queues = "/users/location")
     public void listenToMatch(UserLocationUpdatedEvent event) {
-        log.info("Event: {}.", event);
-        String destination = String.format("/users/%d/location", event.getUserId());
+        String destination = String.format("/topic/users/%d/location", event.getUserId());
+        log.info("Event: {}, Broadcast to => {}", event, destination);
         simpMessaging.convertAndSend(destination, event);
     }
 
