@@ -17,30 +17,25 @@ import javax.inject.Named;
 @Named
 @AllArgsConstructor
 public class StartDriving {
-    private MatchServiceDriver matchServiceDriver;
-    private TripRepository tripRepository;
+    private final MatchServiceDriver matchServiceDriver;
+    private final TripRepository tripRepository;
 
     public void execute(Request req) {
-        Match match = getMatch(req);
-        Trip trip = tripRepository.findById(req.tripId).orElseThrow(NotFoundException::new);
+        Match match = getCurrentMatch(req.passengerId);
+        Trip trip = tripRepository.findByMatchId(match.getId()).orElseThrow(NotFoundException::new);
         trip.getMatchAssociation().resolveAssociation(match);
         trip.startDriving(req.destination);
         tripRepository.save(trip);
     }
 
-    private Match getMatch(Request req) {
-        MatchView matchView = matchServiceDriver.getMatch(req.passengerId, req.matchId);
-        if (matchView == null || matchView.getId() != req.matchId) {
-            throw new NotFoundException();
-        }
+    private Match getCurrentMatch(int passengerId) {
+        MatchView matchView = matchServiceDriver.getCurrentMatch(passengerId);
         return matchView.toEntity();
     }
 
     @AllArgsConstructor
     public static class Request {
         public int passengerId;
-        public int matchId;
-        public String tripId;
         public Location destination;
     }
 }

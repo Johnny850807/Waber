@@ -46,6 +46,12 @@ public class SpringBootTripRepository implements TripRepository {
     }
 
     @Override
+    public Optional<Trip> findByMatchId(int matchId) {
+        return tripDataPort.findByMatchId(matchId)
+                .map(TripData::toEntity);
+    }
+
+    @Override
     public void clearAll() {
         tripDataPort.deleteAll();
     }

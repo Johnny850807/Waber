@@ -17,5 +17,7 @@ public interface TripRepository {
 
     Optional<Trip> findById(String id);
 
+    Optional<Trip> findByMatchId(int matchId);
+
     void clearAll();
 }

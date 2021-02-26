@@ -31,4 +31,12 @@ public class FakeMatchServiceDriver implements MatchServiceDriver {
         }
         return match;
     }
+
+    @Override
+    public MatchView getCurrentMatch(int userId) {
+        return matchViews.values()
+                .stream().filter(m -> m.passengerId == userId || m.driver.id == userId)
+                .findFirst()
+                .orElse(null);
+    }
 }

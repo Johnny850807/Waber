@@ -9,7 +9,6 @@ import tw.waterball.ddd.events.TripArrivedEvent;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.Trip;
 import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
-import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.waber.trip.repositories.TripRepository;
 
 import javax.inject.Named;
@@ -20,23 +19,23 @@ import javax.inject.Named;
 @Named
 @AllArgsConstructor
 public class ArriveDestination {
-    private MatchServiceDriver matchServiceDriver;
-    private PaymentServiceDriver paymentServiceDriver;
-    private TripRepository tripRepository;
+    private final MatchServiceDriver matchServiceDriver;
+    private final PaymentServiceDriver paymentServiceDriver;
+    private final TripRepository tripRepository;
 
     public void execute(Request req, EventBus eventBus) {
-        Match match = getMatch(req);
-        Trip trip = tripRepository.findById(req.tripId).orElseThrow(NotFoundException::new);
+        Match match = getCurrentMatch(req);
+        Trip trip = tripRepository.findByMatchId(match.getId()).orElseThrow(NotFoundException::new);
         trip.getMatchAssociation().resolveAssociation(match);
         trip.arrive();
         tripRepository.save(trip);
         eventBus.publish(new TripArrivedEvent(match, trip));
-        paymentServiceDriver.checkoutPayment(req.passengerId, req.matchId, trip.getId());
+        paymentServiceDriver.checkoutPayment(req.passengerId, match.getId(), trip.getId());
     }
 
-    private Match getMatch(Request req) {
-        MatchView matchView = matchServiceDriver.getMatch(req.passengerId, req.matchId);
-        if (matchView == null || matchView.getId() != req.matchId) {
+    private Match getCurrentMatch(Request req) {
+        MatchView matchView = matchServiceDriver.getCurrentMatch(req.passengerId);
+        if (matchView == null) {
             throw new NotFoundException();
         }
         return matchView.toEntity();
@@ -45,7 +44,5 @@ public class ArriveDestination {
     @AllArgsConstructor
     public static class Request {
         public int passengerId;
-        public int matchId;
-        public String tripId;
     }
 }

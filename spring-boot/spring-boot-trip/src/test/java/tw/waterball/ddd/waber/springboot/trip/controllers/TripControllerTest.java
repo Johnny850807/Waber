@@ -1,8 +1,12 @@
 package tw.waterball.ddd.waber.springboot.trip.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.fridujo.rabbitmq.mock.MockConnectionFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import tw.waterball.ddd.api.match.FakeMatchServiceDriver;
 import tw.waterball.ddd.api.trip.TripView;
+import tw.waterball.ddd.events.MatchCompleteEvent;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
@@ -27,6 +32,8 @@ import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 import tw.waterball.ddd.waber.springboot.trip.TripApplication;
+import tw.waterball.ddd.waber.springboot.trip.configurations.AmqpConfiguration;
+import tw.waterball.ddd.waber.springboot.trip.handler.StartTripHandler;
 import tw.waterball.ddd.waber.springboot.trip.repositories.jpa.SpringBootTripRepository;
 
 import java.util.Arrays;
@@ -42,13 +49,18 @@ import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 import static tw.waterball.ddd.api.trip.TripView.toViewModel;
 
 @ActiveProfiles(FakeServiceDrivers.NAME)
-@ContextConfiguration(classes = TripApplication.class)
+@ContextConfiguration(classes = {TripApplication.class, TripControllerTest.TestConfig.class})
 class TripControllerTest extends AbstractSpringBootTest {
     Passenger passenger = UserStubs.NORMAL_PASSENGER;
     Driver driver = UserStubs.NORMAL_DRIVER;
+
     Match match;
     TripView tripView;
 
+    @Autowired
+    StartTripHandler startTripHandler;
+    @Autowired
+    AmqpTemplate amqpTemplate;
     @Autowired
     FakeMatchServiceDriver matchServiceDriver;
     @MockBean
@@ -57,6 +69,14 @@ class TripControllerTest extends AbstractSpringBootTest {
     @Autowired
     SpringBootTripRepository tripRepository;
 
+    @Configuration
+    public static class TestConfig {
+        @Bean
+        @Primary
+        public ConnectionFactory mockRabbitMqConnectionFactory() {
+            return new CachingConnectionFactory(new MockConnectionFactory());
+        }
+    }
 
     @AfterEach
     void cleanUp() {
@@ -64,19 +84,19 @@ class TripControllerTest extends AbstractSpringBootTest {
     }
 
     @Test
-    void GivenMatch_WhenStartTrip_TripShouldBeCreatedWithPickingState() throws Exception {
+    void GivenMatch_WhenStartTrip_TripShouldBeCreatedWithPickingState() {
         givenMatch();
+        startTripHandler.setOnHandledListener(() -> {
+            Trip trip = tripRepository.findById(this.tripView.id).orElseThrow();
+            assertEquals(TripStateType.PICKING, trip.getState().getType());
+        });
         startTrip();
-
-        Trip trip = tripRepository.findById(this.tripView.id).orElseThrow();
-        assertEquals(TripStateType.PICKING, trip.getState().getType());
     }
 
     @Test
     void GivenPickingTrip_WhenStartDriving_TripShouldBeInDrivingState() throws Exception {
         givenTrip(TripStateType.PICKING);
         startDriving(new Location(500, 500));
-
         Trip trip = tripRepository.findById(this.tripView.id).orElseThrow();
         assertEquals(TripStateType.DRIVING, trip.getState().getType());
     }
@@ -123,7 +143,7 @@ class TripControllerTest extends AbstractSpringBootTest {
 
     private void arrive() throws Exception {
         mockMvc.perform(
-                patch("/api/users/{passengerId}/matches/{matchId}/trips/{tripId}/arrive",
+                patch("/api/users/{passengerId}/trips/current/arrive",
                         passenger.getId(), match.getId(), tripView.id))
                 .andExpect(status().isOk());
     }
@@ -131,18 +151,16 @@ class TripControllerTest extends AbstractSpringBootTest {
 
     private void startDriving(Location destination) throws Exception {
         mockMvc.perform(
-                patch("/api/users/{passengerId}/matches/{matchId}/trips/{tripId}/drive",
+                patch("/api/users/{passengerId}/trips/current/startDriving",
                         passenger.getId(), match.getId(), tripView.id)
                         .content(toJson(destination))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
-    private void startTrip() throws Exception {
-        this.tripView = getBody(mockMvc.perform(
-                post("/api/users/{passengerId}/matches/{matchId}/trips",
-                        passenger.getId(), match.getId()))
-                .andExpect(status().isOk()), TripView.class);
+    private void startTrip() {
+        amqpTemplate.convertAndSend(AmqpConfiguration.EVENTS_EXCHANGE, StartTripHandler.ROUTING_KEY,
+                new MatchCompleteEvent(match));
     }
 
     private List<TripView> queryTripHistory(int userId) throws Exception {

@@ -1,6 +1,7 @@
 package tw.waterball.ddd.waber.springboot.trip.handler;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -16,13 +17,15 @@ import tw.waterball.ddd.waber.trip.usecases.StartTrip;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Configuration
 @Slf4j
 public class StartTripHandler {
     public static final String ROUTING_KEY = "/matches/complete";
     public static final String QUEUE_NAME = "waber-trip:StartTripHandler";
     private final StartTrip startTrip;
+    private Runnable onHandledListener = () -> {};
+
     @Bean
     public Queue startTripHandlerQueue() {
         return new Queue(QUEUE_NAME);
@@ -35,10 +38,17 @@ public class StartTripHandler {
                 .to(exchange).with(ROUTING_KEY);
     }
 
+    public void setOnHandledListener(Runnable onHandledListener) {
+        this.onHandledListener = onHandledListener;
+    }
+
+
     @RabbitListener(queues = QUEUE_NAME)
     public void startTrip(MatchCompleteEvent event) {
         log.info("Received Event: {}", event);
         startTrip.execute(new StartTrip.Request(event.getPassengerId(), event.getMatchId()),
                 trip -> { /*Present Nothing*/ });
+
+        onHandledListener.run();
     }
 }

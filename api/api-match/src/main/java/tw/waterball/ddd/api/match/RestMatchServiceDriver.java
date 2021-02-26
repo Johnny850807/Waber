@@ -9,13 +9,20 @@ import tw.waterball.ddd.commons.model.BaseUrl;
  */
 @AllArgsConstructor
 public class RestMatchServiceDriver implements MatchServiceDriver {
-    private BaseUrl matchServiceBaseUrl;
-    private RestTemplate api;
+    private final BaseUrl matchServiceBaseUrl;
+    private final RestTemplate api;
 
     @Override
     public MatchView getMatch(int passengerId, int matchId) {
         return api.getForEntity(
                 matchServiceBaseUrl.withPath("/api/users/{passengerId}/match/{matchId}"),
                 MatchView.class, passengerId, matchId).getBody();
+    }
+
+    @Override
+    public MatchView getCurrentMatch(int userId) {
+        return api.getForEntity(
+                matchServiceBaseUrl.withPath("/api/users/{userId}/matches/current"),
+                MatchView.class, userId).getBody();
     }
 }
