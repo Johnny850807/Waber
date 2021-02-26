@@ -17,13 +17,15 @@ public class MatchCompleteEvent extends Event {
     public static final String EVENT_NAME = "MatchCompleteEvent";
     private int passengerId;
     private int driverId;
+    private int matchId;
 
     public MatchCompleteEvent(Match match) {
-        this(match.getPassengerId(), match.getDriverId());
+        this(match.getId(), match.getPassengerId(), match.getDriverId());
     }
 
-    public MatchCompleteEvent(int passengerId, int driverId) {
+    public MatchCompleteEvent(int matchId, int passengerId, int driverId) {
         super(EVENT_NAME);
+        this.matchId = matchId;
         this.passengerId = passengerId;
         this.driverId = driverId;
     }

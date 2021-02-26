@@ -24,8 +24,8 @@ public class SpringBootUserRepository implements UserRepository {
     }
 
     @Override
-    public List<Driver> findAllDrivers() {
-        return jpaUserDataPort.findAllByDriverIsTrue()
+    public List<Driver> findAllAvailableDrivers() {
+        return jpaUserDataPort.findAllByDriverIsTrueAndDriverStatusIs(Driver.Status.AVAILABLE.toString())
                 .stream().map(UserData::toDriver)
                 .collect(Collectors.toList());
     }
@@ -51,8 +51,8 @@ public class SpringBootUserRepository implements UserRepository {
     }
 
     @Override
-    public List<Driver> findAllDriversByCarType(Driver.CarType carType) {
-        return jpaUserDataPort.findAllByCarType(carType)
+    public List<Driver> findAllAvailableDriversByCarType(Driver.CarType carType) {
+        return jpaUserDataPort.findAllByCarTypeAndDriverStatusIs(carType, Driver.Status.AVAILABLE.toString())
                 .stream().map(UserData::toDriver)
                 .collect(Collectors.toList());
     }

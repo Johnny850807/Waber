@@ -65,15 +65,23 @@ services:
       - "traefik.http.routers.match-service.service=match-service"
       - "traefik.http.services.match-service.loadbalancer.server.port=80"
       - "traefik.http.routers.match-service.priority=2"
-#  trip-service:
-#    build: spring-boot/spring-boot-trip
-#    depends_on:
-#      - mongodb
-#      - rabbitmq
-#    environment:
-#      spring.profiles.active: microservice
-#      spring.data.mongodb.uri: mongodb://mongodb:27017/waber_trip
-#      spring.rabbitmq.host: rabbitmq
+  trip-service:
+    build: spring-boot/spring-boot-trip
+    depends_on:
+      - mysql
+      - rabbitmq
+      - jaeger
+    environment:
+      spring.profiles.active: microservice
+      spring.data.mongodb.uri: mongodb://mongodb:27017/waber_trip
+      spring.rabbitmq.host: rabbitmq
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.trip-service.rule=PathPrefix(`/api/users/{passengerId:[0-9]+}/matches/{matchId:[0-9]+}/trips`)"
+      - "traefik.http.routers.trip-service.entrypoints=web"
+      - "traefik.http.routers.trip-service.service=trip-service"
+      - "traefik.http.services.trip-service.loadbalancer.server.port=80"
+      - "traefik.http.routers.trip-service.priority=3"
 #  payment-service:
 #    build: spring-boot/spring-boot-payment
 #    depends_on:

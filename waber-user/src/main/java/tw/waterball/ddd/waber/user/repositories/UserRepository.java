@@ -11,13 +11,13 @@ import java.util.Optional;
  * @author - johnny850807@gmail.com (Waterball)
  */
 public interface UserRepository {
-    List<Driver> findAllDrivers();
+    List<Driver> findAllAvailableDrivers();
 
     Optional<User> findById(int userId);
 
     List<User> findAllByIds(Iterable<Integer> userIds);
 
-    List<Driver> findAllDriversByCarType(Driver.CarType carType);
+    List<Driver> findAllAvailableDriversByCarType(Driver.CarType carType);
 
     User save(User user);
 

@@ -12,11 +12,13 @@ import tw.waterball.ddd.events.UserLocationUpdatedEvent;
 @Configuration
 public class RabbitEventBusConfiguration {
 
+    public static final String EVENTS_EXCHANGE = "events";
+
     @Bean
     public EventBus.Subscriber rabbitEventBusSubscriber(AmqpTemplate amqpTemplate) {
         return event -> {
             if (UserLocationUpdatedEvent.EVENT_NAME.equals(event.getName())) {
-                amqpTemplate.convertAndSend(AmqpQueuesConfiguration.USERS_LOCATION, event);
+                amqpTemplate.convertAndSend(EVENTS_EXCHANGE, "/users/location", event);
             }
         };
     }

@@ -17,20 +17,21 @@ import java.util.stream.Collectors;
 @Named
 @AllArgsConstructor
 public class QueryDrivers {
-    private ActivityRepository activityRepository;
-    private UserRepository userRepository;
+    private final ActivityRepository activityRepository;
+    private final UserRepository userRepository;
 
     public Collection<Driver> execute(Request req) {
         if (req.activityName != null && !req.activityName.trim().isEmpty()) {
             Activity activity = activityRepository.findByName(req.activityName)
                     .orElseThrow(NotFoundException::new);
             return activity.getParticipantDrivers().stream()
+                    .filter(driver -> driver.getStatus() == Driver.Status.AVAILABLE)
                     .filter(driver -> driver.getCarType() == req.carType)
                     .collect(Collectors.toList());
         } else if (req.carType != null) {
-            return userRepository.findAllDriversByCarType(req.carType);
+            return userRepository.findAllAvailableDriversByCarType(req.carType);
         }
-        return userRepository.findAllDrivers();
+        return userRepository.findAllAvailableDrivers();
     }
 
     @AllArgsConstructor

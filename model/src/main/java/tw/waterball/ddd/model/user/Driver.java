@@ -43,6 +43,10 @@ public class Driver extends User {
         this.carType = carType;
     }
 
+    public boolean isAvailable() {
+        return true;
+    }
+
     public void setStatus(Status status) {
         if (this.status == Status.MATCHED && status == Status.MATCHED) {
             throw new DriverHasBeenMatchedException(this);

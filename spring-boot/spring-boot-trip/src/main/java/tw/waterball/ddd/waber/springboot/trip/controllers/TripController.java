@@ -1,9 +1,11 @@
 package tw.waterball.ddd.waber.springboot.trip.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.api.trip.TripView;
 import tw.waterball.ddd.events.EventBus;
+import tw.waterball.ddd.events.MatchCompleteEvent;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.waber.springboot.trip.presenters.TripPresenter;
 import tw.waterball.ddd.waber.trip.usecases.ArriveDestination;
@@ -37,6 +39,7 @@ public class TripController {
         startTrip.execute(new StartTrip.Request(passengerId, matchId), presenter);
         return presenter.getTripView();
     }
+
 
     @PatchMapping("/{tripId}/drive")
     public void startDriving(@PathVariable int passengerId,
