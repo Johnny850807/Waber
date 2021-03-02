@@ -9,7 +9,7 @@ import tw.waterball.ddd.waber.springboot.payment.presenters.PaymentPresenter;
  * @author Waterball (johnny850807@gmail.com)
  */
 @CrossOrigin
-@RequestMapping("/api/passengers/{passengerId}/matches/{matchId}/trips/{tripId}/payment")
+@RequestMapping("/api/payments")
 @RestController
 public class PaymentController {
     private final CheckoutPayment checkoutPayment;
@@ -18,12 +18,15 @@ public class PaymentController {
         this.checkoutPayment = checkoutPayment;
     }
 
-    @PostMapping
-    public PaymentView checkoutPayment(@PathVariable int passengerId,
-                                     @PathVariable int matchId,
-                                     @PathVariable String tripId) {
+    @GetMapping("/health")
+    public String healthCheck() {
+        return "OK";
+    }
+
+    @PostMapping("/trips/{tripId}")
+    public PaymentView checkoutPayment(@PathVariable String tripId) {
         var presenter = new PaymentPresenter();
-        checkoutPayment.execute(new CheckoutPayment.Request(passengerId, matchId, tripId), presenter);
+        checkoutPayment.execute(new CheckoutPayment.Request(tripId), presenter);
         return presenter.getPaymentView();
     }
 }

@@ -28,7 +28,7 @@ import static tw.waterball.ddd.api.match.MatchView.toViewModel;
  */
 @Slf4j
 @CrossOrigin
-@RequestMapping("/api/users/{userId}/matches")
+@RequestMapping("/api")
 @RestController
 @AllArgsConstructor
 public class MatchController {
@@ -36,7 +36,7 @@ public class MatchController {
     private final MatchRepository matchRepository;
     private final UserServiceDriver userServiceDriver;
 
-    @PostMapping
+    @PostMapping("/users/{userId}/matches")
     public MatchView startMatching(@PathVariable int userId,
                                    @RequestBody MatchPreferences matchPreferences) {
         Passenger passenger = userServiceDriver.getPassenger(userId);
@@ -46,8 +46,8 @@ public class MatchController {
         return presenter.getMatchView();
     }
 
-    @GetMapping("/current")
-    public MatchView getMatch(@PathVariable int userId) {
+    @GetMapping("/users/{userId}/matches/current")
+    public MatchView getUserCurrentMatch(@PathVariable int userId) {
         User user = userServiceDriver.getUser(userId);
         Supplier<Optional<Match>> findMatch = user instanceof Passenger ?
                 () -> matchRepository.findPassengerCurrentMatch(userId) :
@@ -57,9 +57,8 @@ public class MatchController {
                 .orElseThrow(NotFoundException::new);
     }
 
-    @GetMapping("/{matchId}")
-    public MatchView getMatch(@PathVariable int userId,
-                              @PathVariable int matchId) {
+    @GetMapping("/matches/{matchId}")
+    public MatchView getMatchById(@PathVariable int matchId) {
         return matchRepository.findById(matchId)
                 .map(this::toMatchView)
                 .orElseThrow(NotFoundException::new);

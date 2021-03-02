@@ -19,7 +19,7 @@ public class StartTrip {
     private TripRepository tripRepository;
 
     public void execute(Request req, TripPresenter presenter) {
-        MatchView matchView = matchServiceDriver.getMatch(req.passengerId, req.matchId);
+        MatchView matchView = matchServiceDriver.getMatch(req.matchId);
         Match match = matchView.toEntity();
         Trip trip = new Trip(match);
         Trip savedTrip = tripRepository.save(trip);

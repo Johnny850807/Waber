@@ -13,10 +13,10 @@ public class RestMatchServiceDriver implements MatchServiceDriver {
     private final RestTemplate api;
 
     @Override
-    public MatchView getMatch(int passengerId, int matchId) {
+    public MatchView getMatch(int matchId) {
         return api.getForEntity(
-                matchServiceBaseUrl.withPath("/api/users/{passengerId}/match/{matchId}"),
-                MatchView.class, passengerId, matchId).getBody();
+                matchServiceBaseUrl.withPath("/api/matches/{matchId}"),
+                MatchView.class, matchId).getBody();
     }
 
     @Override

@@ -15,14 +15,16 @@ public class Arrived extends TripState {
 
     @Override
     public void startDriving(Location destination) {
-
+        throw new IllegalStateException("The trip has been over.");
     }
 
+    @Override
     public void refusePassenger() {
-
+        throw new IllegalStateException("The trip has been over.");
     }
 
+    @Override
     public void arrive() {
-
+        throw new IllegalStateException("The trip has been over.");
     }
 }

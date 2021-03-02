@@ -1,4 +1,8 @@
 #!/bin/bash
+
+[ -z "$JAVA_XMS" ] && JAVA_XMS=3g
+[ -z "$JAVA_XMX" ] && JAVA_XMX=600m
+
 set -e
 
 # OpenTelemetry:

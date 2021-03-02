@@ -1,44 +1,10 @@
-version: "3"
+version: "2"
 
 services:
-  mongodb:
-    image: mongo
-    command: --bind_ip 0.0.0.0
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-db-data:/data/db
-  mysql:
-    image: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: 1qaz2wsx
-    ports:
-    - "3306:3306"
-    volumes:
-      - mysql-db-data:/var/lib/mysql
-      - "./init-databases.sql:/data/application/init-db.sql"
-    command:
-      - "--init-file=/data/application/init-db.sql"
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-    - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: waber
-      RABBITMQ_DEFAULT_PASS: waber
-      RABBITMQ_DEFAULT_VHOST: /waber
-  jaeger:
-    image: jaegertracing/all-in-one
-    ports:
-      - "16686:16686"
   user-service:
     build: spring-boot/spring-boot-user
     ports:
-    - "8011:8011"
-    depends_on:
-      - mysql
-      - rabbitmq
-      - jaeger
+      - "8011:8011"
     environment:
       spring.profiles.active: microservice
       spring.datasource.url: jdbc:mysql://mysql:3306/waber_user
@@ -50,29 +16,24 @@ services:
       - "traefik.http.routers.user-service.service=user-service"
       - "traefik.http.services.user-service.loadbalancer.server.port=80"
       - "traefik.http.routers.user-service.priority=1"
+    memswap_limit: -1
+
   match-service:
     build: spring-boot/spring-boot-match
-    depends_on:
-      - mysql
-      - rabbitmq
-      - jaeger
     environment:
       spring.profiles.active: microservice
       spring.datasource.url: jdbc:mysql://mysql:3306/waber_match
       spring.rabbitmq.host: rabbitmq
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.match-service.rule=PathPrefix(`/api/users/{passengerId:[0-9]+}/matches`)"
+      - "traefik.http.routers.match-service.rule=PathPrefix(`/api/users/{passengerId:[0-9]+}/matches`) || PathPrefix(`/api/matches`)"
       - "traefik.http.routers.match-service.entrypoints=web"
       - "traefik.http.routers.match-service.service=match-service"
       - "traefik.http.services.match-service.loadbalancer.server.port=80"
       - "traefik.http.routers.match-service.priority=2"
+
   trip-service:
     build: spring-boot/spring-boot-trip
-    depends_on:
-      - mysql
-      - rabbitmq
-      - jaeger
     environment:
       spring.profiles.active: microservice
       spring.data.mongodb.uri: mongodb://mongodb:27017/waber_trip
@@ -84,19 +45,22 @@ services:
       - "traefik.http.routers.trip-service.service=trip-service"
       - "traefik.http.services.trip-service.loadbalancer.server.port=80"
       - "traefik.http.routers.trip-service.priority=3"
+
 #  payment-service:
 #    build: spring-boot/spring-boot-payment
-#    depends_on:
-#      - mongodb
 #    environment:
 #      spring.profiles.active: microservice
 #      spring.data.mongodb.uri: mongodb://mongodb:27017/waber_payment
 #      spring.rabbitmq.host: rabbitmq
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.payment-service.rule=PathPrefix(`/api/payments`)"
+#      - "traefik.http.routers.payment-service.entrypoints=web"
+#      - "traefik.http.routers.payment-service.service=payment-service"
+#      - "traefik.http.services.payment-service.loadbalancer.server.port=80"
+#    memswap_limit: -1
   broker:
     build: spring-boot/spring-boot-broker
-    depends_on:
-      - rabbitmq
-      - jaeger
     environment:
       spring.rabbitmq.host: rabbitmq
     labels:
@@ -105,19 +69,9 @@ services:
       - "traefik.http.routers.broker.entrypoints=web"
       - "traefik.http.routers.broker.service=broker"
       - "traefik.http.services.broker.loadbalancer.server.port=80"
-  traefik:
-    image: traefik:v2.3
-    command:
-      - "--entryPoints.web.address=:80"
-      - "--api.insecure=true"
-      - "--providers.docker"
-      - "--providers.docker.exposedbydefault=false"
-    ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
 
-volumes:
-  mongo-db-data:
-  mysql-db-data:
+networks:
+  default:
+    external:
+      name: ddd-benchmark-waber_infra
+

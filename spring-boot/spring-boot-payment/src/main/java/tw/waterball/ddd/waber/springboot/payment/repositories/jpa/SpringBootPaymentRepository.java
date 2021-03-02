@@ -6,6 +6,8 @@ import tw.waterball.ddd.waber.pricing.repositories.PaymentRepository;
 
 import javax.inject.Named;
 
+import java.util.Optional;
+
 import static tw.waterball.ddd.waber.springboot.payment.repositories.jpa.PaymentData.toData;
 
 /**
@@ -14,11 +16,22 @@ import static tw.waterball.ddd.waber.springboot.payment.repositories.jpa.Payment
 @Named
 @AllArgsConstructor
 public class SpringBootPaymentRepository implements PaymentRepository {
-    private MongoPaymentDataPort dataPort;
+    private final MongoPaymentDataPort dataPort;
 
     @Override
     public Payment save(Payment payment) {
         PaymentData savedData = dataPort.save(toData(payment));
         return savedData.toEntity();
+    }
+
+    @Override
+    public Optional<Payment> findByTripId(String tripId) {
+        return dataPort.findFirstByTripId(tripId)
+                .map(PaymentData::toEntity);
+    }
+
+    @Override
+    public boolean existsByTripId(String tripId) {
+        return dataPort.existsByTripId(tripId);
     }
 }

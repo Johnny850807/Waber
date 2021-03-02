@@ -24,12 +24,8 @@ public class FakeMatchServiceDriver implements MatchServiceDriver {
     }
 
     @Override
-    public MatchView getMatch(int passengerId, int matchId) {
-        var match = matchViews.get(matchId);
-        if (match.passengerId != passengerId) {
-            return null;
-        }
-        return match;
+    public MatchView getMatch(int matchId) {
+        return matchViews.get(matchId);
     }
 
     @Override

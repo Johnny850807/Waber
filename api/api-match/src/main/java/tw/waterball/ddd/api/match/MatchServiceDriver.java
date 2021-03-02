@@ -5,7 +5,7 @@ package tw.waterball.ddd.api.match;
  */
 public interface MatchServiceDriver {
 
-    MatchView getMatch(int passengerId, int matchId);
+    MatchView getMatch(int matchId);
 
     MatchView getCurrentMatch(int userId);
 }

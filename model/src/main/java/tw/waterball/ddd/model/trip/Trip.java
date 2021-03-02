@@ -1,7 +1,5 @@
 package tw.waterball.ddd.model.trip;
 
-import lombok.Getter;
-import lombok.Setter;
 import tw.waterball.ddd.model.associations.One;
 import tw.waterball.ddd.model.base.AggregateRoot;
 import tw.waterball.ddd.model.geo.Location;

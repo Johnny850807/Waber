@@ -8,7 +8,6 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -109,7 +108,7 @@ class TripControllerTest extends AbstractSpringBootTest {
         Trip trip = tripRepository.findById(this.tripView.id).orElseThrow();
         assertEquals(TripStateType.ARRIVED, trip.getState().getType());
 
-        verify(paymentServiceDriver).checkoutPayment(passenger.getId(), match.getId(), trip.getId());
+        verify(paymentServiceDriver).checkoutPayment(trip.getId());
     }
 
     @Test

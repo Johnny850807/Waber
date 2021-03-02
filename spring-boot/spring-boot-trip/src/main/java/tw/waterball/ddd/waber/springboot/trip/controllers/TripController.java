@@ -2,8 +2,11 @@ package tw.waterball.ddd.waber.springboot.trip.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import tw.waterball.ddd.api.trip.TripView;
+import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.model.geo.Location;
+import tw.waterball.ddd.waber.trip.repositories.TripRepository;
 import tw.waterball.ddd.waber.trip.usecases.ArriveDestination;
 import tw.waterball.ddd.waber.trip.usecases.StartDriving;
 
@@ -18,6 +21,7 @@ public class TripController {
     private final StartDriving startDriving;
     private final ArriveDestination arriveDestination;
     private final EventBus eventBus;
+    private final TripRepository tripRepository;
 
 
     @GetMapping("/trips/health")
@@ -35,6 +39,13 @@ public class TripController {
     public void arrive(@PathVariable int passengerId) {
         arriveDestination.execute(new ArriveDestination.Request(passengerId),
                 eventBus);
+    }
+
+    @GetMapping("/trips/{tripId}")
+    public TripView getTripById(@PathVariable String tripId) {
+        return tripRepository.findById(tripId)
+                .map(TripView::toViewModel)
+                .orElseThrow(NotFoundException::new);
     }
 
 

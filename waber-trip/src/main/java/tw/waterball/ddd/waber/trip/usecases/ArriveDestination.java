@@ -30,7 +30,7 @@ public class ArriveDestination {
         trip.arrive();
         tripRepository.save(trip);
         eventBus.publish(new TripArrivedEvent(match, trip));
-        paymentServiceDriver.checkoutPayment(req.passengerId, match.getId(), trip.getId());
+        paymentServiceDriver.checkoutPayment(trip.getId());
     }
 
     private Match getCurrentMatch(Request req) {

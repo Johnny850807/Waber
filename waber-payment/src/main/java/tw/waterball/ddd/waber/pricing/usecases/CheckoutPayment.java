@@ -5,6 +5,7 @@ import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.api.trip.TripServiceDriver;
 import tw.waterball.ddd.api.trip.TripView;
+import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.payment.Payment;
 import tw.waterball.ddd.model.payment.PricingStrategy;
 import tw.waterball.ddd.model.trip.Trip;
@@ -17,10 +18,10 @@ import javax.inject.Named;
  */
 @Named
 public class CheckoutPayment {
-    private PricingStrategy pricingStrategy;
-    private MatchServiceDriver matchServiceDriver;
-    private TripServiceDriver tripServiceDriver;
-    private PaymentRepository paymentRepository;
+    private final PricingStrategy pricingStrategy;
+    private final MatchServiceDriver matchServiceDriver;
+    private final TripServiceDriver tripServiceDriver;
+    private final PaymentRepository paymentRepository;
 
     public CheckoutPayment(PricingStrategy pricingStrategy,
                            MatchServiceDriver matchServiceDriver,
@@ -34,6 +35,9 @@ public class CheckoutPayment {
 
     public void execute(Request request, Presenter presenter) {
         Trip trip = getTrip(request);
+        if (paymentRepository.existsByTripId(trip.getId())) {
+            throw new IllegalStateException("The trip's payment has been checked out.");
+        }
         Payment payment = new Payment();
         payment.checkout(trip, pricingStrategy);
         payment = paymentRepository.save(payment);
@@ -41,14 +45,13 @@ public class CheckoutPayment {
     }
 
     private Trip getTrip(Request request) {
-        MatchView matchView = matchServiceDriver.getMatch(request.passengerId, request.matchId);
         TripView tripView = tripServiceDriver.getTrip(request.tripId);
+        MatchView matchView = matchServiceDriver.getMatch(tripView.matchId);
         return tripView.toEntityWithMatch(matchView.toEntity());
     }
 
     @AllArgsConstructor
     public static class Request {
-        public int passengerId, matchId;
         public String tripId;
     }
 
