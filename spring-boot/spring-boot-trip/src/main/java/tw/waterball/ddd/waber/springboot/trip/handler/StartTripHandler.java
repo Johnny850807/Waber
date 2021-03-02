@@ -1,6 +1,5 @@
 package tw.waterball.ddd.waber.springboot.trip.handler;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Binding;

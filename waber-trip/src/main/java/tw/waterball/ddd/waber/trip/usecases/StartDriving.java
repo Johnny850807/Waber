@@ -12,6 +12,8 @@ import tw.waterball.ddd.waber.trip.repositories.TripRepository;
 import javax.inject.Named;
 
 /**
+ * This use-case has some performance issue,
+ * this is designed on purpose to present the distributed tracing's convenience.
  * @author Waterball (johnny850807@gmail.com)
  */
 @Named
@@ -22,10 +24,16 @@ public class StartDriving {
 
     public void execute(Request req) {
         Match match = getCurrentMatch(req.passengerId);
-        Trip trip = tripRepository.findByMatchId(match.getId()).orElseThrow(NotFoundException::new);
+        Trip trip = tripRepository.findByMatchId(match.getId())
+                .orElseGet(() -> startTrip(match));
         trip.getMatchAssociation().resolveAssociation(match);
         trip.startDriving(req.destination);
         tripRepository.save(trip);
+    }
+
+    private Trip startTrip(Match match) {
+        Trip trip = new Trip(match);
+        return tripRepository.save(trip);
     }
 
     private Match getCurrentMatch(int passengerId) {

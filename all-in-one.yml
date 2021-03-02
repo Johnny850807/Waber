@@ -4,6 +4,8 @@ services:
   mongodb:
     image: mongo
     command: --bind_ip 0.0.0.0
+    ports:
+      - "27017:27017"
     volumes:
       - mongo-db-data:/data/db
   mysql:
@@ -77,7 +79,7 @@ services:
       spring.rabbitmq.host: rabbitmq
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.trip-service.rule=PathPrefix(`/api/users/{passengerId:[0-9]+}/matches/{matchId:[0-9]+}/trips`)"
+      - "traefik.http.routers.trip-service.rule=PathPrefix(`/api/trips`) || PathPrefix(`/api/users/{passengerId:[0-9]+}/trips`)"
       - "traefik.http.routers.trip-service.entrypoints=web"
       - "traefik.http.routers.trip-service.service=trip-service"
       - "traefik.http.services.trip-service.loadbalancer.server.port=80"
