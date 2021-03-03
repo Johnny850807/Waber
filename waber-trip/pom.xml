@@ -13,8 +13,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-match</artifactId>
+            <groupId>tw.waterball.ddd.api</groupId>
+            <artifactId>api-match</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>

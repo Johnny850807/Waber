@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class SpringBootMatchRepository implements MatchRepository {
-    private JpaMatchDataPort dataPort;
+    private final JpaMatchDataPort dataPort;
 
     @Override
     public List<Match> saveAll(Match ...matches) {
@@ -45,13 +45,13 @@ public class SpringBootMatchRepository implements MatchRepository {
 
     @Override
     public Optional<Match> findPassengerCurrentMatch(int passengerId) {
-        return dataPort.findFirstByPassengerIdOrderByCreatedDateDesc(passengerId)
+        return dataPort.findFirstByPassengerIdAndAliveIsTrueOrderByCreatedDateDesc(passengerId)
                 .map(MatchData::toEntity);
     }
 
     @Override
     public Optional<Match> findDriverCurrentMatch(int driverId) {
-        return dataPort.findFirstByDriverIdOrderByCreatedDateDesc(driverId)
+        return dataPort.findFirstByDriverIdAndAliveIsTrueOrderByCreatedDateDesc(driverId)
                 .map(MatchData::toEntity);
     }
 
@@ -62,5 +62,15 @@ public class SpringBootMatchRepository implements MatchRepository {
         } catch (EntityNotFoundException err) {
             throw new NotFoundException(err);
         }
+    }
+
+    @Override
+    public void setAlive(int matchId, boolean alive) {
+        dataPort.setAlive(matchId, alive);
+    }
+
+    @Override
+    public void removeAll() {
+        dataPort.deleteAll();
     }
 }

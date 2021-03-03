@@ -18,17 +18,19 @@ import static tw.waterball.ddd.model.geo.Route.from;
  * @author - johnny850807@gmail.com (Waterball)
  */
 public class Match extends AggregateRoot<Integer> {
-    private MatchPreferences preferences;
-    private One<Passenger> passenger = new One<>();
-    private ZeroOrOne<Driver> driver = new ZeroOrOne<>();
+    private final MatchPreferences preferences;
+    private final One<Passenger> passenger = new One<>();
+    private final ZeroOrOne<Driver> driver = new ZeroOrOne<>();
+    private boolean alive = true;
     private Date createdDate = new Date();
 
     public static Match start(Passenger passenger, MatchPreferences preferences) {
         return new Match(passenger, preferences);
     }
 
-    public Match(Integer id, int passengerId, Integer driverId, MatchPreferences preferences, Date createdDate) {
+    public Match(Integer id, int passengerId, Integer driverId, MatchPreferences preferences, Date createdDate, boolean alive) {
         super(id);
+        this.alive = alive;
         passenger.resolveId(passengerId);
         driver.resolveId(driverId);
         this.preferences = preferences;
@@ -75,6 +77,14 @@ public class Match extends AggregateRoot<Integer> {
 
     public void complete(Driver driver) {
         this.driver.resolveAssociation(driver);
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public void setDriver(Driver driver) {

@@ -21,4 +21,7 @@ public interface MatchRepository {
 
     Match associateById(int matchId);
 
+    void setAlive(int matchId, boolean alive);
+
+    void removeAll();
 }

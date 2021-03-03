@@ -17,7 +17,7 @@ public class RabbitEventBusConfiguration {
     public static final String START_MATCHING_QUEUE = "/matches/start";
 
     @Bean
-    public Exchange eventsExchange() {
+    public DirectExchange eventsExchange() {
         return new DirectExchange(EVENTS_EXCHANGE);
     }
 

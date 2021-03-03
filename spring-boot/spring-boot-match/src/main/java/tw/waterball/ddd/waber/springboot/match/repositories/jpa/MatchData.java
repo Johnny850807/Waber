@@ -29,6 +29,7 @@ public class MatchData {
     @Embedded
     private MatchPreferencesData matchPreferences;
     private Date createdDate;
+    private boolean alive;
 
     public static MatchData fromEntity(Match match) {
         return MatchData.builder()
@@ -38,12 +39,13 @@ public class MatchData {
                 .passengerId(match.getPassengerId())
                 .matchPreferences(MatchPreferencesData.fromEntity(match.getPreferences()))
                 .createdDate(match.getCreatedDate())
+                .alive(match.isAlive())
                 .build();
     }
 
     public Match toEntity() {
         return new Match(getId(), getPassengerId(),
                 getDriverId(), getMatchPreferences().toEntity(),
-                createdDate);
+                createdDate, alive);
     }
 }

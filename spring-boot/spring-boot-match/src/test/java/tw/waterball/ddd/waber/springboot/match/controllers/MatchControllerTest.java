@@ -1,6 +1,7 @@
 package tw.waterball.ddd.waber.springboot.match.controllers;
 
 import com.github.fridujo.rabbitmq.mock.MockConnectionFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.stubs.UserStubs;
+import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 import tw.waterball.ddd.waber.springboot.match.MatchApplication;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
@@ -60,6 +62,12 @@ public class MatchControllerTest extends AbstractSpringBootTest {
         userServiceDriver.addPassenger(passenger);
     }
 
+    @AfterEach
+    public void cleanUp() {
+        driver.setStatus(Driver.Status.AVAILABLE);
+        userServiceDriver.reset();
+    }
+
     @Test
     void GivenOneDriver_WhenStartMatching_ShouldMatchThatDriver() throws Exception {
         givenOneDriver();
@@ -96,6 +104,7 @@ public class MatchControllerTest extends AbstractSpringBootTest {
         assertNotEquals(0, completionCount, "The only driver should be matched.");
         assertEquals(1, completionCount, "Race Condition: Found multiple match-completion but there is only one driver.");
     }
+
 
     private void givenOneDriver() {
         userServiceDriver.addDriver(driver);

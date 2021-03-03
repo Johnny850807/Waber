@@ -24,6 +24,7 @@ public class MatchView {
     public boolean completed;
     public MatchPreferences matchPreferences;
     public Date createdDate;
+    public boolean alive;
 
     public static MatchView toViewModel(Match match) {
         return MatchView.builder()
@@ -34,6 +35,7 @@ public class MatchView {
                 .completed(match.isCompleted())
                 .matchPreferences(match.getPreferences())
                 .createdDate(match.getCreatedDate())
+                .alive(match.isAlive())
                 .build();
     }
 
@@ -42,7 +44,7 @@ public class MatchView {
     }
 
     public Match toEntity() {
-        return new Match(id, passengerId, driver.id, matchPreferences, createdDate);
+        return new Match(id, passengerId, driver.id, matchPreferences, createdDate, alive);
     }
 
     public int getId() {

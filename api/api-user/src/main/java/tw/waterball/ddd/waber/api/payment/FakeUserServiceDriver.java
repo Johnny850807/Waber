@@ -66,4 +66,9 @@ public class FakeUserServiceDriver implements UserServiceDriver {
         }
         return driver;
     }
+
+    public void reset() {
+        drivers.clear();
+        passengers.clear();
+    }
 }

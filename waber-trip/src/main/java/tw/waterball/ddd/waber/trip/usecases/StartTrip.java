@@ -15,8 +15,8 @@ import javax.inject.Named;
 @Named
 @AllArgsConstructor
 public class StartTrip {
-    private MatchServiceDriver matchServiceDriver;
-    private TripRepository tripRepository;
+    private final MatchServiceDriver matchServiceDriver;
+    private final TripRepository tripRepository;
 
     public void execute(Request req, TripPresenter presenter) {
         MatchView matchView = matchServiceDriver.getMatch(req.matchId);
