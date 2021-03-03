@@ -24,7 +24,7 @@ public class SpringBootUserRepository implements UserRepository {
     }
 
     @Override
-    public List<Driver> findAllAvailableDrivers() {
+    public List<Driver> getAllAvailableDrivers() {
         return jpaUserDataPort.findAllByDriverIsTrueAndDriverStatusIs(Driver.Status.AVAILABLE.toString())
                 .stream().map(UserData::toDriver)
                 .collect(Collectors.toList());
@@ -69,15 +69,6 @@ public class SpringBootUserRepository implements UserRepository {
         data.setLatitude(location.getLatitude());
         data.setLongitude(location.getLongitude());
         jpaUserDataPort.save(data);
-    }
-
-    @Override
-    public User associateById(int id) {
-        try {
-            return jpaUserDataPort.getOne(id).toEntity();
-        } catch (EntityNotFoundException err) {
-            throw new NotFoundException(err);
-        }
     }
 
     @Override

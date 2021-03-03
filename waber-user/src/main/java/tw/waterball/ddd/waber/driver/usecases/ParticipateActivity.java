@@ -1,6 +1,7 @@
-package tw.waterball.ddd.waber.user.usecases;
+package tw.waterball.ddd.waber.driver.usecases;
 
 import lombok.AllArgsConstructor;
+import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.user.Activity;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.waber.passenger.repositories.ActivityRepository;
@@ -14,13 +15,12 @@ import javax.inject.Named;
 @Named
 @AllArgsConstructor
 public class ParticipateActivity {
-    private ActivityRepository activityRepository;
-    private UserRepository userRepository;
+    private final ActivityRepository activityRepository;
+    private final UserRepository userRepository;
 
     public void execute(Request req) {
-        Activity activity = activityRepository.findByName(req.activityName)
-                .orElseThrow(() -> new IllegalArgumentException("Activity not found."));
-        Driver driver = (Driver) userRepository.associateById(req.driverId);
+        Activity activity = activityRepository.findByName(req.activityName).orElseThrow(NotFoundException::new);
+        Driver driver = (Driver) userRepository.findById(req.driverId).orElseThrow(NotFoundException::new);
         activity.participate(driver);
         activityRepository.save(activity);
     }

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tw.waterball.ddd.model.associations.Many;
 import tw.waterball.ddd.model.user.Activity;
 
 import javax.persistence.*;
@@ -13,12 +12,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static javax.persistence.GenerationType.IDENTITY;
+import static tw.waterball.ddd.model.associations.LazyMappingSet.lazyMap;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
 @Table(name = "activity")
-@Entity @Getter @Setter
+@Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActivityData {
@@ -41,14 +43,7 @@ public class ActivityData {
     }
 
     public static Activity toEntity(ActivityData data) {
-        Activity activity = new Activity(data.getId(), data.getName());
-        activity.setParticipantDrivers(
-                Many.lazyOn(() ->
-                        data.getParticipantDrivers().stream()
-                                .map(UserData::toDriver)
-                                .collect(Collectors.toSet())
-                )
-        );
-        return activity;
+        return new Activity(data.getId(), data.getName(),
+                lazyMap(data.getParticipantDrivers(), UserData::toDriver));
     }
 }

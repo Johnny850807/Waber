@@ -1,8 +1,6 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.commons.model.ErrorMessage;
@@ -10,10 +8,9 @@ import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.DriverHasBeenMatchedException;
 import tw.waterball.ddd.waber.driver.usecases.SetDriverStatus;
 import tw.waterball.ddd.waber.driver.usecases.SignUpToBeDriver;
-import tw.waterball.ddd.waber.user.usecases.QueryDrivers;
+import tw.waterball.ddd.waber.user.usecases.FindAvailableDrivers;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -24,7 +21,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class DriverController {
     private SignUpToBeDriver signUpToBeDriver;
-    private QueryDrivers queryDrivers;
+    private FindAvailableDrivers findAvailableDrivers;
     private SetDriverStatus setDriverStatus;
 
     @PostMapping
@@ -42,7 +39,7 @@ public class DriverController {
     @GetMapping
     public Collection<Driver> queryAvailableDrivers(@RequestParam(required = false) String activityName,
                                            @RequestParam(required = false) Driver.CarType carType) {
-        var drivers = queryDrivers.execute(new QueryDrivers.Request(activityName, carType));
+        var drivers = findAvailableDrivers.execute(new FindAvailableDrivers.Request(activityName, carType));
         return drivers;
     }
 

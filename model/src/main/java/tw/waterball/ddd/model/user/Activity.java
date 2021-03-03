@@ -7,6 +7,7 @@ import tw.waterball.ddd.model.associations.Many;
 
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -17,11 +18,12 @@ public class Activity extends AggregateRoot<Integer> {
     @Size(min = 1, max = 10)
     private String name;
 
-    private Many<Driver> participantDrivers = new Many<>();
+    private Collection<Driver> participantDrivers;
 
-    public Activity(int id, String name) {
+    public Activity(int id, String name, Set<Driver> participantDrivers) {
         this.id = id;
         this.name = name;
+        this.participantDrivers = participantDrivers;
     }
 
     public Activity(String name) {
@@ -33,10 +35,10 @@ public class Activity extends AggregateRoot<Integer> {
     }
 
     public Collection<Driver> getParticipantDrivers() {
-        return participantDrivers.get();
+        return participantDrivers;
     }
 
-    public void setParticipantDrivers(Many<Driver> participantDrivers) {
+    public void setParticipantDrivers(Collection<Driver> participantDrivers) {
         this.participantDrivers = participantDrivers;
     }
 

@@ -2,12 +2,11 @@ package tw.waterball.ddd.waber.springboot.user.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import tw.waterball.ddd.model.user.Activity;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.waber.passenger.repositories.ActivityRepository;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
-import tw.waterball.ddd.waber.user.usecases.ParticipateActivity;
+import tw.waterball.ddd.waber.driver.usecases.ParticipateActivity;
 
 import java.util.Collection;
 

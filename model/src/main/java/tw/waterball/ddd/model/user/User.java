@@ -1,17 +1,13 @@
 package tw.waterball.ddd.model.user;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import tw.waterball.ddd.model.base.AggregateRoot;
 import tw.waterball.ddd.model.geo.Location;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -19,7 +15,6 @@ import java.util.Arrays;
 @Getter
 @NoArgsConstructor
 public abstract class User extends AggregateRoot<Integer> {
-
     protected String type;
 
     @Size(min = 1, max = 10)

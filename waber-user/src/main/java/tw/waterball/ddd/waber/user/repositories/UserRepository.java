@@ -11,7 +11,7 @@ import java.util.Optional;
  * @author - johnny850807@gmail.com (Waterball)
  */
 public interface UserRepository {
-    List<Driver> findAllAvailableDrivers();
+    List<Driver> getAllAvailableDrivers();
 
     Optional<User> findById(int userId);
 
@@ -25,7 +25,6 @@ public interface UserRepository {
 
     void updateLatestLocation(int userId, Location location);
 
-    User associateById(int id);
 
     void clearAll();
 
