@@ -121,8 +121,7 @@ public class MatchControllerTest extends AbstractSpringBootTest {
     }
 
     private MatchView getMatch(int matchId) throws Exception {
-        return getBody(mockMvc.perform(get("/api/users/{passengerId}/matches/{matchId}",
-                passenger.getId(), matchId))
+        return getBody(mockMvc.perform(get("/api/matches/{matchId}", matchId))
                 .andExpect(status().isOk()), MatchView.class);
     }
 

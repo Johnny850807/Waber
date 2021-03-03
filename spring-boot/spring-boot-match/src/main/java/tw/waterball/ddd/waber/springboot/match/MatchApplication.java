@@ -10,7 +10,7 @@ import tw.waterball.ddd.model.Jobs;
 import tw.waterball.ddd.model.geo.DistanceCalculator;
 import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
-import tw.waterball.ddd.waber.match.usecases.MatchingUseCase;
+import tw.waterball.ddd.waber.match.usecases.MatchUseCase;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -37,13 +37,12 @@ public class MatchApplication {
     }
 
     @Bean
-    public MatchingUseCase matchingUseCase(UserServiceDriver userServiceDriver,
-                                           Jobs matchingJobs,
-                                           MatchRepository matchRepository,
-                                           DistanceCalculator distanceCalculator,
-                                           EventBus eventBus,
-                                           @Value("${waber.match.schedule.rescheduleDelayTimeInMs}") long rescheduleDelayTimeInMs) {
-        return new MatchingUseCase(userServiceDriver, matchingJobs, matchRepository,
+    public MatchUseCase matchingUseCase(UserServiceDriver userServiceDriver,
+                                        MatchRepository matchRepository,
+                                        DistanceCalculator distanceCalculator,
+                                        EventBus eventBus,
+                                        @Value("${waber.match.schedule.rescheduleDelayTimeInMs}") long rescheduleDelayTimeInMs) {
+        return new MatchUseCase(userServiceDriver, matchRepository,
                 distanceCalculator, rescheduleDelayTimeInMs, eventBus);
     }
 

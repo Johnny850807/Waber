@@ -14,12 +14,12 @@ import tw.waterball.ddd.model.geo.Location;
 @Getter
 @NoArgsConstructor
 public class UserLocationUpdatedEvent extends Event  {
-    public final static String EVENT_NAME = "UserLocationUpdated";
+    public final static String NAME = "UserLocationUpdated";
     private int userId;
     private Location location;
 
     public UserLocationUpdatedEvent(int userId, Location location) {
-        super(EVENT_NAME);
+        super(NAME);
         this.userId = userId;
         this.location = location;
     }

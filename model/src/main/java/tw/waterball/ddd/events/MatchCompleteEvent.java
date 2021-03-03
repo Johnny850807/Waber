@@ -14,7 +14,7 @@ import tw.waterball.ddd.model.match.Match;
 @Getter
 @NoArgsConstructor
 public class MatchCompleteEvent extends Event {
-    public static final String EVENT_NAME = "MatchCompleteEvent";
+    public static final String NAME = "MatchCompleteEvent";
     private int passengerId;
     private int driverId;
     private int matchId;
@@ -24,7 +24,7 @@ public class MatchCompleteEvent extends Event {
     }
 
     public MatchCompleteEvent(int matchId, int passengerId, int driverId) {
-        super(EVENT_NAME);
+        super(NAME);
         this.matchId = matchId;
         this.passengerId = passengerId;
         this.driverId = driverId;

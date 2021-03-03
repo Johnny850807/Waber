@@ -9,10 +9,7 @@ import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
 
 import static tw.waterball.ddd.commons.utils.StreamUtils.iterate;
 import static tw.waterball.ddd.model.geo.Route.from;
@@ -51,6 +48,9 @@ public class Match extends AggregateRoot<Integer> {
     }
 
     public void perform(Many<Driver> drivers, DistanceCalculator distanceCalculator) {
+        perform(drivers.iterator(), distanceCalculator);
+    }
+    public void perform(Collection<Driver> drivers, DistanceCalculator distanceCalculator) {
         perform(drivers.iterator(), distanceCalculator);
     }
 

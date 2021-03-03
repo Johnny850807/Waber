@@ -1,7 +1,6 @@
 package tw.waterball.ddd.waber.springboot.user.config;
 
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tw.waterball.ddd.events.EventBus;
@@ -20,7 +19,7 @@ public class RabbitEventBusConfiguration {
     @Bean
     public EventBus.Subscriber rabbitEventBusSubscriber(AmqpTemplate amqpTemplate) {
         return event -> {
-            if (UserLocationUpdatedEvent.EVENT_NAME.equals(event.getName())) {
+            if (UserLocationUpdatedEvent.NAME.equals(event.getName())) {
                 amqpTemplate.convertAndSend(EVENTS_EXCHANGE, "/users/location", event);
             }
         };

@@ -35,7 +35,7 @@ public class MatchData {
                 .id(match.getId())
                 .driverId(match.getDriverOptional()
                         .map(Driver::getId).orElse(null))
-                .passengerId(match.getPassenger().getId())
+                .passengerId(match.getPassengerId())
                 .matchPreferences(MatchPreferencesData.fromEntity(match.getPreferences()))
                 .createdDate(match.getCreatedDate())
                 .build();

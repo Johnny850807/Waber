@@ -17,7 +17,7 @@ import tw.waterball.ddd.model.trip.TripStateType;
 @Getter
 @NoArgsConstructor
 public class TripStateChangedEvent extends Event {
-    public static final String EVENT_NAME = "TripArrivedEvent";
+    public static final String NAME = "TripArrivedEvent";
     private int driverId;
     private int passengerId;
     private int matchId;
@@ -29,7 +29,7 @@ public class TripStateChangedEvent extends Event {
     }
 
     public TripStateChangedEvent(int driverId, int passengerId, int matchId, String tripId, TripState state) {
-        super(EVENT_NAME);
+        super(NAME);
         this.driverId = driverId;
         this.passengerId = passengerId;
         this.matchId = matchId;

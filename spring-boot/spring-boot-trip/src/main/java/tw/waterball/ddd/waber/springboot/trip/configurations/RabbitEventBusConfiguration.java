@@ -2,7 +2,6 @@ package tw.waterball.ddd.waber.springboot.trip.configurations;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Exchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tw.waterball.ddd.events.EventBus;
@@ -23,7 +22,7 @@ public class RabbitEventBusConfiguration {
     @Bean
     public EventBus.Subscriber rabbitEventBusSubscriber(AmqpTemplate amqpTemplate) {
         return event -> {
-            if (TripStateChangedEvent.EVENT_NAME.equals(event.getName())) {
+            if (TripStateChangedEvent.NAME.equals(event.getName())) {
                 amqpTemplate.convertAndSend(EVENTS_EXCHANGE, "/trips/state/change", event);
             }
         };
