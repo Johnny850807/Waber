@@ -59,6 +59,10 @@ public class Trip extends AggregateRoot<String> {
         this.state = state;
     }
 
+    public Match getMatch() {
+        return match.get();
+    }
+
     public One<Match> getMatchAssociation() {
         return match;
     }

@@ -8,7 +8,10 @@ import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.waber.trip.repositories.TripRepository;
 import tw.waterball.ddd.waber.trip.usecases.ArriveDestination;
+import tw.waterball.ddd.waber.trip.usecases.FindCurrentTrip;
 import tw.waterball.ddd.waber.trip.usecases.StartDriving;
+
+import static tw.waterball.ddd.api.trip.TripView.toViewModel;
 
 /**
  * @author Waterball (johnny850807@gmail.com)
@@ -20,8 +23,9 @@ import tw.waterball.ddd.waber.trip.usecases.StartDriving;
 public class TripController {
     private final StartDriving startDriving;
     private final ArriveDestination arriveDestination;
-    private final EventBus eventBus;
+    private final FindCurrentTrip findCurrentTrip;
     private final TripRepository tripRepository;
+    private final EventBus eventBus;
 
 
     @GetMapping("/trips/health")
@@ -46,6 +50,11 @@ public class TripController {
         return tripRepository.findById(tripId)
                 .map(TripView::toViewModel)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    @GetMapping("/users/{passengerId}/trips/current")
+    public TripView getCurrentTrip(@PathVariable int passengerId) {
+        return toViewModel(findCurrentTrip.execute(passengerId));
     }
 
 

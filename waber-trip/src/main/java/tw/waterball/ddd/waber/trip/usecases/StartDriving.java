@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
+import tw.waterball.ddd.events.EventBus;
+import tw.waterball.ddd.events.TripStateChangedEvent;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.Trip;
@@ -19,26 +21,15 @@ import javax.inject.Named;
 @Named
 @AllArgsConstructor
 public class StartDriving {
-    private final MatchServiceDriver matchServiceDriver;
+    private final EventBus eventBus;
+    private final FindCurrentTrip findCurrentTrip;
     private final TripRepository tripRepository;
 
     public void execute(Request req) {
-        Match match = getCurrentMatch(req.passengerId);
-        Trip trip = tripRepository.findByMatchId(match.getId())
-                .orElseGet(() -> startTrip(match));
-        trip.getMatchAssociation().resolveAssociation(match);
+        Trip trip = findCurrentTrip.execute(req.passengerId, true);
         trip.startDriving(req.destination);
+        eventBus.publish(new TripStateChangedEvent(trip.getMatch(), trip));
         tripRepository.save(trip);
-    }
-
-    private Trip startTrip(Match match) {
-        Trip trip = new Trip(match);
-        return tripRepository.save(trip);
-    }
-
-    private Match getCurrentMatch(int passengerId) {
-        MatchView matchView = matchServiceDriver.getCurrentMatch(passengerId);
-        return matchView.toEntity();
     }
 
     @AllArgsConstructor

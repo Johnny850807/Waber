@@ -31,7 +31,7 @@ import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 import tw.waterball.ddd.waber.springboot.trip.TripApplication;
-import tw.waterball.ddd.waber.springboot.trip.configurations.AmqpConfiguration;
+import tw.waterball.ddd.waber.springboot.trip.configurations.RabbitEventBusConfiguration;
 import tw.waterball.ddd.waber.springboot.trip.handler.StartTripHandler;
 import tw.waterball.ddd.waber.springboot.trip.repositories.jpa.SpringBootTripRepository;
 
@@ -80,16 +80,6 @@ class TripControllerTest extends AbstractSpringBootTest {
     @AfterEach
     void cleanUp() {
         tripRepository.clearAll();
-    }
-
-    @Test
-    void GivenMatch_WhenStartTrip_TripShouldBeCreatedWithPickingState() {
-        givenMatch();
-        startTripHandler.setOnHandledListener(() -> {
-            Trip trip = tripRepository.findById(this.tripView.id).orElseThrow();
-            assertEquals(TripStateType.PICKING, trip.getState().getType());
-        });
-        startTrip();
     }
 
     @Test
@@ -158,7 +148,7 @@ class TripControllerTest extends AbstractSpringBootTest {
     }
 
     private void startTrip() {
-        amqpTemplate.convertAndSend(AmqpConfiguration.EVENTS_EXCHANGE, StartTripHandler.ROUTING_KEY,
+        amqpTemplate.convertAndSend(RabbitEventBusConfiguration.EVENTS_EXCHANGE, StartTripHandler.ROUTING_KEY,
                 new MatchCompleteEvent(match));
     }
 

@@ -23,7 +23,6 @@ public class StartTripHandler {
     public static final String ROUTING_KEY = "/matches/complete";
     public static final String QUEUE_NAME = "waber-trip:StartTripHandler";
     private final StartTrip startTrip;
-    private Runnable onHandledListener = () -> {};
 
     @Bean
     public Queue startTripHandlerQueue() {
@@ -37,9 +36,6 @@ public class StartTripHandler {
                 .to(exchange).with(ROUTING_KEY);
     }
 
-    public void setOnHandledListener(Runnable onHandledListener) {
-        this.onHandledListener = onHandledListener;
-    }
 
 
     @RabbitListener(queues = QUEUE_NAME)
@@ -47,7 +43,5 @@ public class StartTripHandler {
         log.info("Received Event: {}", event);
         startTrip.execute(new StartTrip.Request(event.getPassengerId(), event.getMatchId()),
                 trip -> { /*Present Nothing*/ });
-
-        onHandledListener.run();
     }
 }
