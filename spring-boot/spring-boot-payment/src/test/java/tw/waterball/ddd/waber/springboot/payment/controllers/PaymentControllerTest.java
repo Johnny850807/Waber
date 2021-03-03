@@ -8,11 +8,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import tw.waterball.ddd.api.match.FakeMatchServiceDriver;
-import tw.waterball.ddd.api.match.MatchServiceDriver;
-import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.api.trip.FakeTripServiceDriver;
-import tw.waterball.ddd.api.trip.TripServiceDriver;
-import tw.waterball.ddd.api.trip.TripView;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.payment.PricingItem;
 import tw.waterball.ddd.model.payment.PricingStrategy;
@@ -28,8 +24,6 @@ import tw.waterball.ddd.waber.springboot.payment.PaymentApplication;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.*;

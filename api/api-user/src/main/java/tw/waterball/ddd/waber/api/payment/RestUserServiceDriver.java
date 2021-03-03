@@ -1,7 +1,6 @@
 package tw.waterball.ddd.waber.api.payment;
 
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

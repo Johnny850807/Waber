@@ -4,11 +4,8 @@ import lombok.AllArgsConstructor;
 import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
-import tw.waterball.ddd.events.EventBus;
-import tw.waterball.ddd.events.TripStateChangedEvent;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.Trip;
-import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
 import tw.waterball.ddd.waber.trip.repositories.TripRepository;
 
 import javax.inject.Named;

@@ -3,7 +3,6 @@ package tw.waterball.ddd.waber.api.payment;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import tw.waterball.ddd.model.payment.Payment;
-import tw.waterball.ddd.model.payment.Price;
 import tw.waterball.ddd.model.payment.PricingItem;
 
 import java.util.List;

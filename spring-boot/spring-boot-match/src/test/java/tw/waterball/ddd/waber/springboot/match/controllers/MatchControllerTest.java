@@ -20,7 +20,6 @@ import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.stubs.UserStubs;
-import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 import tw.waterball.ddd.waber.springboot.match.MatchApplication;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
