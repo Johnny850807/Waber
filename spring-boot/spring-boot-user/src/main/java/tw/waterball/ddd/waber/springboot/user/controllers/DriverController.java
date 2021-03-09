@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.commons.model.ErrorMessage;
 import tw.waterball.ddd.model.user.Driver;
-import tw.waterball.ddd.model.user.DriverHasBeenMatchedException;
+import tw.waterball.ddd.model.user.DriverIsNotAvailableException;
 import tw.waterball.ddd.waber.driver.usecases.SetDriverStatus;
 import tw.waterball.ddd.waber.driver.usecases.SignUpToBeDriver;
 import tw.waterball.ddd.waber.user.usecases.FindAvailableDrivers;
@@ -45,15 +45,15 @@ public class DriverController {
 
     @PatchMapping("/{driverId}")
     public void setDriverStatus(@PathVariable int driverId,
-                                @RequestBody String status) throws DriverHasBeenMatchedException {
+                                @RequestBody String status) throws DriverIsNotAvailableException {
         setDriverStatus.execute(new SetDriverStatus.Request(driverId,
                 Driver.Status.valueOf(status.trim().toUpperCase())));
     }
 
     // survey if this handler can be shared in spring-boot-commons
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({DriverHasBeenMatchedException.class})
-    public ErrorMessage handleDriverHasBeenMatchedException(DriverHasBeenMatchedException err) {
+    @ExceptionHandler({DriverIsNotAvailableException.class})
+    public ErrorMessage handleDriverHasBeenMatchedException(DriverIsNotAvailableException err) {
         return ErrorMessage.fromException(err);
     }
 

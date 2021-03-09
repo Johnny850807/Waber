@@ -9,5 +9,5 @@ import tw.waterball.ddd.model.match.MatchPreferences;
 public class MatchStubs {
     public static Match COMPLETED_MATCH = new Match(20,
             UserStubs.NORMAL_PASSENGER.getId(),
-            UserStubs.NORMAL_DRIVER, new MatchPreferences());
+            UserStubs.NORMAL_DRIVER.getId(), new MatchPreferences());
 }

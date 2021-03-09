@@ -2,7 +2,7 @@ package tw.waterball.ddd.waber.api.payment;
 
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
-import tw.waterball.ddd.model.user.DriverHasBeenMatchedException;
+import tw.waterball.ddd.model.user.DriverIsNotAvailableException;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.model.user.User;
 
@@ -42,7 +42,7 @@ public class FakeUserServiceDriver implements UserServiceDriver {
     }
 
     @Override
-    public synchronized void setDriverStatus(int driverId, Driver.Status status) throws DriverHasBeenMatchedException {
+    public synchronized void setDriverStatus(int driverId, Driver.Status status) throws DriverIsNotAvailableException {
         drivers.get(driverId).setStatus(status);
     }
 

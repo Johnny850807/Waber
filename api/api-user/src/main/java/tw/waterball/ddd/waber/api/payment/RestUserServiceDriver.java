@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import tw.waterball.ddd.commons.model.BaseUrl;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
-import tw.waterball.ddd.model.user.DriverHasBeenMatchedException;
+import tw.waterball.ddd.model.user.DriverIsNotAvailableException;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.model.user.User;
 
@@ -62,7 +62,7 @@ public class RestUserServiceDriver implements UserServiceDriver {
     }
 
     @Override
-    public void setDriverStatus(int driverId, Driver.Status status) throws DriverHasBeenMatchedException {
+    public void setDriverStatus(int driverId, Driver.Status status) throws DriverIsNotAvailableException {
         var headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
         var httpEntity = new HttpEntity<>(status.toString(), headers);

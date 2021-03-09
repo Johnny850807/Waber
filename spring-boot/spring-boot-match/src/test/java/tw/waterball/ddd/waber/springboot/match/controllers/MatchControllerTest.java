@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static tw.waterball.ddd.api.match.MatchView.DriverView.toViewModel;
 import static tw.waterball.ddd.commons.utils.SneakyUtils.sneakyThrows;
 
 @ActiveProfiles(FakeServiceDrivers.NAME)
@@ -83,7 +84,7 @@ public class MatchControllerTest extends AbstractSpringBootTest {
             throw new AssertionError("The match can't be completed within " + timeCountdown + "ms.");
         }
         Assertions.assertEquals(
-                MatchView.DriverView.fromEntity(driver), pollMatch.driver, "The matched driver is incorrect.");
+                toViewModel(driver), pollMatch.driver, "The matched driver is incorrect.");
     }
 
     @Test

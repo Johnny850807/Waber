@@ -7,6 +7,7 @@ import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
+import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.model.user.User;
 import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
@@ -60,10 +61,9 @@ public class MatchController {
     }
 
     private MatchView toMatchView(Match match) {
-        Optional<Integer> driverId = match.getDriverAssociation().getId();
-        driverId.map(userServiceDriver::getDriver)
-                .ifPresent(match::setDriver);
-        return toViewModel(match);
+        Optional<Integer> driverId = match.mayHaveDriverId();
+        Driver driver = driverId.map(userServiceDriver::getDriver).orElse(null);
+        return toViewModel(match, driver);
     }
 
 }

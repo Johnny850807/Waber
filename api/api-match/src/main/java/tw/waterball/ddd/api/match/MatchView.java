@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import lombok.Builder;
 import lombok.AllArgsConstructor;
+import org.springframework.lang.Nullable;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
@@ -27,11 +28,13 @@ public class MatchView {
     public boolean alive;
 
     public static MatchView toViewModel(Match match) {
+        return toViewModel(match, null);
+    }
+    public static MatchView toViewModel(Match match, @Nullable Driver driver) {
         return MatchView.builder()
                 .id(match.getId())
-                .passengerId(match.getPassengerAssociation().getId())
-                .driver(match.getDriverOptional()
-                        .map(DriverView::fromEntity).orElse(null))
+                .passengerId(match.getPassengerId())
+                .driver(DriverView.toViewModel(driver))
                 .completed(match.isCompleted())
                 .matchPreferences(match.getPreferences())
                 .createdDate(match.getCreatedDate())
@@ -58,7 +61,10 @@ public class MatchView {
         public Integer id;
         public String name;
 
-        public static DriverView fromEntity(Driver driver) {
+        public static DriverView toViewModel(@Nullable Driver driver) {
+            if (driver == null) {
+                return null;
+            }
             return new DriverView(driver.getId(), driver.getName());
         }
     }

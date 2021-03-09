@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tw.waterball.ddd.model.geo.Location;
-import tw.waterball.ddd.model.match.Match;
 
 import javax.validation.constraints.NotNull;
 
@@ -49,7 +48,7 @@ public class Driver extends User {
 
     public void setStatus(Status status) {
         if (this.status == Status.MATCHED && status == Status.MATCHED) {
-            throw new DriverHasBeenMatchedException(this);
+            throw new DriverIsNotAvailableException(this);
         }
         this.status = status;
     }
