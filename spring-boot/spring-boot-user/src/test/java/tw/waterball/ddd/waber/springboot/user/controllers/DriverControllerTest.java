@@ -11,10 +11,11 @@ class DriverControllerTest extends AbstractUserApplicationTest {
 
     @Test
     void testSignUpDriver() throws Exception {
-        Driver actual = signUpDriver();
+        Driver expected = driver;
+        signUpDriver();
 
-        assertNotNull(actual.getId());
-        driver.setId(actual.getId());
-        assertEquals(toData(driver), toData(actual));
+        assertNotNull(driver.getId());
+        expected.setId(driver.getId());
+        assertEquals(toData(expected), toData(driver));
     }
 }

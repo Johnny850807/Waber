@@ -1,7 +1,6 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tw.waterball.ddd.model.user.Driver;
 
@@ -25,7 +24,7 @@ class ActivityControllerTest extends AbstractUserApplicationTest {
 
     @Test
     void GivenDriverSignedUp_WhenHeParticipatesValentinesDay_ShouldBeTheParticipantOfValentinesDay() throws Exception {
-        driver = signUpDriver();
+        signUpDriver();
 
         participateValentinesDay();
 

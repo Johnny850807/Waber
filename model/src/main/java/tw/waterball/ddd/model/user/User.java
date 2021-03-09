@@ -23,9 +23,6 @@ public abstract class User extends AggregateRoot<Integer> {
     @Email
     protected String email;
 
-    @NotBlank
-    protected String password;
-
     protected Location location;
 
     public User(String type, int id) {
@@ -33,12 +30,11 @@ public abstract class User extends AggregateRoot<Integer> {
         this.id = id;
     }
 
-    public User(String type, int id, String name, String email, String password, Location location) {
+    public User(String type, int id, String name, String email, Location location) {
         this.type = type;
         this.id = id;
         this.name = name;
         this.email = email;
-        this.password = password;
         this.location = location;
     }
 
@@ -46,7 +42,6 @@ public abstract class User extends AggregateRoot<Integer> {
         this.type = type;
         this.name = name;
         this.email = email;
-        this.password = password;
     }
 
     public void setName(String name) {
@@ -56,11 +51,7 @@ public abstract class User extends AggregateRoot<Integer> {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    
     public void setLocation(Location location) {
         this.location = location;
     }

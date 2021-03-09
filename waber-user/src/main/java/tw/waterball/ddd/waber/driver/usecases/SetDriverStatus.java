@@ -1,6 +1,7 @@
 package tw.waterball.ddd.waber.driver.usecases;
 
 import lombok.AllArgsConstructor;
+import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.waber.user.repositories.UserRepository;
 
@@ -15,7 +16,7 @@ public class SetDriverStatus {
     private UserRepository userRepository;
 
     public void execute(Request req) {
-        Driver driver = (Driver) userRepository.associateById(req.driverId);
+        Driver driver = (Driver) userRepository.findById(req.driverId).orElseThrow(NotFoundException::new);
         driver.setStatus(req.status);
         userRepository.save(driver);
     }

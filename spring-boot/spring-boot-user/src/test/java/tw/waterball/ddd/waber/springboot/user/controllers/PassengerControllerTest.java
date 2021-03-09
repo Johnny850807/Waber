@@ -11,11 +11,12 @@ class PassengerControllerTest extends AbstractUserApplicationTest {
 
     @Test
     void testSignUpPassenger() throws Exception {
-        Passenger actual = signUpPassenger();
+        Passenger expected = passenger;
+        signUpPassenger();
 
-        assertNotNull(actual.getId());
-        passenger.setId(actual.getId());
-        assertEquals(toData(passenger), toData(actual));
+        assertNotNull(passenger.getId());
+        expected.setId(passenger.getId());
+        assertEquals(toData(expected), toData(passenger));
     }
 
 }

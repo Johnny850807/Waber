@@ -13,7 +13,6 @@ import javax.inject.Named;
 @Named
 @AllArgsConstructor
 public class SignUpToBeDriver {
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
     private final UserRepository userRepository;
 
     public Driver execute(Request req) {

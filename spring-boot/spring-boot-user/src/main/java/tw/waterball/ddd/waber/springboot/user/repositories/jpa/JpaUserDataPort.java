@@ -12,7 +12,7 @@ import java.util.Optional;
  */
 @Repository
 public interface JpaUserDataPort extends JpaRepository<UserData, Integer> {
-    Optional<UserData> findByEmailAndPassword(String email, String password);
+    Optional<UserData> findByEmail(String email);
 
     List<UserData> findAllByCarTypeAndDriverStatusIs(Driver.CarType carType, String driverStatus);
 

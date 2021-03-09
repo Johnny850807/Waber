@@ -18,7 +18,7 @@ public class Activity extends AggregateRoot<Integer> {
     @Size(min = 1, max = 10)
     private String name;
 
-    private Collection<Driver> participantDrivers;
+    private Set<Driver> participantDrivers;
 
     public Activity(int id, String name, Set<Driver> participantDrivers) {
         this.id = id;
@@ -38,7 +38,7 @@ public class Activity extends AggregateRoot<Integer> {
         return participantDrivers;
     }
 
-    public void setParticipantDrivers(Collection<Driver> participantDrivers) {
+    public void setParticipantDrivers(Set<Driver> participantDrivers) {
         this.participantDrivers = participantDrivers;
     }
 

@@ -20,6 +20,7 @@ public interface UserRepository {
     List<Driver> findAllAvailableDriversByCarType(Driver.CarType carType);
 
     User save(User user);
+    User saveUserWithHisPassword(User user, String password);
 
     Optional<User> findByEmailAndPassword(String email, String password);
 

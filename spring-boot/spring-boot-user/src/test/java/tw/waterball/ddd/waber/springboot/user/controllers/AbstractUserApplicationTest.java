@@ -1,7 +1,6 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -12,11 +11,13 @@ import tw.waterball.ddd.stubs.UserStubs;
 import tw.waterball.ddd.waber.passenger.repositories.ActivityRepository;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 import tw.waterball.ddd.waber.springboot.user.UserApplication;
+import tw.waterball.ddd.waber.springboot.user.repositories.jpa.UserData;
 import tw.waterball.ddd.waber.user.repositories.UserRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @ContextConfiguration(classes = {UserApplication.class})
 public abstract class AbstractUserApplicationTest extends AbstractSpringBootTest {
+    protected String password = "password";
     protected Driver driver = UserStubs.NORMAL_DRIVER;
     protected Passenger passenger = UserStubs.NORMAL_PASSENGER;
 
@@ -38,23 +40,27 @@ public abstract class AbstractUserApplicationTest extends AbstractSpringBootTest
         userRepository.clearAll();
     }
 
-    protected Driver signUpDriver() throws Exception {
-        Driver newDriver = getBody(mockMvc.perform(post("/api/drivers")
+    protected void signUpDriver() throws Exception {
+        driver = getBody(mockMvc.perform(post("/api/drivers")
                 .content(toJson(driver))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()), Driver.class);
-        return newDriver;
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("password").doesNotExist()), Driver.class);
     }
 
-    protected Passenger signUpPassenger() throws Exception {
-        return getBody(mockMvc.perform(post("/api/passengers")
+    protected void signUpPassenger() throws Exception {
+        passenger = getBody(mockMvc.perform(post("/api/passengers")
                 .content(toJson(passenger))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()), Passenger.class);
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("password").doesNotExist()), Passenger.class);
     }
 
     protected User getUser(int userId) throws Exception {
         return getBody(mockMvc.perform(get("/api/users/{userId}", userId))
-                .andExpect(status().isOk()), User.class);
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("password").doesNotExist()), User.class);
     }
+
 }
+

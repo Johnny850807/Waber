@@ -36,7 +36,6 @@ import static tw.waterball.ddd.api.trip.TripView.toViewModel;
 @ContextConfiguration(classes = {PaymentApplication.class, PaymentControllerTest.TestConfiguration.class})
 class PaymentControllerTest extends AbstractSpringBootTest {
     private static final PricingItem pricingItem = new PricingItem("Test", "Test", BigDecimal.valueOf(666));
-    private final Passenger passenger = UserStubs.NORMAL_PASSENGER;
     private final Match match = MatchStubs.COMPLETED_MATCH;
     private final Trip trip = TripStubs.ARRIVED_TRIP;
 

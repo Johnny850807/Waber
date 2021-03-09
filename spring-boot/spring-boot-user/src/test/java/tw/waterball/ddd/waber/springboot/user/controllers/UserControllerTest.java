@@ -22,7 +22,7 @@ public class UserControllerTest extends AbstractUserApplicationTest {
     void GivenPassengerSignedUp_WhenSignIn_ShouldSucceed() throws Exception {
         signUpPassenger();
 
-        SignInParams signInParams = new SignInParams(passenger.getEmail(), passenger.getPassword());
+        SignInParams signInParams = new SignInParams(passenger.getEmail(), password);
         Passenger actual = signIn(signInParams);
 
         assertNotNull(actual.getId());
@@ -32,7 +32,7 @@ public class UserControllerTest extends AbstractUserApplicationTest {
 
     @Test
     void GivenDriverSignedUp_WhenUpdateLocation_ShouldBeUpdated() throws Exception {
-        driver = signUpDriver();
+        signUpDriver();
 
         Location location = new Location(500.44, 600.77);
         updateLocation(driver.getId(), location);

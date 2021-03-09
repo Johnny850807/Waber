@@ -1,27 +1,27 @@
 package tw.waterball.ddd.waber.springboot.user.repositories.jpa;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.User;
 import tw.waterball.ddd.waber.user.repositories.UserRepository;
 
-import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static tw.waterball.ddd.waber.springboot.user.repositories.jpa.UserData.toData;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
 @Component
+@AllArgsConstructor
 public class SpringBootUserRepository implements UserRepository {
-    private JpaUserDataPort jpaUserDataPort;
-
-    public SpringBootUserRepository(JpaUserDataPort jpaUserDataPort) {
-        this.jpaUserDataPort = jpaUserDataPort;
-    }
+    private final JpaUserDataPort jpaUserDataPort;
+    private final JpaPasswordPort jpaPasswordPort;
 
     @Override
     public List<Driver> getAllAvailableDrivers() {
@@ -38,7 +38,16 @@ public class SpringBootUserRepository implements UserRepository {
 
     @Override
     public User save(User user) {
-        UserData data = jpaUserDataPort.save(UserData.toData(user));
+        UserData data = jpaUserDataPort.save(toData(user));
+        user.setId(data.getId());
+        return user;
+    }
+
+    @Override
+    @Transactional
+    public User saveUserWithHisPassword(User user, String password) {
+        UserData data = jpaUserDataPort.save(toData(user));
+        jpaPasswordPort.save(new Password(data.getId(), password));
         user.setId(data.getId());
         return user;
     }
@@ -59,8 +68,15 @@ public class SpringBootUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findByEmailAndPassword(String email, String password) {
-        return jpaUserDataPort.findByEmailAndPassword(email, password)
+        var user = jpaUserDataPort.findByEmail(email)
                 .map(UserData::toEntity);
+        if (user.isPresent()) {
+            var p = jpaPasswordPort.findById(user.get().getId());
+            if (p.isPresent()) {
+                return user;
+            }
+        }
+        return Optional.empty();
     }
 
     @Override

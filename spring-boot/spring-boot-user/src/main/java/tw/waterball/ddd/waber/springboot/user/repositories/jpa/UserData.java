@@ -1,6 +1,7 @@
 package tw.waterball.ddd.waber.springboot.user.repositories.jpa;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
@@ -28,7 +29,6 @@ public class UserData {
     private Integer id;
     private String name;
     private String email;
-    private String password;
     private Driver.CarType carType;
     private double latitude;
     private double longitude;
@@ -45,7 +45,6 @@ public class UserData {
                 .id(driver.getId())
                 .name(driver.getName())
                 .email(driver.getEmail())
-                .password(driver.getPassword())
                 .carType(driver.getCarType())
                 .driverStatus(driver.getStatus().toString())
                 .driver(true)
@@ -57,7 +56,6 @@ public class UserData {
                 .id(passenger.getId())
                 .name(passenger.getName())
                 .email(passenger.getEmail())
-                .password(passenger.getPassword())
                 .driver(false)
                 .build();
     }
@@ -68,13 +66,13 @@ public class UserData {
 
     public Driver toDriver() {
         return new Driver(getId(),
-                getName(), getEmail(), getPassword(), getCarType(),
+                getName(), getEmail(), getCarType(),
                 new Location(getLatitude(), getLongitude()),
                 Driver.Status.valueOf(driverStatus));
     }
 
     public Passenger toPassenger() {
-        return new Passenger(getId(), getName(), getEmail(), getPassword(), new Location(getLatitude(), getLongitude()));
+        return new Passenger(getId(), getName(), getEmail(), new Location(getLatitude(), getLongitude()));
     }
 
 }

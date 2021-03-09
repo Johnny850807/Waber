@@ -13,8 +13,8 @@ import tw.waterball.ddd.model.match.Match;
 public class Passenger extends User {
     public static final String TYPE = "Passenger";
 
-    public Passenger(int id, String name, String email, String password, Location latestLocation) {
-        super(TYPE, id, name, email, password, latestLocation);
+    public Passenger(int id, String name, String email, Location latestLocation) {
+        super(TYPE, id, name, email, latestLocation);
     }
 
     public Passenger(String name, String email, String password) {

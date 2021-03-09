@@ -31,8 +31,8 @@ public class Driver extends User {
         super(TYPE, id);
     }
 
-    public Driver(int id, String name, String email, String password, CarType carType, Location latestLocation, Status status) {
-        super(TYPE, id, name, email, password, latestLocation);
+    public Driver(int id, String name, String email, CarType carType, Location latestLocation, Status status) {
+        super(TYPE, id, name, email, latestLocation);
         this.carType = carType;
         this.status = status;
     }

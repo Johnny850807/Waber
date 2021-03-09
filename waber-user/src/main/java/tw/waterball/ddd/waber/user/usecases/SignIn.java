@@ -12,7 +12,7 @@ import javax.inject.Named;
  */
 @Named
 public class SignIn {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public SignIn(UserRepository userRepository) {
         this.userRepository = userRepository;
