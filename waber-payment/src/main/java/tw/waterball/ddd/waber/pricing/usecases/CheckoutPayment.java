@@ -5,7 +5,6 @@ import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.api.trip.TripServiceDriver;
 import tw.waterball.ddd.api.trip.TripView;
-import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.payment.Payment;
 import tw.waterball.ddd.model.payment.PricingStrategy;
 import tw.waterball.ddd.model.trip.Trip;
@@ -47,7 +46,7 @@ public class CheckoutPayment {
     private Trip getTrip(Request request) {
         TripView tripView = tripServiceDriver.getTrip(request.tripId);
         MatchView matchView = matchServiceDriver.getMatch(tripView.matchId);
-        return tripView.toEntityWithMatch(matchView.toEntity());
+        return tripView.toEntity(matchView.toEntity());
     }
 
     @AllArgsConstructor

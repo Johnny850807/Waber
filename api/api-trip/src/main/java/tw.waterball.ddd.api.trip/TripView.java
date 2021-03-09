@@ -27,12 +27,12 @@ public class TripView {
     }
 
     public static TripView toViewModel(Trip trip) {
-        return new TripView(trip.getId(), trip.getMatchAssociation().getId(),
+        return new TripView(trip.getId(), trip.getMatchId(),
                 trip.getDestination(), trip.getState());
     }
 
-    public Trip toEntityWithMatch(Match match) {
-        Trip trip = new Trip(match);
+    public Trip toEntity() {
+        Trip trip = new Trip(matchId);
         trip.setId(id);
         trip.setDestination(destination);
         trip.setState(state.toState(trip));

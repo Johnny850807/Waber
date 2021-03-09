@@ -21,9 +21,10 @@ public class StartTrip {
     public void execute(Request req, TripPresenter presenter) {
         MatchView matchView = matchServiceDriver.getMatch(req.matchId);
         Match match = matchView.toEntity();
-        Trip trip = new Trip(match);
-        Trip savedTrip = tripRepository.save(trip);
-        presenter.present(savedTrip);
+        Trip trip = new Trip(match.getId());
+        Trip savedTrip = tripRepository.saveTripWithMatch(trip, match);
+
+        presenter.present(match, savedTrip);
     }
 
     @AllArgsConstructor

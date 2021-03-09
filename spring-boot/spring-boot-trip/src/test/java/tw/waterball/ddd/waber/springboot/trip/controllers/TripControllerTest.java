@@ -38,6 +38,7 @@ import tw.waterball.ddd.waber.springboot.trip.repositories.jpa.SpringBootTripRep
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,7 +49,7 @@ import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 import static tw.waterball.ddd.api.trip.TripView.toViewModel;
 
 @ActiveProfiles(FakeServiceDrivers.NAME)
-@ContextConfiguration(classes = {TripApplication.class, TripControllerTest.TestConfig.class})
+@ContextConfiguration(classes = {TripApplication.class})
 class TripControllerTest extends AbstractSpringBootTest {
     Passenger passenger = UserStubs.NORMAL_PASSENGER;
     Driver driver = UserStubs.NORMAL_DRIVER;
@@ -59,8 +60,6 @@ class TripControllerTest extends AbstractSpringBootTest {
     @Autowired
     StartTripHandler startTripHandler;
     @Autowired
-    AmqpTemplate amqpTemplate;
-    @Autowired
     FakeMatchServiceDriver matchServiceDriver;
     @MockBean
     PaymentServiceDriver paymentServiceDriver;
@@ -68,14 +67,6 @@ class TripControllerTest extends AbstractSpringBootTest {
     @Autowired
     SpringBootTripRepository tripRepository;
 
-    @Configuration
-    public static class TestConfig {
-        @Bean
-        @Primary
-        public ConnectionFactory mockRabbitMqConnectionFactory() {
-            return new CachingConnectionFactory(new MockConnectionFactory());
-        }
-    }
 
     @AfterEach
     void cleanUp() {
@@ -102,31 +93,33 @@ class TripControllerTest extends AbstractSpringBootTest {
     }
 
     @Test
-    void Given2ArrivedTrip_WhenQueryTripHistoryByPassengerIdOrDriverId_ShouldGetThose2Trips() throws Exception {
+    void Given2ArrivedTripsWithSameMatch_WhenQueryTripHistoryByPassengerIdOrDriverId_ShouldGetThose2Trips() throws Exception {
         givenMatch();
-        List<Trip> trips = Arrays.asList(new Trip(match), new Trip(match));
-        trips.forEach(trip -> trip.setState(new Arrived(trip)));
-        trips = trips.stream().map(tripRepository::save).collect(Collectors.toList());
+        List<Trip> givenTrips = Arrays.asList(new Trip(match.getId()), new Trip(match.getId()));
+        givenTrips.forEach(trip -> trip.setState(new Arrived(trip)));
+        givenTrips = givenTrips.stream().map(trip ->
+                tripRepository.saveTripWithMatch(trip, match)).collect(Collectors.toList());
 
-        List<TripView> expected = trips.stream().map(TripView::toViewModel).collect(Collectors.toList());
+        Set<TripView> expected = givenTrips.stream()
+                .map(TripView::toViewModel).collect(Collectors.toSet());
 
         List<TripView> passengerTripHistory = queryTripHistory(passenger.getId());
-        assertEquals(new HashSet<>(expected), new HashSet<>(passengerTripHistory));
+        assertEquals(expected, new HashSet<>(passengerTripHistory));
 
         List<TripView> driverTripHistory = queryTripHistory(driver.getId());
-        assertEquals(new HashSet<>(expected), new HashSet<>(driverTripHistory));
+        assertEquals(expected, new HashSet<>(driverTripHistory));
     }
 
 
     private void givenTrip(TripStateType stateType) {
         givenMatch();
-        Trip trip = new Trip(match);
+        Trip trip = new Trip(match.getId());
         trip.setState(stateType.toState(trip));
-        this.tripView = toViewModel(tripRepository.save(trip));
+        this.tripView = toViewModel(tripRepository.saveTripWithMatch(trip, match));
     }
 
     private void givenMatch() {
-        match = new Match(345, passenger.getId(), driver, new MatchPreferences());
+        match = new Match(345, passenger.getId(), driver.getId(), new MatchPreferences());
         matchServiceDriver.addMatchView(toViewModel(match));
     }
 
@@ -145,11 +138,6 @@ class TripControllerTest extends AbstractSpringBootTest {
                         .content(toJson(destination))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-    }
-
-    private void startTrip() {
-        amqpTemplate.convertAndSend(RabbitEventBusConfiguration.EVENTS_EXCHANGE, StartTripHandler.ROUTING_KEY,
-                new MatchCompleteEvent(match));
     }
 
     private List<TripView> queryTripHistory(int userId) throws Exception {

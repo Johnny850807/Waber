@@ -6,6 +6,7 @@ import tw.waterball.ddd.api.trip.TripView;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.model.geo.Location;
+import tw.waterball.ddd.waber.springboot.trip.presenters.TripPresenter;
 import tw.waterball.ddd.waber.trip.repositories.TripRepository;
 import tw.waterball.ddd.waber.trip.usecases.ArriveDestination;
 import tw.waterball.ddd.waber.trip.usecases.FindCurrentTrip;
@@ -54,7 +55,9 @@ public class TripController {
 
     @GetMapping("/users/{passengerId}/trips/current")
     public TripView getCurrentTrip(@PathVariable int passengerId) {
-        return toViewModel(findCurrentTrip.execute(passengerId));
+        TripPresenter tripPresenter = new TripPresenter();
+        findCurrentTrip.execute(new FindCurrentTrip.Request(passengerId), tripPresenter);
+        return tripPresenter.getTripView();
     }
 
 

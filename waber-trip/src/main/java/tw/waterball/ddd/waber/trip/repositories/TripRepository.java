@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.trip.repositories;
 
+import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.Trip;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface TripRepository {
 
     List<Trip> queryPassengerTripHistory(int passengerId);
 
-    Trip save(Trip trip);
+    Trip saveTripWithMatch(Trip trip, Match match);
 
     Optional<Trip> findById(String id);
 

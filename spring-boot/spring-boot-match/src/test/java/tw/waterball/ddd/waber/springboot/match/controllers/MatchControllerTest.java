@@ -76,15 +76,13 @@ public class MatchControllerTest extends AbstractSpringBootTest {
     }
 
 
-    @SuppressWarnings("BusyWait")
     private void shouldMatchThatDriver(MatchView matchView) throws Exception {
         final int timeCountdown = 10000;
         MatchView pollMatch = pollCompletedMatch(timeCountdown, matchView);
         if (!pollMatch.completed) {
             throw new AssertionError("The match can't be completed within " + timeCountdown + "ms.");
         }
-        Assertions.assertEquals(
-                toViewModel(driver), pollMatch.driver, "The matched driver is incorrect.");
+        assertEquals(toViewModel(driver), pollMatch.driver, "The matched driver is incorrect.");
     }
 
     @Test

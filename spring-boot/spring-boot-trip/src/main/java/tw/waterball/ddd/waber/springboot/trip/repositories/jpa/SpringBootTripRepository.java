@@ -1,6 +1,7 @@
 package tw.waterball.ddd.waber.springboot.trip.repositories.jpa;
 
 import org.springframework.stereotype.Component;
+import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.Trip;
 import tw.waterball.ddd.waber.trip.repositories.TripRepository;
 
@@ -33,8 +34,8 @@ public class SpringBootTripRepository implements TripRepository {
     }
 
     @Override
-    public Trip save(Trip trip) {
-        TripData data = TripData.toData(trip);
+    public Trip saveTripWithMatch(Trip trip, Match match) {
+        TripData data = TripData.toData(trip, match);
         TripData saveData = tripDataPort.save(data);
         return saveData.toEntity();
     }

@@ -20,10 +20,13 @@ public class ArriveDestination {
     private final TripRepository tripRepository;
 
     public void execute(Request req, EventBus eventBus) {
-        Trip trip = findCurrentTrip.execute(req.passengerId);
+        var result = findCurrentTrip.executeAndGetResult(new FindCurrentTrip.Request(req.passengerId));
+
+        Trip trip = result.getTrip();
         trip.arrive();
-        tripRepository.save(trip);
-        eventBus.publish(new TripStateChangedEvent(trip.getMatch(), trip));
+        tripRepository.saveTripWithMatch(trip, result.getMatch());
+
+        eventBus.publish(new TripStateChangedEvent(result.getMatch(), trip));
         paymentServiceDriver.checkoutPayment(trip.getId());
     }
 

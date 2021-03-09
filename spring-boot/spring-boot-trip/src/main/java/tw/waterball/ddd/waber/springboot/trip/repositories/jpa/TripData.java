@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tw.waterball.ddd.model.geo.Location;
+import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.Trip;
 import tw.waterball.ddd.model.trip.TripState;
 import tw.waterball.ddd.model.trip.TripStateType;
@@ -37,10 +38,10 @@ public class TripData {
         this.state = state.getType();
     }
 
-    public static TripData toData(Trip trip) {
-        int driverId = trip.getMatchAssociation().get().getDriverId();
-        int passengerId = trip.getMatchAssociation().get().getPassengerId();
-        return new TripData(trip.getId(), driverId, passengerId, trip.getMatchAssociation().getId(),
+    public static TripData toData(Trip trip, Match match) {
+        int driverId = match.getDriverId();
+        int passengerId = match.getPassengerId();
+        return new TripData(trip.getId(), driverId, passengerId, match.getId(),
                 trip.getDestination(), trip.getState());
     }
 

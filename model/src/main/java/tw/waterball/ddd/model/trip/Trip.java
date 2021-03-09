@@ -6,27 +6,28 @@ import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.states.Picking;
 
+import java.util.Optional;
+
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
 public class Trip extends AggregateRoot<String> {
-    private final One<Match> match;
+    private final int matchId;
     private TripState state = new Picking(this);
     private Location destination;
 
-    public Trip(Match match) {
-        this.match = One.of(match);
+    public Trip(int matchId) {
+        this.matchId = matchId;
     }
 
-    public Trip(String id, Match match) {
+    public Trip(String id, int matchId) {
         this.id = id;
-        this.match = One.of(match);
+        this.matchId = matchId;
     }
-
 
     public Trip(String tripId, int matchId, Location destination, TripStateType type) {
         this.id = tripId;
-        this.match = One.associate(matchId);
+        this.matchId = matchId;
         this.destination = destination;
         this.state = type.toState(this);
     }
@@ -59,11 +60,8 @@ public class Trip extends AggregateRoot<String> {
         this.state = state;
     }
 
-    public Match getMatch() {
-        return match.get();
+    public int getMatchId() {
+        return matchId;
     }
 
-    public One<Match> getMatchAssociation() {
-        return match;
-    }
 }

@@ -22,10 +22,13 @@ public class StartDriving {
     private final TripRepository tripRepository;
 
     public void execute(Request req) {
-        Trip trip = findCurrentTrip.execute(req.passengerId, true);
+        var result = findCurrentTrip.executeAndGetResult(new FindCurrentTrip.Request(req.passengerId, true));
+
+        Trip trip = result.getTrip();
         trip.startDriving(req.destination);
-        eventBus.publish(new TripStateChangedEvent(trip.getMatch(), trip));
-        tripRepository.save(trip);
+
+        eventBus.publish(new TripStateChangedEvent(result.getMatch(), trip));
+        tripRepository.saveTripWithMatch(trip, result.getMatch());
     }
 
     @AllArgsConstructor

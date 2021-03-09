@@ -30,11 +30,12 @@ public class MatchView {
     public static MatchView toViewModel(Match match) {
         return toViewModel(match, null);
     }
-    public static MatchView toViewModel(Match match, @Nullable Driver driver) {
+
+    public static MatchView toViewModel(Match match, @Nullable String driverName) {
         return MatchView.builder()
                 .id(match.getId())
                 .passengerId(match.getPassengerId())
-                .driver(DriverView.toViewModel(driver))
+                .driver(DriverView.toViewModel(match.getDriverId(), driverName))
                 .completed(match.isCompleted())
                 .matchPreferences(match.getPreferences())
                 .createdDate(match.getCreatedDate())
@@ -61,11 +62,13 @@ public class MatchView {
         public Integer id;
         public String name;
 
-        public static DriverView toViewModel(@Nullable Driver driver) {
-            if (driver == null) {
-                return null;
-            }
+        public static DriverView toViewModel(Driver driver) {
             return new DriverView(driver.getId(), driver.getName());
+
+        }
+        public static DriverView toViewModel(Integer driverId, @Nullable  String driverName) {
+            return new DriverView(driverId, driverName);
+
         }
     }
 }

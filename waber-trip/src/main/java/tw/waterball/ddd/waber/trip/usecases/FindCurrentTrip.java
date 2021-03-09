@@ -1,6 +1,8 @@
 package tw.waterball.ddd.waber.trip.usecases;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
@@ -19,27 +21,41 @@ public class FindCurrentTrip {
     private final MatchServiceDriver matchServiceDriver;
     private final TripRepository tripRepository;
 
-    public Trip execute(int userId) {
-        return execute(userId, false);
+    public DefaultTripPresenter executeAndGetResult(Request request) {
+        DefaultTripPresenter tripPresenter = new DefaultTripPresenter();
+        execute(request, tripPresenter);
+        return tripPresenter;
     }
 
-    public Trip execute(int userId, boolean startNewTripIfNotFound) {
-        Match match = getCurrentMatch(userId);
-        var findTrip = tripRepository.findByMatchId(match.getId());
-        Trip trip = startNewTripIfNotFound ? findTrip.orElseGet(() -> startNewTrip(match))
-                :findTrip.orElseThrow(NotFoundException::new);
-        trip.getMatchAssociation().resolveAssociation(match);
-        return trip;
+    public void execute(Request request, TripPresenter presenter) {
+        Match match = getCurrentMatch(request.userId);
+        var mayHaveTrip = tripRepository.findByMatchId(match.getId());
+        Trip trip = request.startNewTripIfNotFound ? mayHaveTrip.orElseGet(() -> startNewTrip(match))
+                :mayHaveTrip.orElseThrow(NotFoundException::new);
+        presenter.present(match, trip);
     }
 
     private Trip startNewTrip(Match match) {
-        Trip trip = new Trip(match);
-        return tripRepository.save(trip);
+        Trip trip = new Trip(match.getId());
+        return tripRepository.saveTripWithMatch(trip, match);
     }
 
     private Match getCurrentMatch(int userId) {
         MatchView matchView = matchServiceDriver.getCurrentMatch(userId);
         return matchView.toEntity();
+    }
+
+    @Data
+    @RequiredArgsConstructor
+    @AllArgsConstructor
+    public static class Request {
+        public final int userId;
+        public boolean startNewTripIfNotFound = false;
+    }
+
+    public interface Presenter {
+        void setMatch(Match match);
+        void setTrip(Trip trip);
     }
 
 }

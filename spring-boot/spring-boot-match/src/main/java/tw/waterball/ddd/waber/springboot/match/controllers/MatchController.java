@@ -62,8 +62,9 @@ public class MatchController {
 
     private MatchView toMatchView(Match match) {
         Optional<Integer> driverId = match.mayHaveDriverId();
-        Driver driver = driverId.map(userServiceDriver::getDriver).orElse(null);
-        return toViewModel(match, driver);
+        String driverName = driverId.map(userServiceDriver::getDriver)
+                .map(Driver::getName).orElse(null);
+        return toViewModel(match, driverName);
     }
 
 }

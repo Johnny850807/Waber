@@ -42,6 +42,6 @@ public class StartTripHandler {
     public void startTrip(MatchCompleteEvent event) {
         log.info("Received Event: {}", event);
         startTrip.execute(new StartTrip.Request(event.getPassengerId(), event.getMatchId()),
-                trip -> { /*Present Nothing*/ });
+                (match, trip) -> { /*Present Nothing*/ });
     }
 }

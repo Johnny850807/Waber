@@ -1,6 +1,7 @@
 package tw.waterball.ddd.waber.springboot.trip.presenters;
 
 import tw.waterball.ddd.api.trip.TripView;
+import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.Trip;
 
 /**
@@ -8,12 +9,13 @@ import tw.waterball.ddd.model.trip.Trip;
  */
 public class TripPresenter implements tw.waterball.ddd.waber.trip.usecases.TripPresenter {
     private TripView tripView;
-    @Override
-    public void present(Trip trip) {
-        tripView = TripView.toViewModel(trip);
-    }
 
     public TripView getTripView() {
         return tripView;
+    }
+
+    @Override
+    public void present(Match match, Trip trip) {
+        tripView = TripView.toViewModel(trip);
     }
 }
