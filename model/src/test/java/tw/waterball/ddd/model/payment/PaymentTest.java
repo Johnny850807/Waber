@@ -14,15 +14,14 @@ import static org.mockito.Mockito.when;
 import static tw.waterball.ddd.stubs.TripStubs.PICKING_TRIP;
 
 class PaymentTest {
-    private Trip whateverTrip = PICKING_TRIP;
-    private Payment payment = new Payment();
+    private final Trip whateverTrip = PICKING_TRIP;
     private PricingStrategy pricingStrategy;
 
     @Test
     void WhenCheckout_ShouldHaveCorrectTotalPrice() {
         givenPricing(4000000000d, 6000000000d);
 
-        payment.checkout(whateverTrip, pricingStrategy);
+        Payment payment = payment();
 
         assertEquals(BigDecimal.valueOf(10000000000d)
                 .doubleValue(), payment.getTotalPrice().doubleValue());
@@ -35,6 +34,10 @@ class PaymentTest {
                         .mapToObj(BigDecimal::valueOf)
                         .map(price -> new PricingItem("Mock", "Mock", price))
                         .collect(Collectors.toList()));
+    }
+
+    private Payment payment() {
+        return new Payment(whateverTrip.getId(), pricingStrategy.pricing(whateverTrip));
     }
 
 }

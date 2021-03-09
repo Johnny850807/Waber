@@ -12,22 +12,20 @@ import java.util.List;
  */
 @NoArgsConstructor
 public class Payment {
-    private One<Trip> trip = One.empty();
+    private String tripId;
     private List<PricingItem> pricingItems;
     private BigDecimal totalPrice;
     private boolean isPaid;
 
+    public Payment(String tripId, List<PricingItem> pricingItems) {
+        this(tripId, pricingItems, false);
+    }
+
     public Payment(String tripId, List<PricingItem> pricingItems, boolean isPaid) {
-        trip.resolveId(tripId);
+        this.tripId = tripId;
         this.pricingItems = pricingItems;
         this.totalPrice = calculateTotalPrice(pricingItems);
         this.isPaid = isPaid;
-    }
-
-    public void checkout(Trip trip, PricingStrategy pricingStrategy) {
-        this.trip.resolveAssociation(trip);
-        pricingItems = pricingStrategy.pricing(trip);
-        totalPrice = calculateTotalPrice(pricingItems);
     }
 
     private BigDecimal calculateTotalPrice(List<PricingItem> pricingItems) {
@@ -45,13 +43,8 @@ public class Payment {
     }
 
     public String getTripId() {
-        return trip.getId();
+        return tripId;
     }
-
-    public One<Trip> getTripAssociation() {
-        return trip;
-    }
-
 
     public List<PricingItem> getPricingItems() {
         return pricingItems;

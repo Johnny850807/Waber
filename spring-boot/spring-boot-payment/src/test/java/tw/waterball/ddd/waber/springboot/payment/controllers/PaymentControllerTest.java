@@ -35,11 +35,10 @@ import static tw.waterball.ddd.api.trip.TripView.toViewModel;
 @ActiveProfiles(FakeServiceDrivers.NAME)
 @ContextConfiguration(classes = {PaymentApplication.class, PaymentControllerTest.TestConfiguration.class})
 class PaymentControllerTest extends AbstractSpringBootTest {
-    private static PricingItem pricingItem = new PricingItem("Test", "Test", BigDecimal.valueOf(666));
-    private Passenger passenger = UserStubs.NORMAL_PASSENGER;
-    private Driver driver = UserStubs.NORMAL_DRIVER;
-    private Match match = MatchStubs.COMPLETED_MATCH;
-    private Trip trip = TripStubs.ARRIVED_TRIP;
+    private static final PricingItem pricingItem = new PricingItem("Test", "Test", BigDecimal.valueOf(666));
+    private final Passenger passenger = UserStubs.NORMAL_PASSENGER;
+    private final Match match = MatchStubs.COMPLETED_MATCH;
+    private final Trip trip = TripStubs.ARRIVED_TRIP;
 
     @Autowired
     private FakeMatchServiceDriver matchServiceDriver;
@@ -61,12 +60,15 @@ class PaymentControllerTest extends AbstractSpringBootTest {
         matchServiceDriver.addMatchView(toViewModel(match));
         tripServiceDriver.addTripView(toViewModel(trip));
 
-        PaymentView paymentView = getBody(
-                mockMvc.perform(post("/api/passengers/{passengerId}/matches/{matchId}/trips/{tripId}/payment",
-                        passenger.getId(), match.getId(), trip.getId()))
-                        .andExpect(status().isOk()), PaymentView.class);
+        PaymentView paymentView = checkoutPayment();
 
         assertEquals(pricingItem.getPrice().intValue(), paymentView.totalPrice);
+    }
+
+    private PaymentView checkoutPayment() throws Exception {
+        return getBody(
+                mockMvc.perform(post("/api/payments/trips/{tripId}", trip.getId()))
+                        .andExpect(status().isOk()), PaymentView.class);
     }
 
 }
