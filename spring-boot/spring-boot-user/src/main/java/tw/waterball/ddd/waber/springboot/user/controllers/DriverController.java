@@ -20,9 +20,9 @@ import java.util.Collection;
 @RestController
 @AllArgsConstructor
 public class DriverController {
-    private SignUpToBeDriver signUpToBeDriver;
-    private FindAvailableDrivers findAvailableDrivers;
-    private SetDriverStatus setDriverStatus;
+    private final SignUpToBeDriver signUpToBeDriver;
+    private final FindAvailableDrivers findAvailableDrivers;
+    private final SetDriverStatus setDriverStatus;
 
     @PostMapping
     public Driver signUp(@RequestBody SignUpParams params) {

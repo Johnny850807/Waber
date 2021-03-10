@@ -18,7 +18,7 @@ public class SignUpToBeDriver {
     public Driver execute(Request req) {
         Driver driver = new Driver(req.name, req.email, req.password, req.carType);
         driver.validate();
-        return (Driver) userRepository.save(driver);
+        return (Driver) userRepository.saveUserWithHisPassword(driver, req.password);
     }
 
     @AllArgsConstructor

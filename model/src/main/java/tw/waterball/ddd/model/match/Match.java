@@ -49,6 +49,7 @@ public class Match extends AggregateRoot<Integer> {
     public void matchDriver(Driver driver) {
         setDriverId(driver.getId());
     }
+
     public void setDriverId(int driverId) {
         this.driverId = driverId;
     }

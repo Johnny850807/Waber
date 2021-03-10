@@ -6,7 +6,6 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import tw.waterball.ddd.events.MatchCompleteEvent;
 import tw.waterball.ddd.events.StartMatchingCommand;
 import tw.waterball.ddd.waber.match.usecases.MatchUseCase;
 import tw.waterball.ddd.waber.match.usecases.MatchUseCase.MatchRequest;

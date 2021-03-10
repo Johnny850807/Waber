@@ -14,7 +14,6 @@ import tw.waterball.ddd.waber.springboot.match.handler.StartMatchingHandler;
 @Configuration
 public class RabbitEventBusConfiguration {
     public static final String EVENTS_EXCHANGE = "events";
-    public static final String START_MATCHING_QUEUE = "/matches/start";
 
     @Bean
     public DirectExchange eventsExchange() {
@@ -25,7 +24,7 @@ public class RabbitEventBusConfiguration {
     public EventBus.Subscriber rabbitEventBusSubscriber(AmqpTemplate amqpTemplate) {
         return event -> {
             if (MatchCompleteEvent.NAME.equals(event.getName())) {
-                amqpTemplate.convertAndSend(EVENTS_EXCHANGE, "matches/complete", event);
+                amqpTemplate.convertAndSend(EVENTS_EXCHANGE, "/matches/complete", event);
             } else if (StartMatchingCommand.NAME.equals(event.getName())) {
                 amqpTemplate.convertAndSend(StartMatchingHandler.QUEUE_NAME, event);
             }

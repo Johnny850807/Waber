@@ -40,6 +40,7 @@ public class MatchUseCase {
     }
 
     public void execute(MatchRequest req) {
+        log.info("Matching: id={}", req.matchId);
         Match match = matchRepository.findById(req.matchId).orElseThrow(NotFoundException::new);
         List<Driver> drivers = userServiceDriver.filterDrivers(match.getPreferences());
 
