@@ -1,6 +1,7 @@
 package tw.waterball.ddd.model.payment;
 
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import tw.waterball.ddd.model.associations.One;
 import tw.waterball.ddd.model.trip.Trip;
 
@@ -10,6 +11,7 @@ import java.util.List;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
+@ToString
 @NoArgsConstructor
 public class Payment {
     private String tripId;

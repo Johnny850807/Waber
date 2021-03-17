@@ -1,7 +1,9 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
+import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.model.geo.Location;
@@ -13,6 +15,7 @@ import tw.waterball.ddd.waber.user.usecases.UpdateLatestLocation;
 /**
  * @author - johnny850807@gmail.com (Waterball)
  */
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/api/users")
@@ -25,6 +28,7 @@ public class UserController {
 
     @GetMapping("/health")
     public String healthCheck() {
+        log.info("Health Check.");
         return "OK";
     }
 

@@ -1,6 +1,8 @@
 package tw.waterball.ddd.waber.user.usecases;
 
+import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.user.User;
 import tw.waterball.ddd.waber.user.repositories.UserRepository;
@@ -18,6 +20,7 @@ public class SignIn {
         this.userRepository = userRepository;
     }
 
+    @WithSpan
     public User execute(Request req) {
         return userRepository.findByEmailAndPassword(req.email, req.password)
                 .orElseThrow(NotFoundException::new);

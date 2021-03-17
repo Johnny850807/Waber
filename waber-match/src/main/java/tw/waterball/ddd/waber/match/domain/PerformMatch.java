@@ -1,5 +1,7 @@
 package tw.waterball.ddd.waber.match.domain;
 
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.extension.annotations.WithSpan;
 import tw.waterball.ddd.model.geo.DistanceCalculator;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
@@ -11,6 +13,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
 
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.attr;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.currentSpan;
 import static tw.waterball.ddd.commons.utils.StreamUtils.iterate;
 import static tw.waterball.ddd.model.geo.Route.from;
 
@@ -25,14 +29,15 @@ public class PerformMatch {
         this.distanceCalculator = distanceCalculator;
     }
 
+    @WithSpan
     public void execute(Match match, Collection<Driver> drivers) {
-        execute(match, drivers.iterator());
-    }
+        currentSpan(attr("candidates", drivers.size()),
+                attr("preferences", match.getPreferences()));
 
-    public void execute(Match match, Iterator<Driver> drivers) {
+
         Location startLocation = match.getPreferences().getStartLocation();
 
-        iterate(drivers)
+        drivers.stream()
                 .min(minimumDistanceRule(startLocation))
                 .ifPresent(match::matchDriver);
     }

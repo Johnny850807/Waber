@@ -1,6 +1,8 @@
 package tw.waterball.ddd.waber.pricing.usecases;
 
+import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.api.trip.TripServiceDriver;
@@ -14,9 +16,13 @@ import tw.waterball.ddd.waber.pricing.repositories.PaymentRepository;
 import javax.inject.Named;
 import java.util.List;
 
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.attr;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.currentSpan;
+
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
+@Slf4j
 @Named
 @AllArgsConstructor
 public class CheckoutPayment {
@@ -24,7 +30,7 @@ public class CheckoutPayment {
     private final TripServiceDriver tripServiceDriver;
     private final PaymentRepository paymentRepository;
 
-
+    @WithSpan
     public void execute(Request request, Presenter presenter) {
         Trip trip = getTrip(request);
         if (paymentRepository.existsByTripId(trip.getId())) {
@@ -32,7 +38,9 @@ public class CheckoutPayment {
         }
 
         List<PricingItem> pricingItems = pricingStrategy.pricing(trip);
-        Payment payment =  new Payment(trip.getId(), pricingItems);
+        Payment payment = new Payment(trip.getId(), pricingItems);
+        log.info("<Checkout Payment> PricingStrategy={}, Payment={}", pricingStrategy.getClass().getSimpleName(), payment);
+
         payment = paymentRepository.save(payment);
         presenter.present(payment);
     }

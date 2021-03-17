@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.user.usecases;
 
+import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.user.Activity;
@@ -21,6 +22,7 @@ public class FindAvailableDrivers {
     private final ActivityRepository activityRepository;
     private final UserRepository userRepository;
 
+    @WithSpan
     public Collection<Driver> execute(Request req) {
         if (req.hasActivityName) {
             return filterDriversFromActivityParticipants(req);

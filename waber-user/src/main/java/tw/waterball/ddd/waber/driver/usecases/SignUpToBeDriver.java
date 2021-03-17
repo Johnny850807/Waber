@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.driver.usecases;
 
+import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import tw.waterball.ddd.model.user.Driver;
@@ -15,6 +16,7 @@ import javax.inject.Named;
 public class SignUpToBeDriver {
     private final UserRepository userRepository;
 
+    @WithSpan
     public Driver execute(Request req) {
         Driver driver = new Driver(req.name, req.email, req.password, req.carType);
         driver.validate();

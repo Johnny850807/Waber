@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.trip.usecases;
 
+import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.events.TripStateChangedEvent;
@@ -19,6 +20,7 @@ public class ArriveDestination {
     private final PaymentServiceDriver paymentServiceDriver;
     private final TripRepository tripRepository;
 
+    @WithSpan
     public void execute(Request req, EventBus eventBus) {
         var result = findCurrentTrip.executeAndGetResult(new FindCurrentTrip.Request(req.passengerId));
 

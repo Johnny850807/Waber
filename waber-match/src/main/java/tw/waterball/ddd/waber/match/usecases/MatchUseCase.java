@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.match.usecases;
 
+import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
@@ -31,6 +32,7 @@ public class MatchUseCase {
     private final long rescheduleDelayTimeInMs;
     private final EventBus eventBus;
 
+    @WithSpan
     public void execute(StartMatchingRequest req, Presenter presenter) {
         Passenger passenger = userServiceDriver.getPassenger(req.passengerId);
         Match match = Match.start(passenger.getId(), req.matchPreferences);
@@ -39,8 +41,8 @@ public class MatchUseCase {
         presenter.present(match);
     }
 
+    @WithSpan
     public void execute(MatchRequest req) {
-        log.info("Matching: id={}", req.matchId);
         Match match = matchRepository.findById(req.matchId).orElseThrow(NotFoundException::new);
         List<Driver> drivers = userServiceDriver.filterDrivers(match.getPreferences());
 
@@ -57,11 +59,13 @@ public class MatchUseCase {
 
     private void saveIfMatchedDriverIsAvailable(Match match) {
         userServiceDriver.setDriverStatus(match.getDriverId(), Driver.Status.MATCHED);
+        log.info("<Match completed> passengerId: {}, driverId: {}", match.getPassengerId(), match.getDriverId());
         matchRepository.save(match);
         eventBus.publish(new MatchCompleteEvent(match));
     }
 
     private void delayAndReplublishStartMatchingCommand(Match match) {
+        log.info("<Match Rescheduled> passengerId: {}", match.getPassengerId());
         delay(rescheduleDelayTimeInMs);
         eventBus.publish(new StartMatchingCommand(match.getId(), match.getPassengerId()));
     }

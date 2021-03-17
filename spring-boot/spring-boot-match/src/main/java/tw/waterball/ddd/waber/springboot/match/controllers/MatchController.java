@@ -37,7 +37,7 @@ public class MatchController {
     @PostMapping("/users/{passengerId}/matches")
     public MatchView startMatching(@PathVariable int passengerId,
                                    @RequestBody MatchPreferences matchPreferences) {
-        log.info("Start matching for the passenger(id={}).", passengerId);
+        log.info("<Start matching> passenger(id={}), {}}.", passengerId, matchPreferences);
         var presenter = new MatchPresenter();
         matchUseCase.execute(new StartMatchingRequest(passengerId, matchPreferences), presenter);
         return presenter.getMatchView();

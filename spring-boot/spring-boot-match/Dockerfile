@@ -1,14 +1,6 @@
 FROM adoptopenjdk/openjdk11:alpine-slim
 
-ENV APP_NAME waber-match
-ENV APP_HOME /
+COPY ./target/*.jar /match-service.jar
+COPY ./bin/opentelemetry-javaagent-all.jar /
 
-RUN mkdir -p ${APP_HOME}
-
-COPY ./target/*.jar ${APP_HOME}/${APP_NAME}.jar
-COPY ./bin/opentelemetry-javaagent-all.jar ${APP_HOME}/
-COPY ./bin/start-app.sh ${APP_HOME}/
-
-WORKDIR ${APP_HOME}
-
-ENTRYPOINT ["sh", "start-app.sh"]
+CMD ["java", "-javaagent:/opentelemetry-javaagent-all.jar", "-jar", "/match-service.jar"]

@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.trip.usecases;
 
+import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class FindCurrentTrip {
         return tripPresenter;
     }
 
+    @WithSpan
     public void execute(Request request, TripPresenter presenter) {
         Match match = getCurrentMatch(request.userId);
         var mayHaveTrip = tripRepository.findByMatchId(match.getId());

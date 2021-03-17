@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.driver.usecases;
 
+import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
 import tw.waterball.ddd.model.user.Driver;
@@ -13,8 +14,9 @@ import javax.inject.Named;
 @AllArgsConstructor
 @Named
 public class SetDriverStatus {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
+    @WithSpan
     public void execute(Request req) {
         Driver driver = (Driver) userRepository.findById(req.driverId).orElseThrow(NotFoundException::new);
         driver.setStatus(req.status);

@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.trip.usecases;
 
+import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.match.MatchView;
@@ -18,6 +19,7 @@ public class StartTrip {
     private final MatchServiceDriver matchServiceDriver;
     private final TripRepository tripRepository;
 
+    @WithSpan
     public void execute(Request req, TripPresenter presenter) {
         MatchView matchView = matchServiceDriver.getMatch(req.matchId);
         Match match = matchView.toEntity();
