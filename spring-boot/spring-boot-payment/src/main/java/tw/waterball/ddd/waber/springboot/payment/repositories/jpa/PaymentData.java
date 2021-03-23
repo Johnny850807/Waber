@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-@Document("Payment")
+@Document("payment")
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentData {

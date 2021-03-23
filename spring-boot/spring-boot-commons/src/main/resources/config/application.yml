@@ -24,3 +24,7 @@ waber:
       scheme: http
       host: payment-service
       port: 80
+    broker-service:
+      scheme: ws
+      host: broker-service
+      port: 80

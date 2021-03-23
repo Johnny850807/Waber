@@ -9,8 +9,8 @@
         <module>spring-boot-trip</module>
         <module>spring-boot-payment</module>
         <module>spring-boot-broker</module>
+        <module>robots</module>
         <module>test-kit</module>
-        <module>service-registry</module>
     </modules>
     <parent>
         <groupId>tw.waterball.ddd</groupId>

@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.api.payment;
 
+import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.DriverIsNotAvailableException;
@@ -34,6 +35,21 @@ public class FakeUserServiceDriver implements UserServiceDriver {
 
     public void addPassenger(Passenger passenger) {
         passengers.put(passenger.getId(), passenger);
+    }
+
+    @Override
+    public void uploadLocation(int userId, Location location) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Driver signUpAsDriver(String name, String email, String password, Driver.CarType carType) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Passenger signUpAsPassenger(String name, String email, String password) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -26,6 +26,8 @@ public class WaberProperties {
         private BaseUrl tripService;
         @NestedConfigurationProperty
         private BaseUrl paymentService;
+        @NestedConfigurationProperty
+        private BaseUrl brokerService;
     }
 }
 

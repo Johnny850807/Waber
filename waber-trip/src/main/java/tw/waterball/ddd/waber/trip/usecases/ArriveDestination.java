@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.events.TripStateChangedEvent;
 import tw.waterball.ddd.model.trip.Trip;
+import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
+import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.waber.trip.repositories.TripRepository;
 
 import javax.inject.Named;
@@ -19,6 +21,7 @@ public class ArriveDestination {
     private final FindCurrentTrip findCurrentTrip;
     private final PaymentServiceDriver paymentServiceDriver;
     private final TripRepository tripRepository;
+    private final UserServiceDriver userServiceDriver;
 
     @WithSpan
     public void execute(Request req, EventBus eventBus) {
@@ -30,6 +33,8 @@ public class ArriveDestination {
 
         eventBus.publish(new TripStateChangedEvent(result.getMatch(), trip));
         paymentServiceDriver.checkoutPayment(trip.getId());
+
+        userServiceDriver.setDriverStatus(result.getMatch().getDriverId(), Driver.Status.AVAILABLE);
     }
 
     @AllArgsConstructor

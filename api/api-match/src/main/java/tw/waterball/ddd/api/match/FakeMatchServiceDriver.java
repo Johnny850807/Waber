@@ -1,5 +1,7 @@
 package tw.waterball.ddd.api.match;
 
+import tw.waterball.ddd.model.match.MatchPreferences;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +23,11 @@ public class FakeMatchServiceDriver implements MatchServiceDriver {
 
     public void addMatchView(MatchView matchView) {
         matchViews.put(matchView.getId(), matchView);
+    }
+
+    @Override
+    public MatchView startMatching(int userId, MatchPreferences matchPreferences) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

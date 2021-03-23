@@ -1,12 +1,8 @@
 package tw.waterball.ddd.model.trip;
 
-import tw.waterball.ddd.model.associations.One;
 import tw.waterball.ddd.model.base.AggregateRoot;
 import tw.waterball.ddd.model.geo.Location;
-import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.states.Picking;
-
-import java.util.Optional;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)

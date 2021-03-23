@@ -12,8 +12,6 @@ import tw.waterball.ddd.waber.trip.usecases.ArriveDestination;
 import tw.waterball.ddd.waber.trip.usecases.FindCurrentTrip;
 import tw.waterball.ddd.waber.trip.usecases.StartDriving;
 
-import static tw.waterball.ddd.api.trip.TripView.toViewModel;
-
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
@@ -34,15 +32,15 @@ public class TripController {
         return "OK";
     }
 
-    @PatchMapping("/users/{passengerId}/trips/current/startDriving")
-    public void startDriving(@PathVariable int passengerId,
+    @PatchMapping("/users/{userId}/trips/current/startDriving")
+    public void startDriving(@PathVariable int userId,
                              @RequestBody Location destination) {
-        startDriving.execute(new StartDriving.Request(passengerId, destination));
+        startDriving.execute(new StartDriving.Request(userId, destination));
     }
 
-    @PatchMapping("/users/{passengerId}/trips/current/arrive")
-    public void arrive(@PathVariable int passengerId) {
-        arriveDestination.execute(new ArriveDestination.Request(passengerId),
+    @PatchMapping("/users/{userId}/trips/current/arrive")
+    public void arrive(@PathVariable int userId) {
+        arriveDestination.execute(new ArriveDestination.Request(userId),
                 eventBus);
     }
 
@@ -53,10 +51,10 @@ public class TripController {
                 .orElseThrow(NotFoundException::new);
     }
 
-    @GetMapping("/users/{passengerId}/trips/current")
-    public TripView getCurrentTrip(@PathVariable int passengerId) {
+    @GetMapping("/users/{userId}/trips/current")
+    public TripView getCurrentTrip(@PathVariable int userId) {
         TripPresenter tripPresenter = new TripPresenter();
-        findCurrentTrip.execute(new FindCurrentTrip.Request(passengerId), tripPresenter);
+        findCurrentTrip.execute(new FindCurrentTrip.Request(userId), tripPresenter);
         return tripPresenter.getTripView();
     }
 

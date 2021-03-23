@@ -1,5 +1,7 @@
 package tw.waterball.ddd.api.trip;
 
+import tw.waterball.ddd.model.geo.Location;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +24,16 @@ public class FakeTripServiceDriver implements TripServiceDriver {
 
     public void addTripView(TripView tripView) {
         tripViews.put(tripView.id, tripView);
+    }
+
+    @Override
+    public void startDrivingToDestination(int userId, Location destination) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void arrive(int userId) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

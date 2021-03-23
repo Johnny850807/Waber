@@ -1,5 +1,7 @@
 package tw.waterball.ddd.waber.match.usecases;
 
+import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
+
 import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +19,6 @@ import tw.waterball.ddd.waber.match.domain.PerformMatch;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 
 import java.util.List;
-
-import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -54,6 +54,8 @@ public class MatchUseCase {
             } catch (DriverIsNotAvailableException err) {
                 delayAndReplublishStartMatchingCommand(match);
             }
+        } else {
+            delayAndReplublishStartMatchingCommand(match);
         }
     }
 

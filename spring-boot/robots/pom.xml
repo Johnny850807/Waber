@@ -4,14 +4,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>waber</artifactId>
-        <groupId>tw.waterball.ddd</groupId>
+        <artifactId>parent</artifactId>
+        <groupId>tw.waterball.ddd.spring-boot</groupId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>waber-trip</artifactId>
+    <artifactId>robots</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+        <dependency>
+            <groupId>tw.waterball.ddd.spring-boot</groupId>
+            <artifactId>spring-boot-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
             <artifactId>api-user</artifactId>
@@ -22,11 +31,9 @@
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-payment</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>tw.waterball.ddd</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>api-trip</artifactId>
         </dependency>
     </dependencies>
+
+
 </project>

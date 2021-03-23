@@ -1,6 +1,9 @@
 package tw.waterball.ddd.waber.match.domain;
 
-import io.opentelemetry.api.trace.Span;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.attr;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.currentSpan;
+import static tw.waterball.ddd.model.geo.Route.from;
+
 import io.opentelemetry.extension.annotations.WithSpan;
 import tw.waterball.ddd.model.geo.DistanceCalculator;
 import tw.waterball.ddd.model.geo.Location;
@@ -10,13 +13,6 @@ import tw.waterball.ddd.model.user.Driver;
 import javax.inject.Named;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Optional;
-
-import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.attr;
-import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.currentSpan;
-import static tw.waterball.ddd.commons.utils.StreamUtils.iterate;
-import static tw.waterball.ddd.model.geo.Route.from;
 
 /**
  * @author Waterball (johnny850807@gmail.com)

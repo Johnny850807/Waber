@@ -1,5 +1,9 @@
 package tw.waterball.ddd.waber.api.payment;
 
+import static java.util.Arrays.asList;
+import static java.util.Objects.requireNonNull;
+import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -7,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import tw.waterball.ddd.commons.model.BaseUrl;
+import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.DriverIsNotAvailableException;
@@ -15,10 +20,6 @@ import tw.waterball.ddd.model.user.User;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
-import static java.util.Objects.requireNonNull;
-import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
-
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
@@ -26,6 +27,23 @@ import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
 public class RestUserServiceDriver implements UserServiceDriver {
     private final BaseUrl userServiceBaseUrl;
     private final RestTemplate api;
+
+    @Override
+    public void uploadLocation(int userId, Location location) {
+        api.put(userServiceBaseUrl.withPath("/api/users/"+userId+ "/location"), location);
+    }
+
+    @Override
+    public Driver signUpAsDriver(String name, String email, String password, Driver.CarType carType) {
+        return api.postForEntity(userServiceBaseUrl.withPath("/api/drivers"), new Driver(name, email, password, carType),
+                Driver.class).getBody();
+    }
+
+    @Override
+    public Passenger signUpAsPassenger(String name, String email, String password) {
+        return api.postForEntity(userServiceBaseUrl.withPath("/api/passengers"), new Passenger(name, email, password),
+                Passenger.class).getBody();
+    }
 
     @Override
     public Driver getDriver(int driverId) {
