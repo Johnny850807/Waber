@@ -11,7 +11,6 @@ import tw.waterball.ddd.stubs.UserStubs;
 import tw.waterball.ddd.waber.passenger.repositories.ActivityRepository;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 import tw.waterball.ddd.waber.springboot.user.UserApplication;
-import tw.waterball.ddd.waber.springboot.user.repositories.jpa.UserData;
 import tw.waterball.ddd.waber.user.repositories.UserRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

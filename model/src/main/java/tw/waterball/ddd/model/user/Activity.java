@@ -7,6 +7,7 @@ import tw.waterball.ddd.model.associations.Many;
 
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -28,6 +29,7 @@ public class Activity extends AggregateRoot<Integer> {
 
     public Activity(String name) {
         this.name = name;
+        participantDrivers = new HashSet<>();
     }
 
     public boolean hasParticipant(Driver driver) {

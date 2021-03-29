@@ -11,4 +11,6 @@ public interface PaymentRepository {
     Payment save(Payment payment);
     Optional<Payment> findByTripId(String tripId);
     boolean existsByTripId(String tripId);
+
+    void clearAll();
 }

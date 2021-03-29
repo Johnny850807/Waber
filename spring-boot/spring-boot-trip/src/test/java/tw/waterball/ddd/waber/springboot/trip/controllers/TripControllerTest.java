@@ -3,6 +3,7 @@ package tw.waterball.ddd.waber.springboot.trip.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.fridujo.rabbitmq.mock.MockConnectionFactory;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -27,6 +28,7 @@ import tw.waterball.ddd.model.trip.states.Arrived;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.stubs.UserStubs;
+import tw.waterball.ddd.waber.api.payment.FakeUserServiceDriver;
 import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
@@ -61,12 +63,19 @@ class TripControllerTest extends AbstractSpringBootTest {
     StartTripHandler startTripHandler;
     @Autowired
     FakeMatchServiceDriver matchServiceDriver;
+    @Autowired
+    FakeUserServiceDriver userServiceDriver;
     @MockBean
     PaymentServiceDriver paymentServiceDriver;
 
     @Autowired
     SpringBootTripRepository tripRepository;
 
+
+    @BeforeEach
+    void setup() {
+        userServiceDriver.addDriver(driver);
+    }
 
     @AfterEach
     void cleanUp() {

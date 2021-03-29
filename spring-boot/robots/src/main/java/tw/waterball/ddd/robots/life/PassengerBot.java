@@ -107,7 +107,7 @@ public class PassengerBot extends AbstractUserBot {
                         if (theEvent.getUserId() == currentMatch.driver.id) {
                             // since the passenger is in the car, he's moving with the driver.
                             passenger.setLocation(theEvent.getLocation());
-                            log.info("<{}> Moved to {}", name, passenger.getLocation());
+                            log.debug("<{}> Moved to {}", name, passenger.getLocation());
                         } else {
                             subscription.unsubscribe();
                         }

@@ -34,4 +34,9 @@ public class SpringBootPaymentRepository implements PaymentRepository {
     public boolean existsByTripId(String tripId) {
         return dataPort.existsByTripId(tripId);
     }
+
+    @Override
+    public void clearAll() {
+        dataPort.deleteAll();
+    }
 }

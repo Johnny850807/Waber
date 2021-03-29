@@ -1,5 +1,7 @@
 package tw.waterball.ddd.waber.springboot.payment.controllers;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +21,7 @@ import tw.waterball.ddd.stubs.MatchStubs;
 import tw.waterball.ddd.stubs.TripStubs;
 import tw.waterball.ddd.stubs.UserStubs;
 import tw.waterball.ddd.waber.api.payment.PaymentView;
+import tw.waterball.ddd.waber.pricing.repositories.PaymentRepository;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 import tw.waterball.ddd.waber.springboot.payment.PaymentApplication;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
@@ -45,6 +48,9 @@ class PaymentControllerTest extends AbstractSpringBootTest {
     @Autowired
     private FakeTripServiceDriver tripServiceDriver;
 
+    @Autowired
+    private PaymentRepository paymentRepository;
+
     @Configuration
     public static class TestConfiguration {
         @Bean
@@ -52,6 +58,11 @@ class PaymentControllerTest extends AbstractSpringBootTest {
         PricingStrategy pricingStrategy() {
             return trip -> singletonList(pricingItem);
         }
+    }
+
+    @AfterEach
+    void cleanUp() {
+        paymentRepository.clearAll();
     }
 
     @Test

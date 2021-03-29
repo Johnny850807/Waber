@@ -1,7 +1,9 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tw.waterball.ddd.model.user.Activity;
 import tw.waterball.ddd.model.user.Driver;
 
 import java.util.List;
@@ -15,6 +17,11 @@ import static tw.waterball.ddd.waber.springboot.user.repositories.jpa.UserData.t
 class ActivityControllerTest extends AbstractUserApplicationTest {
 
     public static final String VALENTINES_DAY = "ValentinesDay";
+
+    @BeforeEach
+    void setup() {
+        activityRepository.save(new Activity(VALENTINES_DAY));
+    }
 
     private List<Driver> getValentinesDayParticipants() throws Exception {
         return getBody(mockMvc.perform(get("/api/activities/{activityName}/drivers", VALENTINES_DAY))
