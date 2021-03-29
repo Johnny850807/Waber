@@ -1,15 +1,23 @@
 package tw.waterball.ddd.waber.springboot.user.repositories.jpa;
 
-import lombok.*;
-import org.springframework.lang.Nullable;
+import static javax.persistence.GenerationType.IDENTITY;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.model.user.User;
 
-import javax.persistence.*;
-
-import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -45,6 +53,8 @@ public class UserData {
                 .id(driver.getId())
                 .name(driver.getName())
                 .email(driver.getEmail())
+                .latitude(driver.getLocation().getLatitude())
+                .longitude(driver.getLocation().getLongitude())
                 .carType(driver.getCarType())
                 .driverStatus(driver.getStatus().toString())
                 .driver(true)
@@ -56,6 +66,8 @@ public class UserData {
                 .id(passenger.getId())
                 .name(passenger.getName())
                 .email(passenger.getEmail())
+                .latitude(passenger.getLocation().getLatitude())
+                .longitude(passenger.getLocation().getLongitude())
                 .driver(false)
                 .build();
     }

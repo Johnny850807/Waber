@@ -1,5 +1,7 @@
 package tw.waterball.ddd.waber.springboot.user.repositories.jpa;
 
+import static tw.waterball.ddd.waber.springboot.user.repositories.jpa.UserData.toData;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import tw.waterball.ddd.model.geo.Location;
@@ -11,8 +13,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static tw.waterball.ddd.waber.springboot.user.repositories.jpa.UserData.toData;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -80,11 +80,15 @@ public class SpringBootUserRepository implements UserRepository {
     }
 
     @Override
+    @Transactional
     public void updateLatestLocation(int userId, Location location) {
         UserData data = jpaUserDataPort.getOne(userId);
         data.setLatitude(location.getLatitude());
         data.setLongitude(location.getLongitude());
-        jpaUserDataPort.save(data);
+        UserData saved = jpaUserDataPort.save(data);
+        if (saved.getLatitude() == saved.getLongitude()) {
+            System.out.println();
+        }
     }
 
     @Override

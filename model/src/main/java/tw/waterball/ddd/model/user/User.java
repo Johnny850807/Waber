@@ -6,7 +6,6 @@ import tw.waterball.ddd.model.base.AggregateRoot;
 import tw.waterball.ddd.model.geo.Location;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
@@ -23,7 +22,7 @@ public abstract class User extends AggregateRoot<Integer> {
     @Email
     protected String email;
 
-    protected Location location;
+    protected Location location = new Location();
 
     public User(String type, int id) {
         this.type = type;

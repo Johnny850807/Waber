@@ -1,13 +1,17 @@
 package tw.waterball.ddd.robots.view;
 
+import lombok.SneakyThrows;
 import tw.waterball.ddd.model.geo.Location;
+import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.robots.Framework;
 import tw.waterball.ddd.robots.life.AbstractUserBot;
 import tw.waterball.ddd.robots.life.DriverBot;
 import tw.waterball.ddd.robots.life.Life;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -15,6 +19,10 @@ import java.util.Collections;
  * @author Waterball (johnny850807@gmail.com)
  */
 public class LivesMonitor extends JFrame implements Framework.LivesListener {
+    private Image driverIcon;
+    private Image driverMatchedIcon;
+    private Image passengerIcon;
+    private Image destinationIcon;
     private Canvas canvas;
     private static final int CANVAS_WIDTH = 1000;
     private static final int CANVAS_HEIGHT = 800;
@@ -24,7 +32,13 @@ public class LivesMonitor extends JFrame implements Framework.LivesListener {
         setupCanvas();
     }
 
+    @SneakyThrows
     private void setupCanvas() {
+        driverIcon = ImageIO.read(new File(Thread.currentThread().getContextClassLoader().getResource("driver.png").getFile()));
+        driverMatchedIcon = ImageIO.read(new File(Thread.currentThread().getContextClassLoader().getResource("driver-matched.png").getFile()));
+        passengerIcon = ImageIO.read(new File(Thread.currentThread().getContextClassLoader().getResource("passenger.png").getFile()));
+        destinationIcon = ImageIO.read(new File(Thread.currentThread().getContextClassLoader().getResource("destination.png").getFile()));
+
         canvas = new Canvas();
         setContentPane(canvas);
         setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -54,8 +68,21 @@ public class LivesMonitor extends JFrame implements Framework.LivesListener {
                             .map(LivesMonitor.this::normalize)
                             .ifPresent(location -> {
                                 Point point = convertLocationToPoint(location);
-                                g.setColor(life instanceof DriverBot ? Color.red : Color.green);
-                                g.fillRect(point.x, point.y, 10, 10);
+                                if (life instanceof DriverBot) {
+                                    if (((DriverBot) life).getStatus() == Driver.Status.AVAILABLE) {
+                                        g.drawImage(driverIcon, point.x, point.y, 30, 30, null);
+                                    } else {
+                                        g.drawImage(driverMatchedIcon, point.x, point.y, 30, 30, null);
+                                    }
+                                    ((DriverBot) life).getDestination()
+                                            .map(LivesMonitor.this::normalize)
+                                            .map(this::convertLocationToPoint)
+                                            .ifPresent(p -> g.drawImage(destinationIcon, p.x, p.y,
+                                                    30, 30, null));
+                                } else {
+                                    g.drawImage(passengerIcon, point.x+30, point.y,
+                                            30, 30, null);
+                                }
                             });
                 }
             });

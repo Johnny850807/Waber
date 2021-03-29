@@ -15,15 +15,17 @@ import java.util.Random;
  */
 public class UserGenerator extends ScheduledLife {
     private static int id = 0;
-    public static final int MAX_DRIVER = 1;
-    public static final int MAX_PASSENGERS = 1;
+    public final int MAX_DRIVER;
+    public final int MAX_PASSENGERS;
     private final Framework framework;
     private final StompAPI stompAPI;
     private final List<DriverBot> driverBots = new LinkedList<>();
     private final List<PassengerBot> passengerBots = new LinkedList<>();
     private final API api;
 
-    public UserGenerator(Framework framework, StompAPI stompAPI, API api) {
+    public UserGenerator(int maxDrivers, int maxPassengers, Framework framework, StompAPI stompAPI, API api) {
+        this.MAX_DRIVER = maxDrivers;
+        this.MAX_PASSENGERS = maxPassengers;
         this.framework = framework;
         this.stompAPI = stompAPI;
         this.api = api;
@@ -32,8 +34,8 @@ public class UserGenerator extends ScheduledLife {
     @Override
     protected void onNewBorn() {
         Random random = new Random();
-        scheduleFixed(300, (schedule) -> {
-            if (random.nextBoolean() && driverBots.size() < MAX_DRIVER) {
+        scheduleFixed(100, (schedule) -> {
+            if (driverBots.size() < MAX_DRIVER) {
                 DriverBot driverBot = new DriverBot("D-"+id++, stompAPI, api);
                 driverBots.add(driverBot);
                 framework.addLife(driverBot);

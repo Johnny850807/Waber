@@ -1,6 +1,7 @@
 package tw.waterball.ddd.robots;
 
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.trip.TripServiceDriver;
@@ -19,16 +20,19 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @Component
 public class Framework {
+    public static final int INTERVAL = 1;
     private final Collection<Life> lives = new CopyOnWriteArrayList<>();
     private boolean running = false;
     private final List<LivesListener> livesListeners = new LinkedList<>();
     private final StompAPI stompAPI;
 
-    public Framework(StompAPI stompAPI, UserServiceDriver userServiceDriver,
+    public Framework(@Value("${maxDrivers}") int maxDrivers,
+                     @Value("${maxPassengers}") int maxPassengers,
+                     StompAPI stompAPI, UserServiceDriver userServiceDriver,
                      MatchServiceDriver matchServiceDriver,
                      TripServiceDriver tripServiceDriver) {
         this.stompAPI = stompAPI;
-        lives.add(new UserGenerator(this, stompAPI,
+        lives.add(new UserGenerator(maxDrivers, maxPassengers, this, stompAPI,
                 new API(userServiceDriver, matchServiceDriver, tripServiceDriver)));
     }
 
@@ -40,7 +44,7 @@ public class Framework {
             final long time = i;
             livesListeners.forEach(l -> l.onTick(lives));
             lives.forEach(life -> life.tick(time));
-            Thread.sleep(3);
+            Thread.sleep(INTERVAL);
         }
         running = false;
     }

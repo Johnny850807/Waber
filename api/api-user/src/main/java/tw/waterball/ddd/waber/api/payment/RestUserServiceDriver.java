@@ -9,6 +9,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import tw.waterball.ddd.commons.model.BaseUrl;
 import tw.waterball.ddd.model.geo.Location;
@@ -30,7 +32,15 @@ public class RestUserServiceDriver implements UserServiceDriver {
 
     @Override
     public void uploadLocation(int userId, Location location) {
-        api.put(userServiceBaseUrl.withPath("/api/users/"+userId+ "/location"), location);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        map.add("latitude", String.valueOf(location.getLatitude()));
+        map.add("longitude", String.valueOf(location.getLongitude()));
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        api.put(userServiceBaseUrl.withPath("/api/users/"+userId+ "/location"), request);
     }
 
     @Override

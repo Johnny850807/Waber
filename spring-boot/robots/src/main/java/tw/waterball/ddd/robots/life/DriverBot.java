@@ -14,6 +14,7 @@ import java.util.Optional;
  */
 @Slf4j
 public class DriverBot extends AbstractUserBot {
+    public static final double SPEED = 8;
     private final String name;
     private Driver driver;
     private final StompAPI stompAPI;
@@ -77,7 +78,7 @@ public class DriverBot extends AbstractUserBot {
         if (state == State.PICKING_UP_PASSENGER) {
             Location startLocation = currentMatch.matchPreferences.getStartLocation();
             ifArriveOtherwiseMoveToward(startLocation, () -> {
-                destination = getDestination();
+                destination = generateDestination();
                 api.startDrivingToDestination(driver.getId(), destination);
                 state = State.DRIVING_TO_DESTINATION;
                 log.info("<{}> Start driving to the destination {}", name, destination);
@@ -90,6 +91,8 @@ public class DriverBot extends AbstractUserBot {
         if (state == State.DRIVING_TO_DESTINATION) {
             ifArriveOtherwiseMoveToward(destination, () -> {
                 api.arrive(driver.getId());
+                destination = null;
+                currentMatch = null;
                 state = State.ACTIVE;
                 log.info("<{}> Arrived", name);
             });
@@ -97,29 +100,39 @@ public class DriverBot extends AbstractUserBot {
     }
 
     private void ifArriveOtherwiseMoveToward(Location goal, Runnable doIfArrive) {
-        if (driver.getLocation().distance(goal) <= 1) {
+        if (driver.getLocation().distance(goal) <= SPEED * 2) {
             doIfArrive.run();
         } else {
             Location beforeMove = new Location(driver.getLocation().getLatitude(), driver.getLocation().getLongitude());
-            driver.getLocation().moveToward(goal, 0.5);
+            driver.getLocation().moveToward(goal, SPEED);
             updateLocation();
-            log.info("<{}> Moving {} --> {} toward the destination ({}). (Remaining distance: {})", name,
+            log.debug("<{}> Moving {} --> {} toward the destination ({}). (Remaining distance: {})", name,
                     goal, beforeMove, driver.getLocation(), driver.getLocation().distance(goal));
         }
     }
 
     private void updateLocation() {
+        if (driver.getLocation().getLatitude() == 0 && driver.getLocation().getLongitude() == 0) {
+            System.out.println("Error");
+        }
         api.uploadLocation(driver.getId(), driver.getLocation());
     }
 
-    private Location getDestination() {
+    private Location generateDestination() {
         return randomLocation();
     }
-
 
     @Override
     public Optional<Location> getLocation() {
         return Optional.ofNullable(driver)
                 .map(Driver::getLocation);
+    }
+
+    public Optional<Location> getDestination() {
+        return Optional.ofNullable(destination);
+    }
+
+    public Driver.Status getStatus() {
+        return state == State.ACTIVE ? Driver.Status.AVAILABLE : Driver.Status.MATCHED;
     }
 }

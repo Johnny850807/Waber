@@ -120,7 +120,7 @@ public class PassengerBot extends AbstractUserBot {
             if (random.nextInt(100) < 20) {  // 20% probability
                 state = MATCHING;
                 api.startMatching(passenger.getId(), randomMatchPreferences());
-                log.info("<{}> Start matching...", name);
+                log.info("<{}> Start matching {}...", passenger.getLocation(), name);
             }
         }
     }
