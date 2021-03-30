@@ -40,17 +40,10 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-
-#  jaeger:
-#    image: jaegertracing/all-in-one
-#    ports:
-#      - "14250:14250"
-#      - "16686:16686"
   tempo:
     image: grafana/tempo:0.5.0
     command: [ "--target=all", "--storage.trace.backend=local", "--storage.trace.local.path=/var/tempo", "--auth.enabled=false" ]
-    ports:
-      - 8081:80
+
   tempo-query:
     image: grafana/tempo-query:latest
     #command: ["--grpc-storage-plugin.configuration-file=/etc/tempo-query.yaml"]

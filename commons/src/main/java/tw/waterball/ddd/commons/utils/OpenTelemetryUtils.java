@@ -59,8 +59,8 @@ public class OpenTelemetryUtils {
             String attributes = stream(configurations).filter(c -> c instanceof Attr)
                     .map(c -> (Attr) c)
                     .map(attr -> attr.key + "=" + attr.val).collect(joining(", "));
-            message = String.format("%s%s", events.isBlank() ? "" : "events: [" + events + "] ",
-                    attributes.isBlank() ? "" : "attributes [" + attributes + "] ");
+            message = String.format("%s%s", events.isBlank() ? "" : "events: [ " + events + " ] ",
+                    attributes.isBlank() ? "" : "attributes: [ " + attributes + " ] ");
         }
 
         public void asLog(Consumer<String> messageConsumer) {
