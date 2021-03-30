@@ -8,8 +8,6 @@ services:
       - "27017:27017"
     volumes:
       - mongo-db-data:/data/db
-    networks:
-      - infra
 
   mysql:
     image: mysql
@@ -22,8 +20,6 @@ services:
       - "./init-databases.sql:/data/application/init-db.sql"
     command:
       - "--init-file=/data/application/init-db.sql"
-    networks:
-      - infra
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -34,8 +30,6 @@ services:
       RABBITMQ_DEFAULT_USER: waber
       RABBITMQ_DEFAULT_PASS: waber
       RABBITMQ_DEFAULT_VHOST: /waber
-    networks:
-      - infra
 
   traefik:
     image: traefik:v2.3
@@ -49,20 +43,12 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - infra
 
   jaeger:
     image: jaegertracing/all-in-one
     ports:
       - "14250:14250"
       - "16686:16686"
-    networks:
-      - infra
-
-
-networks:
-  infra:
 
 volumes:
   mongo-db-data:

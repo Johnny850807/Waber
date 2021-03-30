@@ -28,6 +28,7 @@ import java.util.List;
 public class MatchUseCase {
     private final UserServiceDriver userServiceDriver;
     private final MatchRepository matchRepository;
+    private final FindCurrentMatch findCurrentMatch;
     private final PerformMatch performMatch;
     private final long rescheduleDelayTimeInMs;
     private final EventBus eventBus;
@@ -35,13 +36,19 @@ public class MatchUseCase {
     @WithSpan
     public void execute(StartMatchingRequest req, Presenter presenter) {
         Passenger passenger = userServiceDriver.getPassenger(req.passengerId);
-        Match match = Match.start(passenger.getId(), req.matchPreferences);
-        matchRepository.save(match);
-        eventBus.publish(new StartMatchingCommand(match.getId(), passenger.getId()));
+        Match match = findCurrentMatch.execute(req.passengerId)
+                .orElseGet(() -> startNewMatch(req, passenger));
         presenter.present(match);
     }
 
-    @WithSpan
+    private Match startNewMatch(StartMatchingRequest req, Passenger passenger) {
+        Match newMatch = Match.start(passenger.getId(), req.matchPreferences);
+        newMatch = matchRepository.save(newMatch);
+        eventBus.publish(new StartMatchingCommand(newMatch.getId(), passenger.getId()));
+        return newMatch;
+    }
+
+    //    @WithSpan
     public void execute(MatchRequest req) {
         Match match = matchRepository.findById(req.matchId).orElseThrow(NotFoundException::new);
         List<Driver> drivers = userServiceDriver.filterDrivers(match.getPreferences());

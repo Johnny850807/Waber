@@ -11,6 +11,7 @@ import tw.waterball.ddd.model.geo.DistanceCalculator;
 import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.waber.match.domain.PerformMatch;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
+import tw.waterball.ddd.waber.match.usecases.FindCurrentMatch;
 import tw.waterball.ddd.waber.match.usecases.MatchUseCase;
 
 import java.util.concurrent.Executors;
@@ -41,11 +42,11 @@ public class MatchApplication {
     public MatchUseCase matchingUseCase(UserServiceDriver userServiceDriver,
                                         MatchRepository matchRepository,
                                         PerformMatch performMatch,
+                                        FindCurrentMatch findCurrentMatch,
                                         EventBus eventBus,
-
                                         @Value("${waber.match.schedule.rescheduleDelayTimeInMs}") long rescheduleDelayTimeInMs) {
         return new MatchUseCase(userServiceDriver, matchRepository,
-                performMatch, rescheduleDelayTimeInMs, eventBus);
+                findCurrentMatch, performMatch, rescheduleDelayTimeInMs, eventBus);
     }
 
 }

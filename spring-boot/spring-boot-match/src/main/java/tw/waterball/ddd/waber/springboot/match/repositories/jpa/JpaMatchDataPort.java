@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,4 +21,5 @@ public interface JpaMatchDataPort extends JpaRepository<MatchData, Integer> {
     @Transactional
     @Query("UPDATE MatchData m SET m.alive = ?2 WHERE m.id = ?1")
     void setAlive(int matchId, boolean alive);
+
 }

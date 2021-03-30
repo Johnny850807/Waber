@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:alpine-slim
+FROM openjdk:11-jre-slim
 
 ENV APP_NAME waber-trip
 ENV APP_HOME /

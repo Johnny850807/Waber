@@ -12,6 +12,7 @@ import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.model.user.User;
 import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
+import tw.waterball.ddd.waber.match.usecases.FindCurrentMatch;
 import tw.waterball.ddd.waber.match.usecases.MatchUseCase;
 import tw.waterball.ddd.waber.match.usecases.MatchUseCase.StartMatchingRequest;
 import tw.waterball.ddd.waber.springboot.match.presenters.MatchPresenter;
@@ -32,24 +33,20 @@ import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 public class MatchController {
     private final MatchUseCase matchUseCase;
     private final MatchRepository matchRepository;
-    private final UserServiceDriver userServiceDriver;
+    private final FindCurrentMatch findCurrentMatch;
+    private final MatchPresenter matchPresenter;
 
     @PostMapping("/users/{passengerId}/matches")
     public MatchView startMatching(@PathVariable int passengerId,
                                    @RequestBody MatchPreferences matchPreferences) {
         log.info("<Start matching> passenger(id={}), {}}.", passengerId, matchPreferences);
-        var presenter = new MatchPresenter();
-        matchUseCase.execute(new StartMatchingRequest(passengerId, matchPreferences), presenter);
-        return presenter.getMatchView();
+        matchUseCase.execute(new StartMatchingRequest(passengerId, matchPreferences), matchPresenter);
+        return matchPresenter.getMatchView();
     }
 
     @GetMapping("/users/{userId}/matches/current")
     public MatchView getUserCurrentMatch(@PathVariable int userId) {
-        User user = userServiceDriver.getUser(userId);
-        Supplier<Optional<Match>> findMatch = user instanceof Passenger ?
-                () -> matchRepository.findPassengerCurrentMatch(userId) :
-                () -> matchRepository.findDriverCurrentMatch(userId);
-        return findMatch.get()
+        return findCurrentMatch.execute(userId)
                 .map(this::toMatchView)
                 .orElseThrow(NotFoundException::new);
     }
@@ -62,10 +59,9 @@ public class MatchController {
     }
 
     private MatchView toMatchView(Match match) {
-        Optional<Integer> driverId = match.mayHaveDriverId();
-        String driverName = driverId.map(userServiceDriver::getDriver)
-                .map(Driver::getName).orElse(null);
-        return toViewModel(match, driverName);
+        matchPresenter.present(match);
+        return matchPresenter.getMatchView();
     }
+
 
 }
