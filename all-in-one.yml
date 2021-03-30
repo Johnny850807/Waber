@@ -7,9 +7,9 @@ services:
       SPRING_PROFILES_ACTIVE: microservice
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/waber_user
       SPRING_RABBITMQ_HOST: rabbitmq
-      OTEL_EXPORTER: otlp_span,prometheus
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
-      OTEL_EXPORTER_OTLP_INSECURE: "true"
+      OTEL_TRACES_EXPORTER: otlp_span
+      OTEL_TRACES_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
+      OTEL_TRACES_EXPORTER_OTLP_INSECURE: "true"
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
     labels:
       - "traefik.enable=true"
@@ -29,9 +29,9 @@ services:
       SPRING_PROFILES_ACTIVE: microservice
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/waber_match
       SPRING_RABBITMQ_HOST: rabbitmq
-      OTEL_EXPORTER: otlp_span,prometheus
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
-      OTEL_EXPORTER_OTLP_INSECURE: "true"
+      OTEL_TRACES_EXPORTER: otlp_span
+      OTEL_TRACES_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
+      OTEL_TRACES_EXPORTER_OTLP_INSECURE: "true"
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
     labels:
       - "traefik.enable=true"
@@ -43,7 +43,7 @@ services:
     logging:
       driver: loki
       options:
-        loki-url: 'http://loki:3100/api/prom/push'
+        loki-url: 'http://localhost:3100/api/prom/push'
 
   trip-service:
     build: spring-boot/spring-boot-trip
@@ -51,9 +51,9 @@ services:
       SPRING_PROFILES_ACTIVE: microservice
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/waber_trip
       SPRING_RABBITMQ_HOST: rabbitmq
-      OTEL_EXPORTER: otlp_span,prometheus
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
-      OTEL_EXPORTER_OTLP_INSECURE: "true"
+      OTEL_TRACES_EXPORTER: otlp_span
+      OTEL_TRACES_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
+      OTEL_TRACES_EXPORTER_OTLP_INSECURE: "true"
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
     labels:
       - "traefik.enable=true"
@@ -65,7 +65,7 @@ services:
     logging:
       driver: loki
       options:
-        loki-url: 'http://loki:3100/api/prom/push'
+        loki-url: 'http://localhost:3100/api/prom/push'
 
   payment-service:
     build: spring-boot/spring-boot-payment
@@ -73,9 +73,9 @@ services:
       SPRING_PROFILES_ACTIVE: microservice
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/waber_payment
       SPRING_RABBITMQ_HOST: rabbitmq
-      OTEL_EXPORTER: otlp_span,prometheus
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
-      OTEL_EXPORTER_OTLP_INSECURE: "true"
+      OTEL_TRACES_EXPORTER: otlp_span
+      OTEL_TRACES_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
+      OTEL_TRACES_EXPORTER_OTLP_INSECURE: "true"
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
     labels:
       - "traefik.enable=true"
@@ -92,9 +92,9 @@ services:
     build: spring-boot/spring-boot-broker
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
-      OTEL_EXPORTER: otlp_span,prometheus
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
-      OTEL_EXPORTER_OTLP_INSECURE: "true"
+      OTEL_TRACES_EXPORTER: otlp_span
+      OTEL_TRACES_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
+      OTEL_TRACES_EXPORTER_OTLP_INSECURE: "true"
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
     labels:
       - "traefik.enable=true"
