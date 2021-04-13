@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-public interface MongoTripDataPort extends MongoRepository<TripData, String> {
+public interface TripDAO extends MongoRepository<TripData, String> {
     List<TripData> findAllByPassengerId(int passengerId);
 
     List<TripData> findAllByDriverId(int driverId);

@@ -9,6 +9,6 @@ import java.util.Optional;
  * @author - johnny850807@gmail.com (Waterball)
  */
 @Repository
-public interface JpaActivityDataPort extends JpaRepository<ActivityData, Integer> {
+public interface ActivityDAO extends JpaRepository<ActivityData, Integer> {
     Optional<ActivityData> findByName(String name);
 }

@@ -14,21 +14,21 @@ import java.util.stream.Collectors;
  */
 @Component
 public class SpringBootTripRepository implements TripRepository {
-    private final MongoTripDataPort tripDataPort;
+    private final TripDAO tripDAO;
 
-    public SpringBootTripRepository(MongoTripDataPort tripDataPort) {
-        this.tripDataPort = tripDataPort;
+    public SpringBootTripRepository(TripDAO tripDAO) {
+        this.tripDAO = tripDAO;
     }
 
     @Override
     public List<Trip> queryDriverTripHistory(int driverId) {
-        return tripDataPort.findAllByDriverId(driverId).stream()
+        return tripDAO.findAllByDriverId(driverId).stream()
                 .map(TripData::toEntity)
                 .collect(Collectors.toList());
     }
     @Override
     public List<Trip> queryPassengerTripHistory(int passengerId) {
-        return tripDataPort.findAllByPassengerId(passengerId).stream()
+        return tripDAO.findAllByPassengerId(passengerId).stream()
                 .map(TripData::toEntity)
                 .collect(Collectors.toList());
     }
@@ -36,24 +36,24 @@ public class SpringBootTripRepository implements TripRepository {
     @Override
     public Trip saveTripWithMatch(Trip trip, Match match) {
         TripData data = TripData.toData(trip, match);
-        TripData saveData = tripDataPort.save(data);
+        TripData saveData = tripDAO.save(data);
         return saveData.toEntity();
     }
 
     @Override
     public Optional<Trip> findById(String id) {
-        return tripDataPort.findById(id)
+        return tripDAO.findById(id)
                 .map(TripData::toEntity);
     }
 
     @Override
     public Optional<Trip> findByMatchId(int matchId) {
-        return tripDataPort.findByMatchId(matchId)
+        return tripDAO.findByMatchId(matchId)
                 .map(TripData::toEntity);
     }
 
     @Override
     public void clearAll() {
-        tripDataPort.deleteAll();
+        tripDAO.deleteAll();
     }
 }

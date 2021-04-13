@@ -20,25 +20,25 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class SpringBootUserRepository implements UserRepository {
-    private final JpaUserDataPort jpaUserDataPort;
-    private final JpaPasswordPort jpaPasswordPort;
+    private final UserDAO userDAO;
+    private final PasswordDAO passwordDAO;
 
     @Override
     public List<Driver> getAllAvailableDrivers() {
-        return jpaUserDataPort.findAllByDriverIsTrueAndDriverStatusIs(Driver.Status.AVAILABLE.toString())
+        return userDAO.findAllByDriverIsTrueAndDriverStatusIs(Driver.Status.AVAILABLE.toString())
                 .stream().map(UserData::toDriver)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<User> findById(int userId) {
-        return jpaUserDataPort.findById(userId)
+        return userDAO.findById(userId)
                 .map(UserData::toEntity);
     }
 
     @Override
     public User save(User user) {
-        UserData data = jpaUserDataPort.save(toData(user));
+        UserData data = userDAO.save(toData(user));
         user.setId(data.getId());
         return user;
     }
@@ -46,32 +46,32 @@ public class SpringBootUserRepository implements UserRepository {
     @Override
     @Transactional
     public User saveUserWithHisPassword(User user, String password) {
-        UserData data = jpaUserDataPort.save(toData(user));
-        jpaPasswordPort.save(new Password(data.getId(), password));
+        UserData data = userDAO.save(toData(user));
+        passwordDAO.save(new Password(data.getId(), password));
         user.setId(data.getId());
         return user;
     }
 
     @Override
     public List<User> findAllByIds(Iterable<Integer> userIds) {
-        return jpaUserDataPort.findAllById(userIds)
+        return userDAO.findAllById(userIds)
                 .stream().map(UserData::toEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Driver> findAllAvailableDriversByCarType(Driver.CarType carType) {
-        return jpaUserDataPort.findAllByCarTypeAndDriverStatusIs(carType, Driver.Status.AVAILABLE.toString())
+        return userDAO.findAllByCarTypeAndDriverStatusIs(carType, Driver.Status.AVAILABLE.toString())
                 .stream().map(UserData::toDriver)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<User> findByEmailAndPassword(String email, String password) {
-        var user = jpaUserDataPort.findByEmail(email)
+        var user = userDAO.findByEmail(email)
                 .map(UserData::toEntity);
         if (user.isPresent()) {
-            var p = jpaPasswordPort.findById(user.get().getId());
+            var p = passwordDAO.findById(user.get().getId());
             if (p.isPresent()) {
                 return user;
             }
@@ -82,10 +82,10 @@ public class SpringBootUserRepository implements UserRepository {
     @Override
     @Transactional
     public void updateLatestLocation(int userId, Location location) {
-        UserData data = jpaUserDataPort.getOne(userId);
+        UserData data = userDAO.getOne(userId);
         data.setLatitude(location.getLatitude());
         data.setLongitude(location.getLongitude());
-        UserData saved = jpaUserDataPort.save(data);
+        UserData saved = userDAO.save(data);
         if (saved.getLatitude() == saved.getLongitude()) {
             System.out.println();
         }
@@ -93,6 +93,6 @@ public class SpringBootUserRepository implements UserRepository {
 
     @Override
     public void clearAll() {
-        jpaUserDataPort.deleteAll();
+        userDAO.deleteAll();
     }
 }

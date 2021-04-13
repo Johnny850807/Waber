@@ -9,6 +9,7 @@
         <module>spring-boot-trip</module>
         <module>spring-boot-payment</module>
         <module>spring-boot-broker</module>
+        <module>chaos-engineering</module>
         <module>robots</module>
         <module>test-kit</module>
     </modules>

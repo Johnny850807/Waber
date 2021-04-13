@@ -13,7 +13,7 @@ import java.util.Optional;
  * @author - johnny850807@gmail.com (Waterball)
  */
 @Repository
-public interface JpaMatchDataPort extends JpaRepository<MatchData, Integer> {
+public interface MatchDAO extends JpaRepository<MatchData, Integer> {
     Optional<MatchData> findFirstByPassengerIdAndAliveIsTrueOrderByCreatedDateDesc(int passengerId);
     Optional<MatchData> findFirstByDriverIdAndAliveIsTrueOrderByCreatedDateDesc(int driverId);
 

@@ -3,8 +3,6 @@ package tw.waterball.ddd.waber.springboot.user.repositories.jpa;
 import org.springframework.stereotype.Component;
 import tw.waterball.ddd.model.user.Activity;
 import tw.waterball.ddd.waber.passenger.repositories.ActivityRepository;
-import tw.waterball.ddd.waber.springboot.user.repositories.jpa.ActivityData;
-import tw.waterball.ddd.waber.springboot.user.repositories.jpa.JpaActivityDataPort;
 
 import java.util.Optional;
 
@@ -13,28 +11,28 @@ import java.util.Optional;
  */
 @Component
 public class SpringBootActivityRepository implements ActivityRepository {
-    private JpaActivityDataPort dataPort;
+    private ActivityDAO activityDAO;
 
-    public SpringBootActivityRepository(JpaActivityDataPort dataPort) {
-        this.dataPort = dataPort;
+    public SpringBootActivityRepository(ActivityDAO activityDAO) {
+        this.activityDAO = activityDAO;
     }
 
     @Override
     public Optional<Activity> findByName(String name) {
-        return dataPort.findByName(name)
+        return activityDAO.findByName(name)
                 .map(ActivityData::toEntity);
     }
 
     @Override
     public Activity save(Activity activity) {
-        ActivityData data = dataPort.save(ActivityData.fromEntity(activity));
+        ActivityData data = activityDAO.save(ActivityData.fromEntity(activity));
         activity.setId(data.getId());
         return activity;
     }
 
     @Override
     public void clearAll() {
-        dataPort.deleteAll();
+        activityDAO.deleteAll();
     }
 
 }

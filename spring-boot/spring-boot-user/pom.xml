@@ -17,6 +17,10 @@
             <artifactId>spring-boot-commons</artifactId>
         </dependency>
         <dependency>
+            <groupId>tw.waterball.ddd.spring-boot</groupId>
+            <artifactId>chaos-engineering</artifactId>
+        </dependency>
+        <dependency>
             <groupId>tw.waterball.ddd</groupId>
             <artifactId>waber-user</artifactId>
         </dependency>

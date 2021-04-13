@@ -16,27 +16,27 @@ import static tw.waterball.ddd.waber.springboot.payment.repositories.jpa.Payment
 @Named
 @AllArgsConstructor
 public class SpringBootPaymentRepository implements PaymentRepository {
-    private final MongoPaymentDataPort dataPort;
+    private final PaymentDAO paymentDAO;
 
     @Override
     public Payment save(Payment payment) {
-        PaymentData savedData = dataPort.save(toData(payment));
+        PaymentData savedData = paymentDAO.save(toData(payment));
         return savedData.toEntity();
     }
 
     @Override
     public Optional<Payment> findByTripId(String tripId) {
-        return dataPort.findFirstByTripId(tripId)
+        return paymentDAO.findFirstByTripId(tripId)
                 .map(PaymentData::toEntity);
     }
 
     @Override
     public boolean existsByTripId(String tripId) {
-        return dataPort.existsByTripId(tripId);
+        return paymentDAO.existsByTripId(tripId);
     }
 
     @Override
     public void clearAll() {
-        dataPort.deleteAll();
+        paymentDAO.deleteAll();
     }
 }

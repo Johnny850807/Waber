@@ -3,7 +3,7 @@ package tw.waterball.ddd.waber.springboot.user.tasks;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import tw.waterball.ddd.waber.springboot.user.repositories.jpa.ActivityData;
-import tw.waterball.ddd.waber.springboot.user.repositories.jpa.JpaActivityDataPort;
+import tw.waterball.ddd.waber.springboot.user.repositories.jpa.ActivityDAO;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
  */
 @Component
 public class PopulateActivities {
-    private JpaActivityDataPort dataPort;
+    private ActivityDAO dataPort;
     private List<String> activityNames;
 
-    public PopulateActivities(JpaActivityDataPort dataPort,
+    public PopulateActivities(ActivityDAO dataPort,
                               @Value("${waber.activities}") List<String> activityNames) {
         this.dataPort = dataPort;
         this.activityNames = activityNames;

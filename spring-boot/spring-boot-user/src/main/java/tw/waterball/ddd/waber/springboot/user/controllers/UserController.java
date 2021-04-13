@@ -1,10 +1,17 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
-import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.User;

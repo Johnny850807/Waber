@@ -7,7 +7,7 @@ import java.util.Optional;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-public interface MongoPaymentDataPort extends MongoRepository<PaymentData, String> {
+public interface PaymentDAO extends MongoRepository<PaymentData, String> {
     Optional<PaymentData> findFirstByTripId(String tripId);
     boolean existsByTripId(String tripId);
 

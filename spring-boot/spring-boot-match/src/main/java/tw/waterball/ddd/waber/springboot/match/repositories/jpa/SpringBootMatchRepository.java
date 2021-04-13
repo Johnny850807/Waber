@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class SpringBootMatchRepository implements MatchRepository {
-    private final JpaMatchDataPort dataPort;
+    private final MatchDAO dataPort;
 
     @Override
     public List<Match> saveAll(Match ...matches) {

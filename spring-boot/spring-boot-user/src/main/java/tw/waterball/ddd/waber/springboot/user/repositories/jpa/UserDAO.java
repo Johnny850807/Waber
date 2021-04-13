@@ -11,7 +11,7 @@ import java.util.Optional;
  * @author - johnny850807@gmail.com (Waterball)
  */
 @Repository
-public interface JpaUserDataPort extends JpaRepository<UserData, Integer> {
+public interface UserDAO extends JpaRepository<UserData, Integer> {
     Optional<UserData> findByEmail(String email);
 
     List<UserData> findAllByCarTypeAndDriverStatusIs(Driver.CarType carType, String driverStatus);
