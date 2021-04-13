@@ -21,6 +21,11 @@ public class WaberFunValue implements FunValue {
         digest = md.digest();
     }
 
+    public WaberFunValue(String funValue, byte[] digest) {
+        this.funValue = funValue;
+        this.digest = digest;
+    }
+
     public byte[] getDigest() {
         return digest;
     }

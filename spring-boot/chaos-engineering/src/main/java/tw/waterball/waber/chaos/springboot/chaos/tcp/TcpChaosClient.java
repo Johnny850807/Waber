@@ -6,6 +6,8 @@ import static tw.waterball.waber.chaos.springboot.chaos.tcp.TcpChaosServer.OP_KI
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tw.waterball.waber.chaos.api.FunValue;
+import tw.waterball.waber.chaos.api.FunValuePacker;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -23,6 +25,7 @@ import java.util.stream.IntStream;
 @Slf4j
 @Component
 public class TcpChaosClient {
+    private FunValuePacker funValuePacker;
     private final String chaosName;
     private final String host;
     private final int port;
@@ -35,7 +38,8 @@ public class TcpChaosClient {
         void onKilled();
     }
 
-    public TcpChaosClient(String chaosName, String host, int port) {
+    public TcpChaosClient(FunValuePacker funValuePacker, String chaosName, String host, int port) {
+        this.funValuePacker = funValuePacker;
         this.chaosName = chaosName;
         this.host = host;
         this.port = port;

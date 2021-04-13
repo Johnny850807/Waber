@@ -4,14 +4,12 @@ import static java.util.Arrays.stream;
 
 import tw.waterball.waber.chaos.api.Chaos;
 import tw.waterball.waber.chaos.api.FunValue;
-import tw.waterball.waber.chaos.springboot.chaos.profiles.ChaosEngineering;
 
 /**
  * Define:
  *
  * @author Waterball (johnny850807@gmail.com)
  */
-@ChaosEngineering
 public abstract class WaberChaos implements Chaos {
     protected final Criteria criteria;
     protected String name;
