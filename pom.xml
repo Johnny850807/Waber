@@ -27,68 +27,58 @@
         <dependencies>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>waber-driver</artifactId>
+                <artifactId>waber-domain-user</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>waber-user</artifactId>
+                <artifactId>waber-domain-match</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>waber-match</artifactId>
+                <artifactId>waber-domain-trip</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>waber-trip</artifactId>
+                <artifactId>waber-domain-payment</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>waber-payment</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>tw.waterball.ddd</groupId>
-                <artifactId>commons</artifactId>
+                <artifactId>waber-commons</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd.spring-boot</groupId>
-                <artifactId>chaos-engineering</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <artifactId>waber-chaos-engineering</artifactId>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>model</artifactId>
+                <artifactId>waber-model</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!--TODO think a way to import it from api.parent BOM-->
             <dependency>
                 <groupId>tw.waterball.ddd.api</groupId>
-                <artifactId>api-user</artifactId>
+                <artifactId>waber-api-user</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd.api</groupId>
-                <artifactId>api-match</artifactId>
+                <artifactId>waber-api-match</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd.api</groupId>
-                <artifactId>api-trip</artifactId>
+                <artifactId>waber-api-trip</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd.api</groupId>
-                <artifactId>api-payment</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>tw.waterball.ddd.api</groupId>
-                <artifactId>api-events</artifactId>
+                <artifactId>waber-api-payment</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

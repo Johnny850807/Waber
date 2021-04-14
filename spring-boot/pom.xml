@@ -9,6 +9,7 @@
         <module>spring-boot-trip</module>
         <module>spring-boot-payment</module>
         <module>spring-boot-broker</module>
+        <module>spring-boot-chaos</module>
         <module>chaos-engineering</module>
         <module>robots</module>
         <module>test-kit</module>
@@ -32,11 +33,11 @@
     <dependencies>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>waber-commons</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>waber-model</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

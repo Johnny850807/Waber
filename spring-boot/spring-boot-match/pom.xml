@@ -18,15 +18,15 @@
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-user</artifactId>
+            <artifactId>waber-api-user</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-match</artifactId>
+            <artifactId>waber-api-match</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-match</artifactId>
+            <artifactId>waber-domain-match</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.spring-boot</groupId>

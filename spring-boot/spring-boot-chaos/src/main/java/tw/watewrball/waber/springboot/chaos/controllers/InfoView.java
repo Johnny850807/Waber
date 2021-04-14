@@ -1,4 +1,4 @@
-package tw.waterball.waber.chaos.springboot.controllers;
+package tw.watewrball.waber.springboot.chaos.controllers;
 
 import static java.util.stream.Collectors.toList;
 

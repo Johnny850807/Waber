@@ -9,16 +9,16 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>waber-match</artifactId>
+    <artifactId>waber-domain-match</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>waber-model</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-user</artifactId>
+            <artifactId>waber-api-user</artifactId>
         </dependency>
     </dependencies>
 

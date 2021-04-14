@@ -23,22 +23,22 @@
         <dependencies>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>model</artifactId>
+                <artifactId>waber-model</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd.api</groupId>
-                <artifactId>api-user</artifactId>
+                <artifactId>waber-api-user</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd.api</groupId>
-                <artifactId>api-match</artifactId>
+                <artifactId>waber-api-match</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd.api</groupId>
-                <artifactId>api-trip</artifactId>
+                <artifactId>waber-api-trip</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>
@@ -54,7 +54,7 @@
 
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>waber-model</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -9,29 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spring-boot-payment</artifactId>
+    <artifactId>chaos-server</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>tw.waterball.ddd.spring-boot</groupId>
-            <artifactId>spring-boot-commons</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-domain-payment</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>waber-api-payment</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>tw.waterball.ddd.spring-boot</groupId>
-            <artifactId>test-kit</artifactId>
-            <scope>test</scope>
+            <artifactId>waber-chaos-engineering</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

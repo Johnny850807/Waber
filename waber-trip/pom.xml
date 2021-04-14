@@ -9,24 +9,24 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>waber-trip</artifactId>
+    <artifactId>waber-domain-trip</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-user</artifactId>
+            <artifactId>waber-api-user</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-match</artifactId>
+            <artifactId>waber-api-match</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-payment</artifactId>
+            <artifactId>waber-api-payment</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>waber-model</artifactId>
         </dependency>
     </dependencies>
 </project>

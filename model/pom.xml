@@ -11,12 +11,12 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>model</artifactId>
+    <artifactId>waber-model</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>waber-commons</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

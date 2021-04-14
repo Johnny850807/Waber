@@ -18,15 +18,15 @@
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-trip</artifactId>
+            <artifactId>waber-api-trip</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>api-payment</artifactId>
+            <artifactId>waber-api-payment</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-trip</artifactId>
+            <artifactId>waber-domain-trip</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.spring-boot</groupId>

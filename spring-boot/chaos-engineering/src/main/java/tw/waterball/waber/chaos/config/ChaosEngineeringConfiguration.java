@@ -1,4 +1,4 @@
-package tw.waterball.waber.chaos.springboot.config;
+package tw.waterball.waber.chaos.config;
 
 import org.springframework.context.annotation.Configuration;
 

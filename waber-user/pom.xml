@@ -9,16 +9,16 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>waber-user</artifactId>
+    <artifactId>waber-domain-user</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>waber-model</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>waber-commons</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>

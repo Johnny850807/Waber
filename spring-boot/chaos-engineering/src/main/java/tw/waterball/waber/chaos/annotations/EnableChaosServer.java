@@ -1,7 +1,7 @@
-package tw.waterball.waber.chaos.springboot.annotations;
+package tw.waterball.waber.chaos.annotations;
 
 import org.springframework.context.annotation.Import;
-import tw.waterball.waber.chaos.springboot.config.TcpServerConfiguration;
+import tw.waterball.waber.chaos.config.TcpServerConfiguration;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

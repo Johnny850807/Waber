@@ -18,11 +18,11 @@
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.spring-boot</groupId>
-            <artifactId>chaos-engineering</artifactId>
+            <artifactId>waber-chaos-engineering</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-user</artifactId>
+            <artifactId>waber-domain-user</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.spring-boot</groupId>
