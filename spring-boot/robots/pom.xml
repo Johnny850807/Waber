@@ -21,15 +21,15 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
+            <groupId>tw.waterball.ddd</groupId>
             <artifactId>waber-api-user</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
+            <groupId>tw.waterball.ddd</groupId>
             <artifactId>waber-api-match</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
+            <groupId>tw.waterball.ddd</groupId>
             <artifactId>waber-api-trip</artifactId>
         </dependency>
     </dependencies>

@@ -2,29 +2,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
+        <artifactId>waber-domain</artifactId>
         <groupId>tw.waterball.ddd</groupId>
-        <artifactId>waber-spring-boot</artifactId>
         <version>${revision}</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>waber-spring-boot-chaos</artifactId>
+    <artifactId>waber-domain-payment</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-chaos-engineering</artifactId>
+            <artifactId>waber-domain-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>waber-api-match</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>waber-api-trip</artifactId>
         </dependency>
     </dependencies>
-
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>

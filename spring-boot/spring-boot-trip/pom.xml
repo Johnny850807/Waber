@@ -17,11 +17,11 @@
             <artifactId>waber-spring-boot-commons</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
+            <groupId>tw.waterball.ddd</groupId>
             <artifactId>waber-api-trip</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
+            <groupId>tw.waterball.ddd</groupId>
             <artifactId>waber-api-payment</artifactId>
         </dependency>
         <dependency>

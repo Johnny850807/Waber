@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>parent</artifactId>
-        <groupId>tw.waterball.ddd.api</groupId>
+        <artifactId>waber-api</artifactId>
+        <groupId>tw.waterball.ddd</groupId>
         <version>${revision}</version>
     </parent>
 

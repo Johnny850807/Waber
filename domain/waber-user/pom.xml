@@ -4,25 +4,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>waber</artifactId>
+        <artifactId>waber-domain</artifactId>
         <groupId>tw.waterball.ddd</groupId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>waber-domain-payment</artifactId>
+    <artifactId>waber-domain-user</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-model</artifactId>
+            <artifactId>waber-domain-model</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>waber-api-match</artifactId>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>waber-commons</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>waber-api-trip</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+            <version>5.3.3.RELEASE</version>
         </dependency>
     </dependencies>
+
 </project>

@@ -13,14 +13,10 @@
         <revision>1.0-SNAPSHOT</revision>
     </properties>
     <modules>
-        <module>waber-user</module>
-        <module>waber-match</module>
-        <module>waber-trip</module>
-        <module>waber-payment</module>
         <module>spring-boot</module>
         <module>commons</module>
-        <module>model</module>
         <module>api</module>
+        <module>domain</module>
     </modules>
 
     <dependencyManagement>
@@ -57,27 +53,27 @@
             </dependency>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>waber-model</artifactId>
+                <artifactId>waber-domain-model</artifactId>
                 <version>${revision}</version>
             </dependency>
             <!--TODO think a way to import it from api.parent BOM-->
             <dependency>
-                <groupId>tw.waterball.ddd.api</groupId>
+                <groupId>tw.waterball.ddd</groupId>
                 <artifactId>waber-api-user</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>tw.waterball.ddd.api</groupId>
+                <groupId>tw.waterball.ddd</groupId>
                 <artifactId>waber-api-match</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>tw.waterball.ddd.api</groupId>
+                <groupId>tw.waterball.ddd</groupId>
                 <artifactId>waber-api-trip</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>tw.waterball.ddd.api</groupId>
+                <groupId>tw.waterball.ddd</groupId>
                 <artifactId>waber-api-payment</artifactId>
                 <version>${revision}</version>
             </dependency>

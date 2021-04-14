@@ -71,7 +71,7 @@ services:
   grafana:
     image: grafana/grafana:7.3.7
     volumes:
-      - ./config/grafana:/etc/grafana/provisioning/datasources
+      - ./etc/config/grafana:/etc/grafana/provisioning/datasources
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"

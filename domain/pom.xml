@@ -8,18 +8,15 @@
         <groupId>tw.waterball.ddd</groupId>
         <version>${revision}</version>
     </parent>
+    <packaging>pom</packaging>
 
-    <artifactId>waber-domain-match</artifactId>
+    <artifactId>waber-domain</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-model</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>tw.waterball.ddd.api</groupId>
-            <artifactId>waber-api-user</artifactId>
-        </dependency>
-    </dependencies>
-
+    <modules>
+        <module>waber-user</module>
+        <module>waber-match</module>
+        <module>waber-trip</module>
+        <module>waber-payment</module>
+        <module>model</module>
+    </modules>
 </project>

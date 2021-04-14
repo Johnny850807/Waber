@@ -9,8 +9,7 @@
         <version>${revision}</version>
     </parent>
     <packaging>pom</packaging>
-    <groupId>tw.waterball.ddd.api</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>waber-api</artifactId>
 
     <modules>
         <module>api-user</module>
@@ -23,21 +22,21 @@
         <dependencies>
             <dependency>
                 <groupId>tw.waterball.ddd</groupId>
-                <artifactId>waber-model</artifactId>
+                <artifactId>waber-domain-model</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>tw.waterball.ddd.api</groupId>
+                <groupId>tw.waterball.ddd</groupId>
                 <artifactId>waber-api-user</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>tw.waterball.ddd.api</groupId>
+                <groupId>tw.waterball.ddd</groupId>
                 <artifactId>waber-api-match</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>tw.waterball.ddd.api</groupId>
+                <groupId>tw.waterball.ddd</groupId>
                 <artifactId>waber-api-trip</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -54,7 +53,7 @@
 
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
-            <artifactId>waber-model</artifactId>
+            <artifactId>waber-domain-model</artifactId>
         </dependency>
     </dependencies>
 </project>
