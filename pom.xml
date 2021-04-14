@@ -51,7 +51,7 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>tw.waterball.ddd.spring-boot</groupId>
+                <groupId>tw.waterball.ddd</groupId>
                 <artifactId>waber-chaos-engineering</artifactId>
                 <version>${revision}</version>
             </dependency>

@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>parent</artifactId>
-        <groupId>tw.waterball.ddd.spring-boot</groupId>
+        <groupId>tw.waterball.ddd</groupId>
+    <artifactId>waber-spring-boot</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>test-kit</artifactId>
+    <artifactId>waber-spring-boot-test-kit</artifactId>
 
     <dependencies>
         <dependency>

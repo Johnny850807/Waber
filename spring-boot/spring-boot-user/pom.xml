@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>parent</artifactId>
-        <groupId>tw.waterball.ddd.spring-boot</groupId>
+        <groupId>tw.waterball.ddd</groupId>
+        <artifactId>waber-spring-boot</artifactId>
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,11 +13,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>tw.waterball.ddd.spring-boot</groupId>
-            <artifactId>spring-boot-commons</artifactId>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>waber-spring-boot-commons</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.spring-boot</groupId>
+            <groupId>tw.waterball.ddd</groupId>
             <artifactId>waber-chaos-engineering</artifactId>
         </dependency>
         <dependency>
@@ -25,8 +25,8 @@
             <artifactId>waber-domain-user</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.spring-boot</groupId>
-            <artifactId>test-kit</artifactId>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>waber-spring-boot-test-kit</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

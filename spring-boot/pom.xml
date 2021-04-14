@@ -20,8 +20,8 @@
         <version>${revision}</version>
     </parent>
     <packaging>pom</packaging>
-    <groupId>tw.waterball.ddd.spring-boot</groupId>
-    <artifactId>parent</artifactId>
+    <groupId>tw.waterball.ddd</groupId>
+    <artifactId>waber-spring-boot</artifactId>
     <name>spring-boot</name>
 
     <properties>
@@ -132,13 +132,13 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>tw.waterball.ddd.spring-boot</groupId>
-                <artifactId>spring-boot-commons</artifactId>
+                <groupId>tw.waterball.ddd</groupId>
+                <artifactId>waber-spring-boot-commons</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>tw.waterball.ddd.spring-boot</groupId>
-                <artifactId>test-kit</artifactId>
+                <groupId>tw.waterball.ddd</groupId>
+                <artifactId>waber-spring-boot-test-kit</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

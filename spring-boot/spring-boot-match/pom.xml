@@ -4,17 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>parent</artifactId>
-        <groupId>tw.waterball.ddd.spring-boot</groupId>
+        <groupId>tw.waterball.ddd</groupId>
+    <artifactId>waber-spring-boot</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>spring-boot-match</artifactId>
+    <artifactId>waber-spring-boot-match</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>tw.waterball.ddd.spring-boot</groupId>
-            <artifactId>spring-boot-commons</artifactId>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>waber-spring-boot-commons</artifactId>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd.api</groupId>
@@ -29,8 +29,8 @@
             <artifactId>waber-domain-match</artifactId>
         </dependency>
         <dependency>
-            <groupId>tw.waterball.ddd.spring-boot</groupId>
-            <artifactId>test-kit</artifactId>
+            <groupId>tw.waterball.ddd</groupId>
+            <artifactId>waber-spring-boot-test-kit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
