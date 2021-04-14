@@ -1,4 +1,4 @@
-package tw.waterball.waber.chaos.springboot.chaos.annotations;
+package tw.waterball.waber.chaos.springboot.annotations;
 
 import org.springframework.context.annotation.Profile;
 

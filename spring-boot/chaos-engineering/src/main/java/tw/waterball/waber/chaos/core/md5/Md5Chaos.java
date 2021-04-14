@@ -1,4 +1,4 @@
-package tw.waterball.waber.chaos.core;
+package tw.waterball.waber.chaos.core.md5;
 
 import static java.util.Arrays.stream;
 
@@ -10,13 +10,13 @@ import tw.waterball.waber.chaos.api.FunValue;
  *
  * @author Waterball (johnny850807@gmail.com)
  */
-public abstract class WaberChaos implements Chaos {
+public abstract class Md5Chaos implements Chaos {
     protected final Criteria criteria;
     protected String name;
-    private boolean performed;
+    private boolean executed;
     private boolean killed;
 
-    public WaberChaos() {
+    public Md5Chaos() {
         this.criteria = criteria();
         this.name = getName();
     }
@@ -30,9 +30,9 @@ public abstract class WaberChaos implements Chaos {
 
     @Override
     public void execute(FunValue funValue) {
-        byte[] digest = ((WaberFunValue) funValue).getDigest();
-        performed = criteria.match(digest);
-        if (performed) {
+        byte[] digest = ((Md5FunValue) funValue).getDigest();
+        executed = criteria.match(digest);
+        if (executed) {
             onPerform(digest);
         } else {
             onNotMatch();
@@ -49,27 +49,30 @@ public abstract class WaberChaos implements Chaos {
 
     }
 
-    public boolean isPerformed() {
-        return performed;
-    }
-
     @Override
     public void kill() {
-        if (isPerformed()) {
+        if (isExecuted()) {
             killed = true;
             onKilled();
         }
     }
 
-    public boolean isAlive() {
-        return isPerformed() && !isKilled();
+    @Override
+    public boolean isExecuted() {
+        return executed;
     }
 
+    @Override
+    public boolean isAlive() {
+        return isExecuted() && !isKilled();
+    }
+
+    @Override
     public boolean isKilled() {
         return killed;
     }
-
     public interface Criteria {
+
         boolean match(byte[] digest);
     }
 

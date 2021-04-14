@@ -1,4 +1,4 @@
-package tw.waterball.waber.chaos.springboot.chaos.config;
+package tw.waterball.waber.chaos.springboot.config;
 
 import org.springframework.context.annotation.Configuration;
 
@@ -6,5 +6,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Waterball (johnny850807@gmail.com)
  */
 @Configuration
-public class TcpClientConfiguration {
+public class ChaosEngineeringConfiguration {
+
+
 }

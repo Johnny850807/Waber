@@ -1,4 +1,4 @@
-package tw.waterball.waber.chaos.core;
+package tw.waterball.waber.chaos.api;
 
 /**
  * @author Waterball (johnny850807@gmail.com)

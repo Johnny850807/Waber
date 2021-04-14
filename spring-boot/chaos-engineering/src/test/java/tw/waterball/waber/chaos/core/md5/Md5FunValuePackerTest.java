@@ -1,18 +1,18 @@
-package tw.waterball.waber.chaos.core;
+package tw.waterball.waber.chaos.core.md5;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class WaberFunValuePackerTest {
-    WaberFunValuePacker packer = new WaberFunValuePacker();
+public class Md5FunValuePackerTest {
+    Md5FunValuePacker packer = new Md5FunValuePacker();
 
     @Test
     void test() {
-        WaberFunValue expected = new WaberFunValue("Hello World");
+        Md5FunValue expected = new Md5FunValue("Hello World");
         byte[] packet = packer.write(expected);
-        WaberFunValue actual = packer.read(packet);
+        Md5FunValue actual = packer.read(packet);
 
         assertEquals(expected.getFunValue(), actual.getFunValue());
         assertArrayEquals(expected.getDigest(), actual.getDigest());
