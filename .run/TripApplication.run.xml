@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TripApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="waber-spring-boot-trip" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="tw.waterball.ddd.waber.springboot.trip.TripApplication" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

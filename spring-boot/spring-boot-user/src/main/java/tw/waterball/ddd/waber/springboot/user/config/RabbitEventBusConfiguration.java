@@ -15,7 +15,6 @@ public class RabbitEventBusConfiguration {
     public static final String EVENTS_EXCHANGE = "events";
 
 
-
     @Bean
     public EventBus.Subscriber rabbitEventBusSubscriber(AmqpTemplate amqpTemplate) {
         return event -> {

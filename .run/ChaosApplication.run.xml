@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ChaosApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="waber-spring-boot-chaos" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="tw.waterball.ddd.waber.springboot.chaos.ChaosApplication" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="chaos.fun-value" value="HelloWorld" />
+      <env name="server.port" value="9005" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

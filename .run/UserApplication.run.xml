@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="UserApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="waber-spring-boot-user" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="tw.waterball.ddd.waber.springboot.user.UserApplication" />
+    <option name="ACTIVE_PROFILES" value="chaos" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="chaos.host" value="localhost" />
+      <env name="chaos.port" value="9999" />
+      <env name="server.port" value="9000" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
