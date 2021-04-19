@@ -18,6 +18,10 @@
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
+            <artifactId>waber-chaos-engineering</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tw.waterball.ddd</groupId>
             <artifactId>waber-api-user</artifactId>
         </dependency>
         <dependency>
@@ -50,6 +54,12 @@
             <groupId>com.github.fridujo</groupId>
             <artifactId>rabbitmq-mock</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
     </dependencies>
 
 

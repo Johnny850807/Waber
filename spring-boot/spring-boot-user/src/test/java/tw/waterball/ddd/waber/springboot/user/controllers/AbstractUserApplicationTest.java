@@ -1,9 +1,18 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
+import com.github.fridujo.rabbitmq.mock.MockConnectionFactory;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import tw.waterball.ddd.model.user.Activity;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.model.user.User;
@@ -22,8 +31,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-@ContextConfiguration(classes = {UserApplication.class})
+@ActiveProfiles
+@ContextConfiguration(classes = {UserApplication.class, AbstractUserApplicationTest.TestConfig.class})
 public abstract class AbstractUserApplicationTest extends AbstractSpringBootTest {
+    public static final String VALENTINES_DAY = "ValentinesDay";
     protected String password = "password";
     protected Driver driver = UserStubs.NORMAL_DRIVER;
     protected Passenger passenger = UserStubs.NORMAL_PASSENGER;
@@ -33,10 +44,21 @@ public abstract class AbstractUserApplicationTest extends AbstractSpringBootTest
     @Autowired
     protected ActivityRepository activityRepository;
 
+
+    @Configuration
+    public static class TestConfig {
+        @Bean
+        @Primary
+        public ConnectionFactory mockRabbitMqConnectionFactory() {
+            return new CachingConnectionFactory(new MockConnectionFactory());
+        }
+    }
+
     @AfterEach
     void cleanUp() {
-        activityRepository.clearAll();
-        userRepository.clearAll();
+        activityRepository.removeAll();
+        activityRepository.save(new Activity(VALENTINES_DAY));
+        userRepository.removeAll();
     }
 
     protected void signUpDriver() throws Exception {

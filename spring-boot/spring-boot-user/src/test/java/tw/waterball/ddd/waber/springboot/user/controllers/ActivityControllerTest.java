@@ -18,10 +18,6 @@ class ActivityControllerTest extends AbstractUserApplicationTest {
 
     public static final String VALENTINES_DAY = "ValentinesDay";
 
-    @BeforeEach
-    void setup() {
-        activityRepository.save(new Activity(VALENTINES_DAY));
-    }
 
     private List<Driver> getValentinesDayParticipants() throws Exception {
         return getBody(mockMvc.perform(get("/api/activities/{activityName}/drivers", VALENTINES_DAY))

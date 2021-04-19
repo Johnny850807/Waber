@@ -5,9 +5,9 @@
     <option name="ACTIVE_PROFILES" value="chaos" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
+      <env name="server.port" value="9000" />
       <env name="chaos.host" value="localhost" />
       <env name="chaos.port" value="9999" />
-      <env name="server.port" value="9000" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

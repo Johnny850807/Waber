@@ -5,10 +5,10 @@ import com.github.fridujo.rabbitmq.mock.MockConnectionFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import tw.waterball.ddd.api.match.FakeMatchServiceDriver;
 import tw.waterball.ddd.api.trip.TripView;
-import tw.waterball.ddd.events.MatchCompleteEvent;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
@@ -33,7 +32,6 @@ import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 import tw.waterball.ddd.waber.springboot.trip.TripApplication;
-import tw.waterball.ddd.waber.springboot.trip.configurations.RabbitEventBusConfiguration;
 import tw.waterball.ddd.waber.springboot.trip.handler.StartTripHandler;
 import tw.waterball.ddd.waber.springboot.trip.repositories.jpa.SpringBootTripRepository;
 
@@ -50,8 +48,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static tw.waterball.ddd.api.match.MatchView.toViewModel;
 import static tw.waterball.ddd.api.trip.TripView.toViewModel;
 
+@AutoConfigureDataMongo
 @ActiveProfiles(FakeServiceDrivers.NAME)
-@ContextConfiguration(classes = {TripApplication.class})
+@ContextConfiguration(classes = {TripApplication.class, TripControllerTest.TestConfig.class})
 class TripControllerTest extends AbstractSpringBootTest {
     Passenger passenger = UserStubs.NORMAL_PASSENGER;
     Driver driver = UserStubs.NORMAL_DRIVER;
@@ -71,6 +70,15 @@ class TripControllerTest extends AbstractSpringBootTest {
     @Autowired
     SpringBootTripRepository tripRepository;
 
+
+    @Configuration
+    public static class TestConfig {
+        @Bean
+        @Primary
+        public ConnectionFactory mockRabbitMqConnectionFactory() {
+            return new CachingConnectionFactory(new MockConnectionFactory());
+        }
+    }
 
     @BeforeEach
     void setup() {

@@ -35,7 +35,7 @@ public class TcpChaosServer implements ChaosEngineListener {
     public static final int OP_INIT_WITH_CHAOS_NAMES = 30;
     public static final int OP_SENT_ALIVE_CHAOS_NAMES = 31;
     public static final int OP_KILLED = 45;
-    public static final int PACKET_SIZE = 2048;
+    public static final int PACKET_SIZE = 4096;
     private final String host;
     private final int port;
     private boolean running;

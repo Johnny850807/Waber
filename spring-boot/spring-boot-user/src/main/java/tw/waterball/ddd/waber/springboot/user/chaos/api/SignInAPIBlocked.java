@@ -1,4 +1,4 @@
-package tw.waterball.ddd.waber.springboot.user.chaos;
+package tw.waterball.ddd.waber.springboot.user.chaos.api;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -17,7 +17,7 @@ import tw.waterball.chaos.core.md5.Md5Chaos;
 public class SignInAPIBlocked extends Md5Chaos {
     @Override
     public String getName() {
-        return "SignInAPIBlocked";
+        return "user.SignInAPIBlocked";
     }
 
     @Override

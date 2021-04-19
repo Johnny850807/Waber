@@ -52,9 +52,11 @@ public class PassengerBot extends AbstractUserBot {
 
     private void handleNewborn() {
         if (state == State.NEWBORN) {
-            passenger = api.signUpAsPassenger(name, name + "@robot.io", name + "-password");
-            passenger.setLocation(randomLocation());
-            updateLocation();
+            if (passenger == null) {
+                passenger = api.signUpAsPassenger(name, name + "@robot.io", name + "-password");
+                passenger.setLocation(randomLocation());
+                updateLocation();
+            }
             subscribeToMatchedCompletionEvent();
             subscribeToTripStateChangedEvent();
             log.info("<{}> Signed up and set the location at {}", name, passenger.getLocation());

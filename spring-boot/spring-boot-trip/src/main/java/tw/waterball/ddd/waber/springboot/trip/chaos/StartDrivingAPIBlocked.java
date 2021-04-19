@@ -1,4 +1,4 @@
-package tw.waterball.ddd.waber.springboot.user.chaos;
+package tw.waterball.ddd.waber.springboot.trip.chaos;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,10 +14,10 @@ import tw.waterball.chaos.core.md5.Md5Chaos;
 @ChaosEngineering
 @Aspect
 @Component
-public class UploadLatestLocationAPIBlocked extends Md5Chaos {
+public class StartDrivingAPIBlocked extends Md5Chaos {
     @Override
     public String getName() {
-        return "UploadLatestLocationAPIBlocked";
+        return "trip.StartDrivingAPIBlocked";
     }
 
     @Override
@@ -25,7 +25,7 @@ public class UploadLatestLocationAPIBlocked extends Md5Chaos {
         return or(positiveNumberAtPositions(0, 2, 5), negativeNumberAtPositions(12));
     }
 
-    @Before("execution(* tw.waterball.ddd.waber.springboot.user.controllers.UserController.updateLatestLocation(..))")
+    @Before("execution(* tw.waterball.ddd.waber.springboot.trip.controllers.TripController.startDriving(..))")
     public void before(JoinPoint joinPoint) {
         if (isAlive()) {
             throw new ChaosTriggeredException();

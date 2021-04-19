@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * @author Waterball (johnny850807@gmail.com)
  */
 public class CompositePricingStrategy implements PricingStrategy {
-    private List<PricingStrategy> pricingStrategies;
+    private final List<PricingStrategy> pricingStrategies;
 
     public CompositePricingStrategy(List<PricingStrategy> pricingStrategies) {
         this.pricingStrategies = pricingStrategies;

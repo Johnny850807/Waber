@@ -1,5 +1,6 @@
 package tw.waterball.ddd.waber.springboot.chaos.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,14 +9,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import tw.waterball.chaos.api.Chaos;
 import tw.waterball.chaos.api.ChaosEngine;
 import tw.waterball.chaos.api.ChaosMiskillingException;
+import tw.waterball.chaos.api.FunValue;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -23,15 +27,14 @@ import java.util.stream.IntStream;
  */
 @RequestMapping("/api/chaos")
 @RestController
+@RequiredArgsConstructor
 public class ChaosController {
     private final ChaosEngine chaosEngine;
     private final Date startTime = new Date();
     private final List<String> killed = new ArrayList<>();
+    private final FunValue funValue;
     private int miss = 0;
 
-    public ChaosController(ChaosEngine chaosEngine) {
-        this.chaosEngine = chaosEngine;
-    }
 
     @GetMapping
     public InfoView ok() {
@@ -50,7 +53,9 @@ public class ChaosController {
     }
 
     public InfoView getInfo() {
-        return new InfoView(miss, startTime, killed, generateNumberToChaosMap());
+        return new InfoView(funValue, miss, startTime, killed,
+                chaosEngine.getAliveChaos().stream().map(Chaos::getName).collect(Collectors.toList()),
+                generateNumberToChaosMap());
     }
 
     private Map<Integer, String> generateNumberToChaosMap() {

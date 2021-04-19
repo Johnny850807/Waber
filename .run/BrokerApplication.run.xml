@@ -2,7 +2,13 @@
   <configuration default="false" name="BrokerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="waber-spring-boot-broker" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="tw.waterball.ddd.waber.springboot.broker.BrokerApplication" />
+    <option name="ACTIVE_PROFILES" value="microservice" />
     <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="server.port" value="9004" />
+      <env name="chaos.host" value="localhost" />
+      <env name="chaos.port" value="9999" />
+    </envs>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

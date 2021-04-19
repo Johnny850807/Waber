@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 @Component
 public class SpringBootActivityRepository implements ActivityRepository {
-    private ActivityDAO activityDAO;
+    private final ActivityDAO activityDAO;
 
     public SpringBootActivityRepository(ActivityDAO activityDAO) {
         this.activityDAO = activityDAO;
@@ -31,7 +31,7 @@ public class SpringBootActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public void clearAll() {
+    public void removeAll() {
         activityDAO.deleteAll();
     }
 

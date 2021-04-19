@@ -1,4 +1,4 @@
-package tw.waterball.ddd.waber.springboot.user.chaos;
+package tw.waterball.ddd.waber.springboot.trip.chaos;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,19 +14,18 @@ import tw.waterball.chaos.core.md5.Md5Chaos;
 @ChaosEngineering
 @Aspect
 @Component
-public class SetDriverStatusAPIChaosBlocked extends Md5Chaos {
+public class ArriveAPIBlocked extends Md5Chaos {
     @Override
     public String getName() {
-        return "SetDriverStatusAPIChaosBlocked";
+        return "trip.ArriveAPIBlocked";
     }
 
     @Override
     protected Criteria criteria() {
-        return or(positiveNumberAtPositions(4, 7, 9),
-                negativeNumberAtPositions(2, 3), positiveNumberAtPositions(6, 13));
+        return and(areZeros(0, 15), positiveNumberAtPositions(10, 11));
     }
 
-    @Before("execution(* tw.waterball.ddd.waber.springboot.user.controllers.DriverController.setDriverStatus(..))")
+    @Before("execution(* tw.waterball.ddd.waber.springboot.trip.controllers.TripController.arrive(..))")
     public void before(JoinPoint joinPoint) {
         if (isAlive()) {
             throw new ChaosTriggeredException();

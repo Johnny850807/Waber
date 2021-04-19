@@ -27,6 +27,6 @@ public interface UserRepository {
     void updateLatestLocation(int userId, Location location);
 
 
-    void clearAll();
+    void removeAll();
 
 }

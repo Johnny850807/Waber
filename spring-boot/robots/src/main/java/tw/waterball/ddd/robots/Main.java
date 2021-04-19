@@ -9,7 +9,7 @@ import java.awt.*;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-@SpringBootApplication(scanBasePackages = "tw.waterball")
+@SpringBootApplication(scanBasePackages = "tw.waterball.ddd")
 public class Main {
     public static void main(String[] args) {
         var context = new SpringApplicationBuilder(Main.class)

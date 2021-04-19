@@ -1,4 +1,4 @@
-package tw.waterball.ddd.waber.springboot.trip.configurations;
+package tw.waterball.ddd.waber.springboot.trip.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

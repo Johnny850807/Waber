@@ -1,4 +1,4 @@
-package tw.waterball.ddd.waber.springboot.trip.configurations;
+package tw.waterball.ddd.waber.springboot.trip.config;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.DirectExchange;

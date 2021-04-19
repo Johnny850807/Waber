@@ -60,9 +60,14 @@ public class UserController {
     public void updateLatestLocation(@PathVariable int userId,
                                      @RequestParam double latitude,
                                      @RequestParam double longitude) {
-        updateLatestLocation.execute(new UpdateLatestLocation.Request(
-                userId, new Location(latitude, longitude)
-        ), eventBus);
+        try {
+
+            updateLatestLocation.execute(new UpdateLatestLocation.Request(
+                    userId, new Location(latitude, longitude)
+            ));
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
     }
 
 

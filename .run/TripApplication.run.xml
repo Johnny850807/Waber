@@ -2,7 +2,17 @@
   <configuration default="false" name="TripApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="waber-spring-boot-trip" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="tw.waterball.ddd.waber.springboot.trip.TripApplication" />
+    <option name="ACTIVE_PROFILES" value="microservice,chaos" />
     <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="server.port" value="9002" />
+      <env name="chaos.host" value="localhost" />
+      <env name="chaos.port" value="9999" />
+      <env name="waber.client.user-service.host" value="localhost" />
+      <env name="waber.client.user-service.port" value="9000" />
+      <env name="waber.client.match-service.host" value="localhost" />
+      <env name="waber.client.match-service.port" value="9001" />
+    </envs>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

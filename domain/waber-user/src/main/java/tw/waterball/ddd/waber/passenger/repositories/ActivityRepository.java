@@ -13,5 +13,5 @@ public interface ActivityRepository {
 
     Activity save(Activity activity);
 
-    void clearAll();
+    void removeAll();
 }

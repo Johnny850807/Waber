@@ -15,6 +15,7 @@
         <dependency>
             <groupId>tw.waterball.ddd</groupId>
             <artifactId>waber-chaos-engineering</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>tw.waterball.ddd</groupId>

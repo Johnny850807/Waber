@@ -2,7 +2,19 @@
   <configuration default="false" name="PaymentApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="waber-spring-boot-payment" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="tw.waterball.ddd.waber.springboot.payment.PaymentApplication" />
+    <option name="ACTIVE_PROFILES" value="microservice,chaos" />
     <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="server.port" value="9003" />
+      <env name="chaos.host" value="localhost" />
+      <env name="chaos.port" value="9999" />
+      <env name="waber.client.user-service.host" value="localhost" />
+      <env name="waber.client.user-service.port" value="9000" />
+      <env name="waber.client.match-service.host" value="localhost" />
+      <env name="waber.client.match-service.port" value="9001" />
+      <env name="waber.client.trip-service.host" value="localhost" />
+      <env name="waber.client.trip-service.port" value="9002" />
+    </envs>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

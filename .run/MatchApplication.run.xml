@@ -2,7 +2,15 @@
   <configuration default="false" name="MatchApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="waber-spring-boot-match" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="tw.waterball.ddd.waber.springboot.match.MatchApplication" />
+    <option name="ACTIVE_PROFILES" value="microservice, chaos" />
     <option name="ALTERNATIVE_JRE_PATH" />
+    <envs>
+      <env name="server.port" value="9001" />
+      <env name="chaos.host" value="localhost" />
+      <env name="chaos.port" value="9999" />
+      <env name="waber.client.user-service.host" value="localhost" />
+      <env name="waber.client.user-service.port" value="9000" />
+    </envs>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

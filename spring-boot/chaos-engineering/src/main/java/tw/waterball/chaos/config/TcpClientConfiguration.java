@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import tw.waterball.chaos.api.Chaos;
 import tw.waterball.chaos.api.ChaosEngine;
 import tw.waterball.chaos.api.ChaosEngineListener;
+import tw.waterball.chaos.api.ChaosMiskillingException;
 import tw.waterball.chaos.api.FunValue;
 import tw.waterball.chaos.api.FunValuePacker;
 import tw.waterball.chaos.core.ChaosEngineImpl;
@@ -62,8 +63,10 @@ public class TcpClientConfiguration {
 
                     @Override
                     public void onChaosKilled(Chaos chaos) {
-                        log.debug("The chaos '{}' is killed.", chaos.getName());
-                        chaosEngine.kill(chaos.getName());
+                        try {
+                            log.debug("Killing the chaos '{}'...", chaos.getName());
+                            chaosEngine.kill(chaos.getName());
+                        } catch (ChaosMiskillingException ignored) { }
                     }
                 });
                 chaosClient.connect();

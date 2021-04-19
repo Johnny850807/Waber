@@ -1,9 +1,16 @@
 package tw.waterball.ddd.waber.springboot.payment.controllers;
 
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static tw.waterball.ddd.api.match.MatchView.toViewModel;
+import static tw.waterball.ddd.api.trip.TripView.toViewModel;
+
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -15,11 +22,8 @@ import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.payment.PricingItem;
 import tw.waterball.ddd.model.payment.PricingStrategy;
 import tw.waterball.ddd.model.trip.Trip;
-import tw.waterball.ddd.model.user.Driver;
-import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.stubs.MatchStubs;
 import tw.waterball.ddd.stubs.TripStubs;
-import tw.waterball.ddd.stubs.UserStubs;
 import tw.waterball.ddd.waber.api.payment.PaymentView;
 import tw.waterball.ddd.waber.pricing.repositories.PaymentRepository;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
@@ -28,13 +32,7 @@ import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 
 import java.math.BigDecimal;
 
-import static java.util.Collections.singletonList;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static tw.waterball.ddd.api.match.MatchView.toViewModel;
-import static tw.waterball.ddd.api.trip.TripView.toViewModel;
-
+@AutoConfigureDataMongo
 @ActiveProfiles(FakeServiceDrivers.NAME)
 @ContextConfiguration(classes = {PaymentApplication.class, PaymentControllerTest.TestConfiguration.class})
 class PaymentControllerTest extends AbstractSpringBootTest {
@@ -58,6 +56,7 @@ class PaymentControllerTest extends AbstractSpringBootTest {
         PricingStrategy pricingStrategy() {
             return trip -> singletonList(pricingItem);
         }
+
     }
 
     @AfterEach

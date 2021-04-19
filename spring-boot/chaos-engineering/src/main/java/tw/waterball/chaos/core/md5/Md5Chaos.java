@@ -104,7 +104,11 @@ public abstract class Md5Chaos implements Chaos {
     protected static Criteria and(Criteria... criteria) {
         return digest -> stream(criteria).allMatch(c -> c.match(digest));
     }
-
+    protected static Criteria areNotZeros(int... positions) {
+        validatePositions(positions);
+        return digest -> stream(positions)
+                .allMatch(i -> i != 0);
+    }
     protected static Criteria areZeros(int... positions) {
         validatePositions(positions);
         return digest -> stream(positions)

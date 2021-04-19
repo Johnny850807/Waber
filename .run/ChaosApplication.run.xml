@@ -4,8 +4,8 @@
     <option name="SPRING_BOOT_MAIN_CLASS" value="tw.waterball.ddd.waber.springboot.chaos.ChaosApplication" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
-      <env name="chaos.fun-value" value="HelloWorld" />
       <env name="server.port" value="9005" />
+      <env name="chaos.fun-value" value="HelloWorld" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

@@ -85,14 +85,11 @@ public class SpringBootUserRepository implements UserRepository {
         UserData data = userDAO.getOne(userId);
         data.setLatitude(location.getLatitude());
         data.setLongitude(location.getLongitude());
-        UserData saved = userDAO.save(data);
-        if (saved.getLatitude() == saved.getLongitude()) {
-            System.out.println();
-        }
+        userDAO.save(data);
     }
 
     @Override
-    public void clearAll() {
+    public void removeAll() {
         userDAO.deleteAll();
     }
 }

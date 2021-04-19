@@ -20,7 +20,9 @@ import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.stubs.UserStubs;
+import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
+import tw.waterball.ddd.waber.springboot.commons.profiles.MySQL;
 import tw.waterball.ddd.waber.springboot.match.MatchApplication;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 
@@ -37,13 +39,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static tw.waterball.ddd.api.match.MatchView.DriverView.toViewModel;
 import static tw.waterball.ddd.commons.utils.SneakyUtils.sneakyThrows;
 
-@ActiveProfiles(FakeServiceDrivers.NAME)
+@ActiveProfiles({FakeServiceDrivers.NAME})
 @ContextConfiguration(classes = {MatchApplication.class, MatchControllerTest.TestConfig.class})
 public class MatchControllerTest extends AbstractSpringBootTest {
     private final Driver driver = UserStubs.NORMAL_DRIVER;
     private final Passenger passenger = UserStubs.NORMAL_PASSENGER;
     private final MatchPreferences preferences = new MatchPreferences(
             passenger.getLocation(), driver.getCarType(), null);
+    @Autowired
+    MatchRepository matchRepository;
 
     @Autowired
     FakeUserServiceDriver userServiceDriver;
@@ -64,6 +68,7 @@ public class MatchControllerTest extends AbstractSpringBootTest {
 
     @AfterEach
     public void cleanUp() {
+        matchRepository.removeAll();
         driver.setStatus(Driver.Status.AVAILABLE);
         userServiceDriver.reset();
     }

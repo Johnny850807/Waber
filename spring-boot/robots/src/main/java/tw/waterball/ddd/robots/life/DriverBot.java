@@ -48,9 +48,11 @@ public class DriverBot extends AbstractUserBot {
 
     private void handleNewborn() {
         if (state == State.NEWBORN) {
-            driver = api.signUpAsDriver(name, name + "@robot.io", name + "-password", randomCarType());
-            driver.setLocation(randomLocation());
-            updateLocation();
+            if (driver == null) {
+                driver = api.signUpAsDriver(name, name + "@robot.io", name + "-password", randomCarType());
+                driver.setLocation(randomLocation());
+                updateLocation();
+            }
             log.info("<{}> Signed up and set the location with {}", name, driver.getLocation());
 
             subscribeToMatchedCompletionEvent();
