@@ -2,6 +2,7 @@ package tw.waterball.ddd.waber.springboot.match.controllers;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
@@ -45,10 +46,14 @@ public class MatchController {
     }
 
     @GetMapping("/users/{userId}/matches/current")
-    public MatchView getUserCurrentMatch(@PathVariable int userId) {
-        return findCurrentMatch.execute(userId)
-                .map(this::toMatchView)
-                .orElseThrow(NotFoundException::new);
+    public ResponseEntity<MatchView> getUserCurrentMatch(@PathVariable int userId) {
+        MatchView match = findCurrentMatch.execute(userId)
+                .map(this::toMatchView).orElse(null);
+        if (match == null) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(match);
+        }
     }
 
     @GetMapping("/matches/{matchId}")

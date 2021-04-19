@@ -29,11 +29,15 @@ public class TripStateChangedEvent extends Event {
     }
 
     public TripStateChangedEvent(int driverId, int passengerId, int matchId, String tripId, TripState state) {
+        this(driverId, passengerId, matchId, tripId, state.getType());
+    }
+
+    public TripStateChangedEvent(int driverId, int passengerId, int matchId, String tripId, TripStateType state) {
         super(NAME);
         this.driverId = driverId;
         this.passengerId = passengerId;
         this.matchId = matchId;
         this.tripId = tripId;
-        this.state = state.getType();
+        this.state = state;
     }
 }
