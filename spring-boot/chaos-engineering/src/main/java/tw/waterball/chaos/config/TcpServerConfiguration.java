@@ -35,7 +35,7 @@ import java.util.Set;
 public class TcpServerConfiguration {
 
     @Bean
-    public FunValue funValue(@Value("${chaos.fun-value}") String funValue) {
+    public FunValue funValue(@Value("${chaos.fun.value}") String funValue) {
         return new Md5FunValue(funValue);
     }
 

@@ -48,7 +48,7 @@ public class MatchUseCase {
         return newMatch;
     }
 
-    //    @WithSpan
+    @WithSpan
     public void execute(MatchRequest req) {
         Match match = matchRepository.findById(req.matchId).orElseThrow(NotFoundException::new);
         List<Driver> drivers = userServiceDriver.filterDrivers(match.getPreferences());

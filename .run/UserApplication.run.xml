@@ -2,12 +2,18 @@
   <configuration default="false" name="UserApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="waber-spring-boot-user" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="tw.waterball.ddd.waber.springboot.user.UserApplication" />
-    <option name="ACTIVE_PROFILES" value="chaos" />
+    <option name="ACTIVE_PROFILES" value="chaos,mysql" />
+    <option name="VM_PARAMETERS" value="-javaagent:spring-boot/spring-boot-user/bin/opentelemetry-javaagent-all.jar" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
       <env name="server.port" value="9000" />
       <env name="chaos.host" value="localhost" />
       <env name="chaos.port" value="9999" />
+      <env name="OTEL_TRACES_EXPORTER" value="jaeger" />
+      <env name="OTEL_METRICS_EXPORTER" value="none" />
+      <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=waber-user" />
+      <env name="LOGGING_PATTERN_CONSOLE" value="%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n" />
+      <env name="OTEL_EXPORTER_JAEGER_ENDPOINT" value="http://localhost:14250" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

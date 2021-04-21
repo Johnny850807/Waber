@@ -3,6 +3,7 @@
     <module name="waber-spring-boot-payment" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="tw.waterball.ddd.waber.springboot.payment.PaymentApplication" />
     <option name="ACTIVE_PROFILES" value="microservice,chaos" />
+    <option name="VM_PARAMETERS" value="-javaagent:spring-boot/spring-boot-payment/bin/opentelemetry-javaagent-all.jar" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
       <env name="server.port" value="9003" />
@@ -14,6 +15,11 @@
       <env name="waber.client.match-service.port" value="9001" />
       <env name="waber.client.trip-service.host" value="localhost" />
       <env name="waber.client.trip-service.port" value="9002" />
+      <env name="OTEL_TRACES_EXPORTER" value="jaeger" />
+      <env name="OTEL_METRICS_EXPORTER" value="none" />
+      <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=waber-user" />
+      <env name="LOGGING_PATTERN_CONSOLE" value="%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n" />
+      <env name="OTEL_EXPORTER_JAEGER_ENDPOINT" value="http://localhost:14250" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

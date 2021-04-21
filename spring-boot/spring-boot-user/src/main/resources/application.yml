@@ -8,4 +8,8 @@ spring:
 waber:
   activities: ValentinesDay
 
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info,metric

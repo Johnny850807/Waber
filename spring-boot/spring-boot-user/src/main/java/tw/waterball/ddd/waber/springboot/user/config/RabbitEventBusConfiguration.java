@@ -1,7 +1,7 @@
 package tw.waterball.ddd.waber.springboot.user.config;
 
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tw.waterball.ddd.events.EventBus;
@@ -16,8 +16,8 @@ public class RabbitEventBusConfiguration {
     public static final String EVENTS_EXCHANGE = "events";
 
     @Bean
-    public TopicExchange eventExchange() {
-        return new TopicExchange(EVENTS_EXCHANGE);
+    public DirectExchange eventExchange() {
+        return new DirectExchange(EVENTS_EXCHANGE);
     }
 
 

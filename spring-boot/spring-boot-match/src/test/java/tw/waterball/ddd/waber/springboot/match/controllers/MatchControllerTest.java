@@ -1,11 +1,10 @@
 package tw.waterball.ddd.waber.springboot.match.controllers;
 
 import com.github.fridujo.rabbitmq.mock.MockConnectionFactory;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -19,13 +18,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.ResultActions;
 import tw.waterball.ddd.api.match.MatchView;
-import tw.waterball.ddd.commons.utils.DelayUtils;
+import tw.waterball.ddd.commons.utils.StreamUtils;
 import tw.waterball.ddd.events.TripStateChangedEvent;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
-import tw.waterball.ddd.model.trip.TripState;
 import tw.waterball.ddd.model.trip.TripStateType;
-import tw.waterball.ddd.model.trip.states.Arrived;
 import tw.waterball.ddd.waber.api.payment.FakeUserServiceDriver;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
@@ -34,15 +31,13 @@ import tw.waterball.ddd.stubs.UserStubs;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 import tw.waterball.ddd.waber.match.usecases.FinalizeMatch;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
-import tw.waterball.ddd.waber.springboot.commons.profiles.MySQL;
 import tw.waterball.ddd.waber.springboot.match.MatchApplication;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 
+import static java.util.stream.IntStream.range;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.times;
@@ -54,6 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static tw.waterball.ddd.api.match.MatchView.DriverView.toViewModel;
 import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
 import static tw.waterball.ddd.commons.utils.SneakyUtils.sneakyThrows;
+import static tw.waterball.ddd.commons.utils.StreamUtils.count;
 import static tw.waterball.ddd.waber.springboot.match.config.RabbitEventBusConfiguration.EVENTS_EXCHANGE;
 
 @ActiveProfiles({FakeServiceDrivers.NAME})
@@ -127,30 +123,30 @@ public class MatchControllerTest extends AbstractSpringBootTest {
     }
 
     @Test
-    void GivenOneDriver_WhenStartMatchingInParallel_ShouldHaveOnlyOneMatchCompleted() {
+    void GivenOneDriver_WhenMultipleMatchRequestsInParallel_ShouldHaveOnlyOneMatchCompleted() {
         givenOneDriver();
 
-        List<MatchView> matchViews = Collections.synchronizedList(new LinkedList<>());
-        IntStream.range(0, 4).parallel()
-                .mapToObj((i) -> sneakyThrows(this::startMatching))
-                .map(matchView -> sneakyThrows(() -> pollCompletedMatch(8000, matchView)))
-                .forEach(matchViews::add);
+        var matches = issueMultipleMatchRequestsInParallel();
 
-        long completionCount = matchViews.stream()
-                .filter(MatchView::isCompleted)
-                .count();
-
+        long completionCount = count(matches, MatchView::isCompleted);
         assertNotEquals(0, completionCount, "The only driver should be matched.");
         assertEquals(1, completionCount, "Race Condition: Found multiple match-completion but there is only one driver.");
     }
 
+    private List<MatchView> issueMultipleMatchRequestsInParallel() {
+        return range(0, 4).parallel()
+                .mapToObj((i) -> startMatching())
+                .map(matchView -> pollCompletedMatch(8000, matchView))
+                .collect(Collectors.toList());
+    }
 
 
     private void givenOneDriver() {
         userServiceDriver.addDriver(driver);
     }
 
-    private MatchView startMatching() throws Exception {
+    @SneakyThrows
+    private MatchView startMatching() {
         String jsonBody = objectMapper.writeValueAsString(preferences);
         return getBody(
                 mockMvc.perform(post("/api/users/{passengerId}/matches", passenger.getId())
@@ -159,7 +155,8 @@ public class MatchControllerTest extends AbstractSpringBootTest {
                         .andExpect(status().is2xxSuccessful()), MatchView.class);
     }
 
-    private MatchView pollCompletedMatch(long timeCountdown, MatchView matchView) throws Exception {
+    @SneakyThrows
+    private MatchView pollCompletedMatch(long timeCountdown, MatchView matchView) {
         MatchView pollResult;
         do {
             Thread.sleep(800);

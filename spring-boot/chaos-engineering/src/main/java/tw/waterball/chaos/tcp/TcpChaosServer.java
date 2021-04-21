@@ -14,6 +14,7 @@ import tw.waterball.chaos.core.md5.Md5FunValue;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -28,6 +29,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
+ * TODO: clear `chaosNameToClientMap` when a client exits
+ *
  * @author Waterball (johnny850807@gmail.com)
  */
 @Slf4j
@@ -44,7 +47,7 @@ public class TcpChaosServer implements ChaosEngineListener {
     private ByteBuffer buffer;
     private final ByteBuffer funValueBytes;
     private final Collection<ChaosServerListener> listeners = new HashSet<>();
-    private final Map<String, SocketChannel> chaosNameToClientMap = new HashMap<>();
+    private final Map<String, Set<SocketChannel>> chaosNameToClientMap = new HashMap<>();
 
     public TcpChaosServer(byte[] funValueBytes, String host, int port) {
         this.funValueBytes = allocate(PACKET_SIZE).put(funValueBytes);
@@ -107,15 +110,19 @@ public class TcpChaosServer implements ChaosEngineListener {
         SocketChannel client = (SocketChannel) key.channel();
         buffer = allocate(PACKET_SIZE);
         client.read(buffer);
-        int opCode = buffer.flip().get();
-        if (opCode == OP_INIT_WITH_CHAOS_NAMES) {
-            initializeClientWithChaosNames(client);
-            sendFunValue(client);
-        } else if (opCode == OP_SENT_ALIVE_CHAOS_NAMES) {
-            claimAliveChaos(client);
-        } else {
-            log.error("Unrecognizable OP Code: {}.", opCode);
-            kickClientOff(client);
+        try {
+            int opCode = buffer.flip().get();
+            if (opCode == OP_INIT_WITH_CHAOS_NAMES) {
+                initializeClientWithChaosNames(client);
+                sendFunValue(client);
+            } else if (opCode == OP_SENT_ALIVE_CHAOS_NAMES) {
+                claimAliveChaos(client);
+            } else {
+                log.error("Unrecognizable OP Code: {}.", opCode);
+                kickClientOff(client);
+            }
+        } catch (BufferUnderflowException ignored) {
+            // TODO: handling
         }
     }
 
@@ -123,8 +130,12 @@ public class TcpChaosServer implements ChaosEngineListener {
         String chaosNamesSplitByComma = readStringByContentLength(buffer);
         String[] chaosNames = chaosNamesSplitByComma.split("\\s*,\\s*");
         log.info("New chaos registered: {}.", String.join(", ", chaosNames));
-        stream(chaosNames).forEach(name -> chaosNameToClientMap.put(name, client));
-        broadcast(l -> l.onChaosRegistered(chaosNames));
+        stream(chaosNames).forEach(name -> chaosNameToClientMap.computeIfAbsent(name, k -> new HashSet<>()).add(client));
+        try {
+            broadcast(l -> l.onChaosRegistered(chaosNames));
+        } catch (IllegalArgumentException err) {
+            log.error(err.getMessage());
+        }
     }
 
     private void sendFunValue(SocketChannel client) throws IOException {
@@ -136,7 +147,7 @@ public class TcpChaosServer implements ChaosEngineListener {
         String chaosNamesSplitByCommas = readStringByContentLength(buffer);
         String[] chaosNames = chaosNamesSplitByCommas.split("\\s*,\\s*");
         log.info("Alive chaos claimed: {}.", String.join(", ", chaosNames));
-        stream(chaosNames).forEach(name -> chaosNameToClientMap.put(name, client));
+        stream(chaosNames).forEach(name -> chaosNameToClientMap.computeIfAbsent(name, k -> new HashSet<>()).add(client));
         broadcast(l -> l.onChaosClaimedAlive(chaosNames));
     }
 
@@ -151,21 +162,23 @@ public class TcpChaosServer implements ChaosEngineListener {
 
     protected synchronized void kill(String chaosName) {
         buffer = allocate(PACKET_SIZE);
-        SocketChannel client = chaosNameToClientMap.get(chaosName);
-        try {
-            log.info("Killing {}...", chaosName);
-            client.write(writeStringByContentLength(buffer.put((byte) OP_KILLED), chaosName).flip());
-            log.info("{} is killed", chaosName);
-        } catch (IOException e1) {
-            log.info("Error", e1);
+        log.info("Killing {}...", chaosName);
+        for (SocketChannel client : chaosNameToClientMap.get(chaosName)) {
             try {
-                client.close();
-            } catch (IOException e2) {
-                e2.printStackTrace();
-            } finally {
-                chaosNameToClientMap.entrySet().removeIf(e -> e.getValue() == client);
+                client.write(writeStringByContentLength(buffer.put((byte) OP_KILLED), chaosName).flip());
+                log.info("{} is killed", chaosName);
+            } catch (IOException e1) {
+                log.info("Error", e1);
+                try {
+                    client.close();
+                } catch (IOException e2) {
+                    e2.printStackTrace();
+                } finally {
+                    chaosNameToClientMap.values().forEach(clients -> clients.remove(client));
+                }
             }
         }
+
     }
 
     private void broadcast(Consumer<? super ChaosServerListener> listenerConsumer) {

@@ -4,10 +4,14 @@ services:
   user-service:
     build: spring-boot/spring-boot-user
     environment:
-      SPRING_PROFILES_ACTIVE: microservice
+      SPRING_PROFILES_ACTIVE: ${chaos}microservice,mysql
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/waber_user
       SPRING_RABBITMQ_HOST: rabbitmq
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
+      CHAOS_HOST: chaos-service
+      CHAOS_PORT: 9999
+      OTEL_TRACES_EXPORTER: jaeger
+      OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
+      OTEL_METRICS_EXPORTER: none
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
     labels:
       - "traefik.enable=true"
@@ -16,18 +20,22 @@ services:
       - "traefik.http.routers.user-service.service=user-service"
       - "traefik.http.services.user-service.loadbalancer.server.port=80"
       - "traefik.http.routers.user-service.priority=1"
-    logging:
-      driver: loki
-      options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+#    logging:
+#      driver: loki
+#      options:
+#        loki-url: 'http://localhost:3100/api/prom/push'
 
   match-service:
     build: spring-boot/spring-boot-match
     environment:
-      SPRING_PROFILES_ACTIVE: microservice
+      SPRING_PROFILES_ACTIVE: ${chaos}microservice,mysql
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/waber_match
       SPRING_RABBITMQ_HOST: rabbitmq
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
+      CHAOS_HOST: chaos-service
+      CHAOS_PORT: 9999
+      OTEL_TRACES_EXPORTER: jaeger
+      OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
+      OTEL_METRICS_EXPORTER: none
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
     labels:
       - "traefik.enable=true"
@@ -36,18 +44,22 @@ services:
       - "traefik.http.routers.match-service.service=match-service"
       - "traefik.http.services.match-service.loadbalancer.server.port=80"
       - "traefik.http.routers.match-service.priority=2"
-    logging:
-      driver: loki
-      options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+#    logging:
+#      driver: loki
+#      options:
+#        loki-url: 'http://localhost:3100/api/prom/push'
 
   trip-service:
     build: spring-boot/spring-boot-trip
     environment:
-      SPRING_PROFILES_ACTIVE: microservice
+      SPRING_PROFILES_ACTIVE: ${chaos}microservice
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/waber_trip
       SPRING_RABBITMQ_HOST: rabbitmq
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
+      CHAOS_HOST: chaos-service
+      CHAOS_PORT: 9999
+      OTEL_TRACES_EXPORTER: jaeger
+      OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
+      OTEL_METRICS_EXPORTER: none
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
     labels:
       - "traefik.enable=true"
@@ -56,18 +68,22 @@ services:
       - "traefik.http.routers.trip-service.service=trip-service"
       - "traefik.http.services.trip-service.loadbalancer.server.port=80"
       - "traefik.http.routers.trip-service.priority=3"
-    logging:
-      driver: loki
-      options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+#    logging:
+#      driver: loki
+#      options:
+#        loki-url: 'http://localhost:3100/api/prom/push'
 
   payment-service:
     build: spring-boot/spring-boot-payment
     environment:
-      SPRING_PROFILES_ACTIVE: microservice
+      SPRING_PROFILES_ACTIVE: ${chaos}microservice
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/waber_payment
       SPRING_RABBITMQ_HOST: rabbitmq
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
+      CHAOS_HOST: chaos-service
+      CHAOS_PORT: 9999
+      OTEL_TRACES_EXPORTER: jaeger
+      OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
+      OTEL_METRICS_EXPORTER: none
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
     labels:
       - "traefik.enable=true"
@@ -75,16 +91,20 @@ services:
       - "traefik.http.routers.payment-service.entrypoints=web"
       - "traefik.http.routers.payment-service.service=payment-service"
       - "traefik.http.services.payment-service.loadbalancer.server.port=80"
-    logging:
-      driver: loki
-      options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+#    logging:
+#      driver: loki
+#      options:
+#        loki-url: 'http://localhost:3100/api/prom/push'
 
   broker:
     build: spring-boot/spring-boot-broker
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:55680
+      CHAOS_HOST: chaos-service
+      CHAOS_PORT: 9999
+      OTEL_TRACES_EXPORTER: jaeger
+      OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
+      OTEL_METRICS_EXPORTER: none
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
     labels:
       - "traefik.enable=true"
@@ -92,10 +112,10 @@ services:
       - "traefik.http.routers.broker.entrypoints=web"
       - "traefik.http.routers.broker.service=broker"
       - "traefik.http.services.broker.loadbalancer.server.port=80"
-    logging:
-      driver: loki
-      options:
-        loki-url: 'http://localhost:3100/api/prom/push'
+#    logging:
+#      driver: loki
+#      options:
+#        loki-url: 'http://localhost:3100/api/prom/push'
 
 
 networks:

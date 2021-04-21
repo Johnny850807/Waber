@@ -71,7 +71,7 @@ public class TcpClientConfiguration {
                 });
                 chaosClient.connect();
             } catch (IOException e) {
-                throw new IllegalStateException(e);
+                e.printStackTrace();
             }
         };
     }
