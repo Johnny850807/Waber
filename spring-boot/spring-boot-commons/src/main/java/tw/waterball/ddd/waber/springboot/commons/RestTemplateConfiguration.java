@@ -52,7 +52,8 @@ public class RestTemplateConfiguration {
                     ErrorMessage errorMessage = objectMapper.readValue(body, ErrorMessage.class);
                     errorMessage.throwException();
                 } catch (JsonProcessingException ignored) {
-                    throw new RuntimeException("Unrecognizable error body: " + body);
+                    throw new RuntimeException("Unrecognizable error (status=" + clientHttpResponse.getRawStatusCode()
+                            + "), body: <" + body + ">");
                 }
             }
         };

@@ -1,7 +1,9 @@
 package tw.waterball.ddd.waber.springboot.commons;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import tw.waterball.ddd.commons.model.BaseUrl;
@@ -9,14 +11,13 @@ import tw.waterball.ddd.commons.model.BaseUrl;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-@Getter @Setter
+@Data
 @ConfigurationProperties("waber")
 public class WaberProperties {
     @NestedConfigurationProperty
     private Client client;
 
-    @Getter
-    @Setter
+    @Data
     public static class Client {
         @NestedConfigurationProperty
         private BaseUrl userService;

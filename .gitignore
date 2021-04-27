@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+build-and-publish-images.sh

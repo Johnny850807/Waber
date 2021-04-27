@@ -1,5 +1,9 @@
 package tw.waterball.ddd.waber.springboot.commons;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -12,9 +16,10 @@ import tw.waterball.ddd.waber.springboot.commons.profiles.Microservice;
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
+@Slf4j
 @Microservice
 @Configuration
-public class MicroservicesConfiguration {
+public class MicroserviceConfiguration {
 
     @Bean
     public RestUserServiceDriver restUserServiceDriver(WaberProperties waberProperties,
@@ -38,6 +43,19 @@ public class MicroservicesConfiguration {
     public RestPaymentServiceDriver restPaymentServiceDriver(WaberProperties waberProperties,
                                                              RestTemplate restTemplate) {
         return new RestPaymentServiceDriver(waberProperties.getClient().getPaymentService(), restTemplate);
+    }
+
+    @Bean
+    public SmartInitializingSingleton log(WaberProperties waberProperties) {
+        return () -> {
+            try {
+                var mapper = new ObjectMapper();
+
+                log.info("Waber properties: {}.", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(waberProperties));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        };
     }
 
 }
