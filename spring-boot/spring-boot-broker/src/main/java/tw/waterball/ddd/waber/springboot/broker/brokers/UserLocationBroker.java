@@ -45,7 +45,7 @@ public class UserLocationBroker {
     }
 
     @RabbitListener(queues = QUEUE_NAME)
-    public void listenToMatch(@Header("traceparent") String traceparent,
+    public void listenToMatch(@Header(name = "traceparent", required = false) String traceparent,
                               UserLocationUpdatedEvent event) {
         log.info("Traceparent: {}", traceparent);
         String destination = String.format("/topic/users/%d/location", event.getUserId());

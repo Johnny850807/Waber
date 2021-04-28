@@ -33,14 +33,13 @@ public class UserGenerator extends ScheduledLife {
 
     @Override
     protected void onNewBorn() {
-        Random random = new Random();
         scheduleFixed(100, (schedule) -> {
             if (driverBots.size() < MAX_DRIVER) {
-                DriverBot driverBot = new DriverBot("D-"+id++, stompAPI, api);
+                DriverBot driverBot = new DriverBot("D-"+id++, stompAPI, api, framework);
                 driverBots.add(driverBot);
                 framework.addLife(driverBot);
             } else if (passengerBots.size() < MAX_PASSENGERS){
-                PassengerBot passengerBot = new PassengerBot("P-"+id++, stompAPI, api);
+                PassengerBot passengerBot = new PassengerBot("P-"+id++, stompAPI, api, framework);
                 passengerBots.add(passengerBot);
                 framework.addLife(passengerBot);
             }

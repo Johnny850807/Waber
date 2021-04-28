@@ -1,5 +1,6 @@
 package tw.waterball.ddd.robots.life;
 
+import static java.util.Optional.ofNullable;
 import static tw.waterball.ddd.robots.life.PassengerBot.State.ACTIVE;
 import static tw.waterball.ddd.robots.life.PassengerBot.State.DRIVING_TO_DESTINATION;
 import static tw.waterball.ddd.robots.life.PassengerBot.State.MATCHING;
@@ -11,6 +12,7 @@ import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.trip.TripStateType;
 import tw.waterball.ddd.model.user.Passenger;
+import tw.waterball.ddd.robots.Framework;
 import tw.waterball.ddd.robots.api.API;
 import tw.waterball.ddd.robots.api.StompAPI;
 
@@ -24,14 +26,16 @@ public class PassengerBot extends AbstractUserBot {
     private final String name;
     private final StompAPI stompAPI;
     private final API api;
+    private Framework framework;
     private State state = State.NEWBORN;
     private Passenger passenger;
     private MatchView currentMatch;
 
-    public PassengerBot(String name, StompAPI stompAPI, API api) {
+    public PassengerBot(String name, StompAPI stompAPI, API api, Framework framework) {
         this.name = name;
         this.stompAPI = stompAPI;
         this.api = api;
+        this.framework = framework;
     }
 
     public enum State {
@@ -107,9 +111,6 @@ public class PassengerBot extends AbstractUserBot {
                     if (state == DRIVING_TO_DESTINATION) {
                         UserLocationUpdatedEvent theEvent = ((UserLocationUpdatedEvent) event);
                         if (theEvent.getUserId() == currentMatch.driver.id) {
-                            // since the passenger is in the car, he's moving with the driver.
-                            passenger.setLocation(theEvent.getLocation());
-                            log.debug("<{}> Moved to {}", name, passenger.getLocation());
                         } else {
                             subscription.unsubscribe();
                         }
@@ -139,9 +140,21 @@ public class PassengerBot extends AbstractUserBot {
         // do nothing
     }
 
+    public Optional<Integer> getPassengerId() {
+        return Optional.of(passenger).map(Passenger::getId);
+    }
+
     @Override
     public Optional<Location> getLocation() {
-        return Optional.ofNullable(passenger)
+        return ofNullable(passenger)
                 .map(Passenger::getLocation);
+    }
+
+    public void setLocation(Location location) {
+        if (passenger == null) {
+            throw new IllegalStateException("Passenger is not ready, can't set its location.");
+        }
+        passenger.setLocation(location);
+        log.debug("<{}> Moved to {}", name, passenger.getLocation());
     }
 }

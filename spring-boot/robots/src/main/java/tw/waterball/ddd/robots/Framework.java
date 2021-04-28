@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.trip.TripServiceDriver;
+import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.robots.api.API;
 import tw.waterball.ddd.robots.api.StompAPI;
 import tw.waterball.ddd.robots.life.Life;
+import tw.waterball.ddd.robots.life.PassengerBot;
 import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 
 import java.util.Collection;
@@ -20,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @Component
 public class Framework {
-    public static final int INTERVAL = 1;
+    public static final int INTERVAL = 3;
     private final Collection<Life> lives = new CopyOnWriteArrayList<>();
     private boolean running = false;
     private final List<LivesListener> livesListeners = new LinkedList<>();
@@ -67,5 +69,16 @@ public class Framework {
 
     public void addLivesListener(LivesListener livesListener) {
         livesListeners.add(livesListener);
+    }
+
+    public PassengerBot getPassengerById(int passengerId) {
+        for (Life life : lives) {
+            if (life instanceof PassengerBot) {
+                if (((PassengerBot) life).getPassengerId().orElse(-9999) == passengerId) {
+                    return (PassengerBot) life;
+                }
+            }
+        }
+        throw new IllegalStateException("Can't find the passenger-bot.");
     }
 }

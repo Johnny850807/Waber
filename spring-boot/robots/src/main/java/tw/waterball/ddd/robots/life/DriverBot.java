@@ -1,37 +1,49 @@
 package tw.waterball.ddd.robots.life;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.Driver;
+import tw.waterball.ddd.robots.Framework;
 import tw.waterball.ddd.robots.api.API;
 import tw.waterball.ddd.robots.api.StompAPI;
 
 import java.util.Optional;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
 @Slf4j
 public class DriverBot extends AbstractUserBot {
-    public static final double SPEED = 8;
+    public static final double SPEED = 2;
     private final String name;
     private Driver driver;
     private final StompAPI stompAPI;
     private final API api;
+    private Framework framework;
     private State state = State.NEWBORN;
     private MatchView currentMatch;
     private Location destination;
+
+    static {
+        new UpdateLocationHandler().start();
+    }
+
+    private PassengerBot currentPassenger;
 
     private enum State {
         NEWBORN, ACTIVE, PICKING_UP_PASSENGER, DRIVING_TO_DESTINATION
     }
 
-    public DriverBot(String name, StompAPI stompAPI, API api) {
+    public DriverBot(String name, StompAPI stompAPI, API api, Framework framework) {
         this.name = name;
         this.stompAPI = stompAPI;
         this.api = api;
-
+        this.framework = framework;
     }
 
     @Override
@@ -51,7 +63,7 @@ public class DriverBot extends AbstractUserBot {
             if (driver == null) {
                 driver = api.signUpAsDriver(name, name + "@robot.io", name + "-password", randomCarType());
                 driver.setLocation(randomLocation());
-                updateLocation();
+                api.uploadLocation(driver.getId(), driver.getLocation());
             }
             log.info("<{}> Signed up and set the location with {}", name, driver.getLocation());
 
@@ -82,6 +94,7 @@ public class DriverBot extends AbstractUserBot {
             ifArriveOtherwiseMoveToward(startLocation, () -> {
                 destination = generateDestination();
                 api.startDrivingToDestination(driver.getId(), destination);
+                currentPassenger = framework.getPassengerById(currentMatch.passengerId);
                 state = State.DRIVING_TO_DESTINATION;
                 log.info("<{}> Start driving to the destination {}", name, destination);
 
@@ -95,6 +108,7 @@ public class DriverBot extends AbstractUserBot {
                 api.arrive(driver.getId());
                 destination = null;
                 currentMatch = null;
+                currentPassenger = null;
                 state = State.ACTIVE;
                 log.info("<{}> Arrived", name);
             });
@@ -108,16 +122,34 @@ public class DriverBot extends AbstractUserBot {
             Location beforeMove = new Location(driver.getLocation().getLatitude(), driver.getLocation().getLongitude());
             driver.getLocation().moveToward(goal, SPEED);
             updateLocation();
+            if (currentPassenger != null) {
+                currentPassenger.setLocation(driver.getLocation());
+            }
             log.debug("<{}> Moving {} --> {} toward the destination ({}). (Remaining distance: {})", name,
                     goal, beforeMove, driver.getLocation(), driver.getLocation().distance(goal));
         }
     }
 
+    private int i = 0;
+    private static final ConcurrentLinkedQueue<Runnable> updateLocationTaskQueue = new ConcurrentLinkedQueue<>();
+
+    @SneakyThrows
     private void updateLocation() {
         if (driver.getLocation().getLatitude() == 0 && driver.getLocation().getLongitude() == 0) {
             System.out.println("Error");
         }
-        api.uploadLocation(driver.getId(), driver.getLocation());
+        updateLocationTaskQueue.add(() -> api.uploadLocation(driver.getId(), driver.getLocation()));
+    }
+
+    private static class UpdateLocationHandler extends Thread {
+        @Override
+        public void run() {
+            while (true) {
+                while (updateLocationTaskQueue.peek() != null) {
+                    updateLocationTaskQueue.poll().run();
+                }
+            }
+        }
     }
 
     private Location generateDestination() {

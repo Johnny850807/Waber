@@ -27,7 +27,7 @@ public class StartMatchingHandler {
     }
 
     @RabbitListener(queues = QUEUE_NAME)
-    public void handleStartMatching(@Header("traceparent") String traceparent,
+    public void handleStartMatching(@Header(name = "traceparent", required = false) String traceparent,
                                     StartMatchingCommand command) {
         log.info("Traceparent: {}", traceparent);
         log.info("Start Matching: {}", command);
