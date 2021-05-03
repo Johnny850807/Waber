@@ -16,9 +16,9 @@
       <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=waber-user" />
       <env name="LOGGING_PATTERN_CONSOLE" value="%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n" />
       <env name="OTEL_EXPORTER_JAEGER_ENDPOINT" value="http://localhost:14250" />
-      <env name="spring.datasource.url" value="jdbc:mysql://localhost:30018/waber_match" />
+      <env name="spring.datasource.url" value="jdbc:mysql://localhost:3306/waber_match" />
       <env name="spring.rabbitmq.host" value="localhost" />
-      <env name="spring.rabbitmq.port" value="30019" />
+      <env name="spring.rabbitmq.port" value="5672" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />
