@@ -1,7 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Waber ALL" type="CompoundRunConfigurationType">
     <toRun name="PaymentApplication" type="SpringBootApplicationConfigurationType" />
-    <toRun name="ChaosApplication" type="SpringBootApplicationConfigurationType" />
     <toRun name="BrokerApplication" type="SpringBootApplicationConfigurationType" />
     <toRun name="MatchApplication" type="SpringBootApplicationConfigurationType" />
     <toRun name="TripApplication" type="SpringBootApplicationConfigurationType" />

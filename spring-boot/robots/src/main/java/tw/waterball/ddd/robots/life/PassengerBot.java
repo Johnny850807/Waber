@@ -23,7 +23,6 @@ import java.util.Optional;
  */
 @Slf4j
 public class PassengerBot extends AbstractUserBot {
-    private final String name;
     private final StompAPI stompAPI;
     private final API api;
     private Framework framework;
@@ -32,7 +31,7 @@ public class PassengerBot extends AbstractUserBot {
     private MatchView currentMatch;
 
     public PassengerBot(String name, StompAPI stompAPI, API api, Framework framework) {
-        this.name = name;
+        super(name);
         this.stompAPI = stompAPI;
         this.api = api;
         this.framework = framework;
@@ -148,6 +147,18 @@ public class PassengerBot extends AbstractUserBot {
     public Optional<Location> getLocation() {
         return ofNullable(passenger)
                 .map(Passenger::getLocation);
+    }
+
+    @Override
+    public String getState() {
+        switch (state) {
+            case MATCHING:
+                return "Matching...";
+            case MATCHED:
+                return "Waiting for pickup...";
+            default:
+                return "";
+        }
     }
 
     public void setLocation(Location location) {

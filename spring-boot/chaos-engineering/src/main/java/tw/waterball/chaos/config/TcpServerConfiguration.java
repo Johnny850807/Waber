@@ -49,7 +49,7 @@ public class TcpServerConfiguration {
                                          @Value("${chaos.port}") int port,
                                          FunValue funValue,
                                          FunValuePacker funValuePacker) {
-        log.info("Chaos engineering is started with the Fun Value: {}.", funValue);
+        log.info("Chaos engineering is started with the Fun-Value={}.", funValue);
         return new TcpChaosServer(funValuePacker.write(funValue), host, port);
     }
 

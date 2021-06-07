@@ -1,4 +1,4 @@
-package tw.waterball.ddd.waber.springboot.commons.advices;
+package tw.waterball.ddd.waber.springboot.commons.aop;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

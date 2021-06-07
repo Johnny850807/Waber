@@ -51,7 +51,7 @@ public class MicroserviceConfiguration {
             try {
                 var mapper = new ObjectMapper();
 
-                log.info("Waber properties: {}.", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(waberProperties));
+                log.info("Waber properties: {}", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(waberProperties));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

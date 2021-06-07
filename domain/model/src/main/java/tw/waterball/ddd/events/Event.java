@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Map;
+
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
@@ -18,4 +20,6 @@ public abstract class Event {
      public String getName() {
           return name;
      }
+
+     public abstract Map<String, String> toMap();
 }

@@ -28,7 +28,7 @@ public class MatchBroker {
     @Bean
     public Binding bindMatchQueueToEvents(@Qualifier("eventsExchange") DirectExchange exchange,
                                  @Qualifier("matchQueue") Queue queue) {
-        log.info("Exchange binding: {} -> {} (Key:{}).", queue.getName(), exchange.getName(), ROUTING_KEY);
+        log.info("Exchange binding: queue={} -> exchange={} routingKey={}", queue.getName(), exchange.getName(), ROUTING_KEY);
         return BindingBuilder.bind(queue)
                 .to(exchange).with(ROUTING_KEY);
     }
@@ -42,9 +42,13 @@ public class MatchBroker {
     public void listenToMatch(MatchCompleteEvent event) {
         String driverMatchesDestination = String.format("/topic/users/%d/matches", event.getDriverId());
         String passengerMatchesDestination = String.format("/topic/users/%d/matches", event.getPassengerId());
-        log.info("Event: {}, Broadcast to => {}", event, driverMatchesDestination);
+
+        log.info("event={} {}", event.getName(), event);
+        if (log.isDebugEnabled()) {
+            log.debug("broadcast-destination={}, {}", driverMatchesDestination, passengerMatchesDestination);
+        }
+
         simpMessaging.convertAndSend(driverMatchesDestination, event);
-        log.info("Event: {}, Broadcast to => {}", event, passengerMatchesDestination);
         simpMessaging.convertAndSend(passengerMatchesDestination, event);
     }
 }

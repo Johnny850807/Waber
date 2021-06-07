@@ -34,7 +34,7 @@ public class UserLocationBroker {
     @Bean
     public Binding bindUserLocationQueueToEvents(@Qualifier("eventsExchange") DirectExchange exchange,
                                  @Qualifier("userLocationQueue") Queue queue) {
-        log.info("Exchange binding: {} -> {} (Key:{}).", queue.getName(), exchange.getName(), ROUTING_KEY);
+        log.info("Exchange binding: queue={} -> exchange={} routingKey={}", queue.getName(), exchange.getName(), ROUTING_KEY);
         return BindingBuilder.bind(queue)
                 .to(exchange).with(ROUTING_KEY);
     }
@@ -47,9 +47,13 @@ public class UserLocationBroker {
     @RabbitListener(queues = QUEUE_NAME)
     public void listenToMatch(@Header(name = "traceparent", required = false) String traceparent,
                               UserLocationUpdatedEvent event) {
-        log.info("Traceparent: {}", traceparent);
         String destination = String.format("/topic/users/%d/location", event.getUserId());
-        log.info("Event: {}, Broadcast to => {}", event, destination);
+
+
+        if (log.isTraceEnabled()) {
+            log.debug("event={} {} broadcast-destination={}", event.getName(), event, destination);
+        }
+
         simpMessaging.convertAndSend(destination, event);
     }
 

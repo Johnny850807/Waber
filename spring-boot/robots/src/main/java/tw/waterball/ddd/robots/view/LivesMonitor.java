@@ -1,5 +1,7 @@
 package tw.waterball.ddd.robots.view;
 
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
 import lombok.SneakyThrows;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.Driver;
@@ -40,6 +42,7 @@ public class LivesMonitor extends JFrame implements Framework.LivesListener {
         destinationIcon = ImageIO.read(new File(Thread.currentThread().getContextClassLoader().getResource("destination.png").getFile()));
 
         canvas = new Canvas();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setContentPane(canvas);
         setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
         setLocation(200, 200);
@@ -67,25 +70,36 @@ public class LivesMonitor extends JFrame implements Framework.LivesListener {
                     ((AbstractUserBot) life).getLocation()
                             .map(LivesMonitor.this::normalize)
                             .ifPresent(location -> {
+                                var state = ((AbstractUserBot) life).getState().toCharArray();
+                                g.setColor(Color.white);
+                                g.drawChars(state, 0, state.length, (int) location.getLatitude(), (int) location.getLongitude() - 10);
                                 Point point = convertLocationToPoint(location);
                                 if (life instanceof DriverBot) {
-                                    if (((DriverBot) life).getStatus() == Driver.Status.AVAILABLE) {
-                                        g.drawImage(driverIcon, point.x, point.y, 30, 30, null);
-                                    } else {
-                                        g.drawImage(driverMatchedIcon, point.x, point.y, 30, 30, null);
-                                    }
-                                    ((DriverBot) life).getDestination()
-                                            .map(LivesMonitor.this::normalize)
-                                            .map(this::convertLocationToPoint)
-                                            .ifPresent(p -> g.drawImage(destinationIcon, p.x, p.y,
-                                                    30, 30, null));
+                                    drawDriver(g, (DriverBot) life, point);
                                 } else {
-                                    g.drawImage(passengerIcon, point.x+30, point.y,
-                                            30, 30, null);
+                                    drawPassenger(g, point);
                                 }
                             });
                 }
             });
+        }
+
+        private void drawPassenger(Graphics g, Point point) {
+            g.drawImage(passengerIcon, point.x + 30, point.y,
+                    30, 30, null);
+        }
+
+        private void drawDriver(Graphics g, DriverBot driver, Point point) {
+            if (driver.getStatus() == Driver.Status.AVAILABLE) {
+                g.drawImage(driverIcon, point.x, point.y, 30, 30, null);
+            } else {
+                g.drawImage(driverMatchedIcon, point.x, point.y, 30, 30, null);
+            }
+            driver.getDestination()
+                    .map(LivesMonitor.this::normalize)
+                    .map(this::convertLocationToPoint)
+                    .ifPresent(p -> g.drawImage(destinationIcon, p.x, p.y,
+                            30, 30, null));
         }
 
         private Point convertLocationToPoint(Location location) {

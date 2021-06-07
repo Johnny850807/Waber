@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class SpringBootMatchRepository implements MatchRepository {
-    private final MatchDAO dataPort;
+    private final MatchDAO matchDAO;
 
     @Override
     public List<Match> saveAll(Match ...matches) {
-        List<MatchData> data = dataPort.saveAll(Arrays.stream(matches)
+        List<MatchData> data = matchDAO.saveAll(Arrays.stream(matches)
                 .map(MatchData::fromEntity).collect(Collectors.toList()));
         for (int i = 0; i < data.size(); i++) {
             matches[i].setId(data.get(i).getId());
@@ -32,33 +32,33 @@ public class SpringBootMatchRepository implements MatchRepository {
 
     @Override
     public Match save(Match match) {
-        MatchData data = dataPort.save(MatchData.fromEntity(match));
+        MatchData data = matchDAO.save(MatchData.fromEntity(match));
         match.setId(data.getId());
         return match;
     }
 
     @Override
     public Optional<Match> findById(int matchId) {
-        return dataPort.findById(matchId)
+        return matchDAO.findById(matchId)
                 .map(MatchData::toEntity);
     }
 
     @Override
     public Optional<Match> findPassengerCurrentMatch(int passengerId) {
-        return dataPort.findFirstByPassengerIdAndAliveIsTrueOrderByCreatedDateDesc(passengerId)
+        return matchDAO.findFirstByPassengerIdAndAliveIsTrueOrderByCreatedDateDesc(passengerId)
                 .map(MatchData::toEntity);
     }
 
     @Override
     public Optional<Match> findDriverCurrentMatch(int driverId) {
-        return dataPort.findFirstByDriverIdAndAliveIsTrueOrderByCreatedDateDesc(driverId)
+        return matchDAO.findFirstByDriverIdAndAliveIsTrueOrderByCreatedDateDesc(driverId)
                 .map(MatchData::toEntity);
     }
 
     @Override
     public Match associateById(int matchId) {
         try {
-            return dataPort.getOne(matchId).toEntity();
+            return matchDAO.getOne(matchId).toEntity();
         } catch (EntityNotFoundException err) {
             throw new NotFoundException(err);
         }
@@ -66,11 +66,11 @@ public class SpringBootMatchRepository implements MatchRepository {
 
     @Override
     public void setAlive(int matchId, boolean alive) {
-        dataPort.setAlive(matchId, alive);
+        matchDAO.setAlive(matchId, alive);
     }
 
     @Override
     public void removeAll() {
-        dataPort.deleteAll();
+        matchDAO.deleteAll();
     }
 }

@@ -1,11 +1,15 @@
 package tw.waterball.ddd.waber.match.usecases;
 
 import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.attr;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.currentSpan;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.event;
 
 import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
+import tw.waterball.ddd.commons.utils.OpenTelemetryUtils;
 import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.events.MatchCompleteEvent;
 import tw.waterball.ddd.events.StartMatchingCommand;
@@ -68,13 +72,11 @@ public class MatchUseCase {
 
     private void saveIfMatchedDriverIsAvailable(Match match) {
         userServiceDriver.setDriverStatus(match.getDriverId(), Driver.Status.MATCHED);
-        log.info("<Match completed> passengerId: {}, driverId: {}", match.getPassengerId(), match.getDriverId());
         matchRepository.save(match);
         eventBus.publish(new MatchCompleteEvent(match));
     }
 
     private void delayAndReplublishStartMatchingCommand(Match match) {
-        log.info("<Match Rescheduled> passengerId: {}", match.getPassengerId());
         delay(rescheduleDelayTimeInMs);
         eventBus.publish(new StartMatchingCommand(match.getId(), match.getPassengerId()));
     }

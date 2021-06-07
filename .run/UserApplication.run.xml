@@ -6,7 +6,7 @@
     <option name="VM_PARAMETERS" value="-javaagent:spring-boot/spring-boot-user/bin/opentelemetry-javaagent-all.jar" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
-      <env name="server.port" value="10000" />
+      <env name="server.port" value="9000" />
       <env name="chaos.host" value="localhost" />
       <env name="chaos.port" value="9999" />
       <env name="OTEL_TRACES_EXPORTER" value="jaeger" />

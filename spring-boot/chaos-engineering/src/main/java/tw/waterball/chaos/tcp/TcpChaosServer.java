@@ -38,7 +38,7 @@ public class TcpChaosServer implements ChaosEngineListener {
     public static final int OP_INIT_WITH_CHAOS_NAMES = 30;
     public static final int OP_SENT_ALIVE_CHAOS_NAMES = 31;
     public static final int OP_KILLED = 45;
-    public static final int PACKET_SIZE = 4096;
+    public static final int PACKET_SIZE = 10240;
     private final String host;
     private final int port;
     private boolean running;
@@ -161,10 +161,10 @@ public class TcpChaosServer implements ChaosEngineListener {
     }
 
     protected synchronized void kill(String chaosName) {
-        buffer = allocate(PACKET_SIZE);
         log.info("Killing {}...", chaosName);
         for (SocketChannel client : chaosNameToClientMap.get(chaosName)) {
             try {
+                buffer = allocate(PACKET_SIZE);
                 client.write(writeStringByContentLength(buffer.put((byte) OP_KILLED), chaosName).flip());
                 log.info("{} is killed", chaosName);
             } catch (IOException e1) {
@@ -178,7 +178,6 @@ public class TcpChaosServer implements ChaosEngineListener {
                 }
             }
         }
-
     }
 
     private void broadcast(Consumer<? super ChaosServerListener> listenerConsumer) {

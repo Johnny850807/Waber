@@ -46,4 +46,9 @@ public class UserGenerator extends ScheduledLife {
         });
     }
 
+    @Override
+    public String getName() {
+        return "UserGenerator";
+    }
+
 }

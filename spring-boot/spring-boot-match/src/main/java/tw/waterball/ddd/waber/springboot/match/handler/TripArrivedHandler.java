@@ -45,7 +45,6 @@ public class TripArrivedHandler {
     @RabbitListener(queues = QUEUE_NAME)
     public void handleTripArrived(TripStateChangedEvent event) {
         if (event.getState() == TripStateType.ARRIVED) {
-            log.info("Cancel match[id={}] due to trip's arrival.", event.getMatchId());
             finalizeMatch.execute(event.getMatchId());
         }
     }

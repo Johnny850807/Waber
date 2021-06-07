@@ -1,5 +1,7 @@
 package tw.waterball.ddd.events;
 
+import static tw.waterball.ddd.commons.utils.MapUtils.map;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,10 +11,11 @@ import tw.waterball.ddd.model.trip.Trip;
 import tw.waterball.ddd.model.trip.TripState;
 import tw.waterball.ddd.model.trip.TripStateType;
 
+import java.util.Map;
+
 /**
  * @author Waterball (johnny850807@gmail.com)
  */
-@ToString
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @NoArgsConstructor
@@ -39,5 +42,18 @@ public class TripStateChangedEvent extends Event {
         this.matchId = matchId;
         this.tripId = tripId;
         this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("driverId=%d passengerId=%d matchId=%d tripId=%s state=%s",
+                driverId, passengerId, matchId, tripId, state);
+    }
+
+    @Override
+    public Map<String, String> toMap() {
+        return map("driverId", "passengerId", "matchId", "tripId", "state")
+                .to(String.valueOf(driverId), String.valueOf(passengerId), String.valueOf(matchId),
+                        String.valueOf(tripId), String.valueOf(state));
     }
 }

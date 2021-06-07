@@ -15,7 +15,7 @@ import tw.waterball.ddd.waber.passenger.usecases.SignUpToBePassenger;
 @RestController
 @AllArgsConstructor
 public class PassengerController {
-    private SignUpToBePassenger signUpToBePassenger;
+    private final SignUpToBePassenger signUpToBePassenger;
 
     @PostMapping
     public Passenger signUp(@RequestBody SignUpParams params) {

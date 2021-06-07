@@ -1,5 +1,9 @@
 package tw.waterball.ddd.waber.springboot.user.controllers;
 
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.attr;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.currentSpan;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.event;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +52,8 @@ public class UserController {
 
     @PostMapping("/signIn")
     public User signIn(@RequestBody SignInParams params) {
+        currentSpan(event("SignIn"), attr("email", params.email)).asLog(log::info);
+
         return signIn.execute(new SignIn.Request(params.email, params.password));
     }
 
@@ -62,7 +68,6 @@ public class UserController {
                                      @RequestParam double latitude,
                                      @RequestParam double longitude) {
         try {
-
             updateLatestLocation.execute(new UpdateLatestLocation.Request(
                     userId, new Location(latitude, longitude)
             ));

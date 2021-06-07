@@ -53,7 +53,7 @@ public class TcpChaosClient {
     }
 
     public void connect() throws IOException {
-        log.info("Connecting to {}:{}...", host, port);
+        log.info("Connecting to address={}:{} ...", host, port);
         server = SocketChannel.open(new InetSocketAddress(host, port));
         connected = true;
         log.info("Connected");
@@ -65,7 +65,7 @@ public class TcpChaosClient {
 
     private void initializeWithChaosNames() throws IOException {
         String names = chaosCollection.stream().map(Chaos::getName).collect(joining(", "));
-        log.info("Initializing Chaos client with a set of chaos {}...", names);
+        log.info("Initializing Chaos client with a set of chaos={}...", names);
         buffer = allocate(PACKET_SIZE);
         buffer.put((byte) OP_INIT_WITH_CHAOS_NAMES);
         buffer = writeStringByContentLength(buffer, names).flip();
@@ -74,7 +74,7 @@ public class TcpChaosClient {
     }
 
     private void retrieveFunValue() throws IOException {
-        log.info("Retrieving the fun value...");
+        log.info("Retrieving the fun value ...");
         buffer = allocate(PACKET_SIZE);
         server.read(buffer);
         FunValue funValue = funValuePacker.read(buffer.array());
@@ -84,7 +84,7 @@ public class TcpChaosClient {
 
     private void sendAliveChaosNames() throws IOException {
         String names = chaosCollection.stream().filter(Chaos::isExecuted).map(Chaos::getName).collect(joining(","));
-        log.info("Sending the alive chaos names: {}.", names);
+        log.info("Sending the alive chaos names={}.", names);
         buffer = allocate(PACKET_SIZE);
         buffer.put((byte) OP_SENT_ALIVE_CHAOS_NAMES);
         server.write(writeStringByContentLength(buffer, names).flip());
@@ -116,12 +116,12 @@ public class TcpChaosClient {
 
     private void killChaos() {
         String chaosName = readStringByContentLength(buffer);
-        log.info("Killing the chaos: {}.", chaosName);
+        log.info("Killing the chaos={}.", chaosName);
         chaosCollection.stream()
                 .filter(chaos -> chaos.getName().equals(chaosName))
                 .forEach(chaos -> {
                     chaos.kill();
-                    log.info("The chaos {} is killed.", chaos.getName());
+                    log.info("The chaos={} is killed.", chaos.getName());
                     broadcast(listener -> listener.onChaosKilled(chaos));
                 });
     }

@@ -33,9 +33,9 @@ public class DriverController {
 
     @PostMapping
     public Driver signUp(@RequestBody SignUpParams params) {
-        currentSpan(attr("name", params.name),
-                attr("email", params.name), attr("carType", params.carType))
-                .asLog(msg -> log.info("Sign up: {}", msg));
+        currentSpan(event("sign-up"),
+                attr("name", params.name), attr("email", params.name), attr("carType", params.carType))
+                .asLog(log::info);
 
         return signUpToBeDriver.execute(
                 new SignUpToBeDriver.Request(params.name, params.email, params.password, params.carType)
@@ -58,8 +58,8 @@ public class DriverController {
     @PatchMapping("/{driverId}")
     public void setDriverStatus(@PathVariable int driverId,
                                 @RequestBody String status) throws DriverIsNotAvailableException {
-        currentSpan(attr("driverId", driverId), attr("status", status))
-                .asLog(msg -> log.info("Set Driver Status: {}", msg));
+        currentSpan(event("SetDriverStatus"), attr("driverId", driverId), attr("status", status))
+                .asLog(log::info);
 
         setDriverStatus.execute(new SetDriverStatus.Request(driverId,
                 Driver.Status.valueOf(status.trim().toUpperCase())));

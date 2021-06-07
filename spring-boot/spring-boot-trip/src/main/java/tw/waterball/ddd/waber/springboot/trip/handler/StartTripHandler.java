@@ -1,5 +1,9 @@
 package tw.waterball.ddd.waber.springboot.trip.handler;
 
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.attr;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.currentSpan;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.event;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Binding;
@@ -36,11 +40,12 @@ public class StartTripHandler {
                 .to(exchange).with(ROUTING_KEY);
     }
 
-
-
     @RabbitListener(queues = QUEUE_NAME)
     public void startTrip(MatchCompleteEvent event) {
-        log.info("Received Event: {}", event);
+        currentSpan(event("StartTrip"), attr("passengerId", event.getPassengerId()),
+                attr("matchId", event.getMatchId()))
+                .asLog(log::info);
+
         startTrip.execute(new StartTrip.Request(event.getPassengerId(), event.getMatchId()),
                 (match, trip) -> { /*Present Nothing*/ });
     }

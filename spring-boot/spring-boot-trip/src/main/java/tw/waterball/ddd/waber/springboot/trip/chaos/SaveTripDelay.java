@@ -1,11 +1,12 @@
-package tw.waterball.ddd.waber.springboot.user.chaos.api;
+package tw.waterball.ddd.waber.springboot.trip.chaos;
+
+import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import tw.waterball.chaos.annotations.ChaosEngineering;
-import tw.waterball.chaos.api.ChaosTriggeredException;
 import tw.waterball.chaos.core.md5.Md5Chaos;
 
 /**
@@ -14,21 +15,21 @@ import tw.waterball.chaos.core.md5.Md5Chaos;
 @ChaosEngineering
 @Aspect
 @Component
-public class SignInAPIBlocked extends Md5Chaos {
+public class SaveTripDelay extends Md5Chaos {
     @Override
     public String getName() {
-        return "user.SignInAPIBlocked";
+        return "trip.SaveTripDelay";
     }
 
     @Override
     protected Criteria criteria() {
-        return or(positiveNumberAtPositions(0, 1, 2), positiveNumberAtPositions(10, 11, 12));
+        return and(areZeros(7, 8, 9), positiveNumberAtPositions(0, 1));
     }
 
-    @Before("execution(* tw.waterball.ddd.waber.springboot.user.controllers.UserController.signIn(..))")
+    @Before("execution(* tw.waterball.ddd.waber.springboot.trip.repositories.jpa.SpringBootTripRepository.saveTripWithMatch(..))")
     public void before(JoinPoint joinPoint) {
         if (isAlive()) {
-            throw new ChaosTriggeredException();
+            delay(6000);
         }
     }
 }

@@ -29,7 +29,7 @@ public class TripBroker {
     @Bean
     public Binding bindTripQueueToEvents(@Qualifier("eventsExchange") DirectExchange exchange,
                                  @Qualifier("tripQueue") Queue queue) {
-        log.info("Exchange binding: {} -> {} (Key:{}).", queue.getName(), exchange.getName(), ROUTING_KEY);
+        log.info("Exchange binding: queue={} -> exchange={} routingKey={}", queue.getName(), exchange.getName(), ROUTING_KEY);
         return BindingBuilder.bind(queue)
                 .to(exchange).with(ROUTING_KEY);
     }
@@ -43,9 +43,11 @@ public class TripBroker {
     public void listenToMatch(TripStateChangedEvent event) {
         String[] destinations = {String.format("/topic/trips/%s", event.getTripId()),
                 String.format("/topic/users/%d/trips/current/state", event.getPassengerId())};
-
+        log.info("event={} {}", event.getName(), event);
+        if (log.isDebugEnabled()) {
+            log.debug("broadcast-destination={}", String.join(", ", destinations));
+        }
         for (String destination : destinations) {
-            log.info("Event: {}, Broadcast to => {}", event, destination);
             simpMessaging.convertAndSend(destination, event.getState().toString());
         }
     }

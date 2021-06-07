@@ -1,5 +1,10 @@
 package tw.waterball.ddd.waber.springboot.payment.controllers;
 
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.api;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.attr;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.currentSpan;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.event;
+
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.waber.api.payment.PaymentView;
 import tw.waterball.ddd.waber.pricing.usecases.CheckoutPayment;
@@ -25,6 +30,8 @@ public class PaymentController {
 
     @PostMapping("/trips/{tripId}")
     public PaymentView checkoutPayment(@PathVariable String tripId) {
+        currentSpan(api("CheckoutPayment"), attr("tripId", tripId));
+
         var presenter = new PaymentPresenter();
         checkoutPayment.execute(new CheckoutPayment.Request(tripId), presenter);
         return presenter.getPaymentView();

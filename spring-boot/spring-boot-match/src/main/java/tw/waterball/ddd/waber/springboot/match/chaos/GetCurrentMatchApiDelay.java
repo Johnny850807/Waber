@@ -1,5 +1,7 @@
 package tw.waterball.ddd.waber.springboot.match.chaos;
 
+import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -14,10 +16,10 @@ import tw.waterball.chaos.core.md5.Md5Chaos;
 @ChaosEngineering
 @Aspect
 @Component
-public class GetUserCurrentMatchingAPIBlocked extends Md5Chaos {
+public class GetCurrentMatchApiDelay extends Md5Chaos {
     @Override
     public String getName() {
-        return "match.GetUserCurrentMatchingAPIBlocked";
+        return "match.GetCurrentMatchApiDelay";
     }
 
     @Override
@@ -28,7 +30,7 @@ public class GetUserCurrentMatchingAPIBlocked extends Md5Chaos {
     @Before("execution(* tw.waterball.ddd.waber.springboot.match.controllers.MatchController.getUserCurrentMatch(..))")
     public void before(JoinPoint joinPoint) {
         if (isAlive()) {
-            throw new ChaosTriggeredException();
+            delay(6000);
         }
     }
 }

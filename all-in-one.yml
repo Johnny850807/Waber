@@ -12,7 +12,7 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
-      LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
+      LOGGING_PATTERN_CONSOLE: $LOGGING_PATTERN
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.user-service.rule=PathPrefix(`/api/users`) || PathPrefix(`/api/passengers`) || PathPrefix(`/api/drivers`)"
@@ -20,10 +20,10 @@ services:
       - "traefik.http.routers.user-service.service=user-service"
       - "traefik.http.services.user-service.loadbalancer.server.port=80"
       - "traefik.http.routers.user-service.priority=1"
-#    logging:
-#      driver: loki
-#      options:
-#        loki-url: 'http://localhost:3100/api/prom/push'
+    logging:
+      driver: loki
+      options:
+        loki-url: 'http://localhost:3100/api/prom/push'
 
   match-service:
     build: spring-boot/spring-boot-match
@@ -36,7 +36,7 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
-      LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
+      LOGGING_PATTERN_CONSOLE: $LOGGING_PATTERN
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.match-service.rule=PathPrefix(`/api/users/{passengerId:[0-9]+}/matches`) || PathPrefix(`/api/matches`)"
@@ -44,10 +44,10 @@ services:
       - "traefik.http.routers.match-service.service=match-service"
       - "traefik.http.services.match-service.loadbalancer.server.port=80"
       - "traefik.http.routers.match-service.priority=2"
-#    logging:
-#      driver: loki
-#      options:
-#        loki-url: 'http://localhost:3100/api/prom/push'
+    logging:
+      driver: loki
+      options:
+        loki-url: 'http://localhost:3100/api/prom/push'
 
   trip-service:
     build: spring-boot/spring-boot-trip
@@ -60,7 +60,7 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
-      LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
+      LOGGING_PATTERN_CONSOLE: $LOGGING_PATTERN
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.trip-service.rule=PathPrefix(`/api/trips`) || PathPrefix(`/api/users/{passengerId:[0-9]+}/trips`)"
@@ -68,10 +68,10 @@ services:
       - "traefik.http.routers.trip-service.service=trip-service"
       - "traefik.http.services.trip-service.loadbalancer.server.port=80"
       - "traefik.http.routers.trip-service.priority=3"
-#    logging:
-#      driver: loki
-#      options:
-#        loki-url: 'http://localhost:3100/api/prom/push'
+    logging:
+      driver: loki
+      options:
+        loki-url: 'http://localhost:3100/api/prom/push'
 
   payment-service:
     build: spring-boot/spring-boot-payment
@@ -84,17 +84,17 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
-      LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
+      LOGGING_PATTERN_CONSOLE: $LOGGING_PATTERN
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.payment-service.rule=PathPrefix(`/api/payments`)"
       - "traefik.http.routers.payment-service.entrypoints=web"
       - "traefik.http.routers.payment-service.service=payment-service"
       - "traefik.http.services.payment-service.loadbalancer.server.port=80"
-#    logging:
-#      driver: loki
-#      options:
-#        loki-url: 'http://localhost:3100/api/prom/push'
+    logging:
+      driver: loki
+      options:
+        loki-url: 'http://localhost:3100/api/prom/push'
 
   broker:
     build: spring-boot/spring-boot-broker
@@ -105,17 +105,17 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
-      LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg traceID=%X{trace_id} %n"
+      LOGGING_PATTERN_CONSOLE: $LOGGING_PATTERN
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.broker.rule=PathPrefix(`/broker`) || PathPrefix(`/topic`)"
       - "traefik.http.routers.broker.entrypoints=web"
       - "traefik.http.routers.broker.service=broker"
       - "traefik.http.services.broker.loadbalancer.server.port=80"
-#    logging:
-#      driver: loki
-#      options:
-#        loki-url: 'http://localhost:3100/api/prom/push'
+    logging:
+      driver: loki
+      options:
+        loki-url: 'http://localhost:3100/api/prom/push'
 
 
 networks:

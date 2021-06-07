@@ -1,11 +1,12 @@
-package tw.waterball.ddd.waber.springboot.user.chaos.api;
+package tw.waterball.ddd.waber.springboot.user.chaos.jpa;
+
+import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import tw.waterball.chaos.annotations.ChaosEngineering;
-import tw.waterball.chaos.api.ChaosTriggeredException;
 import tw.waterball.chaos.core.md5.Md5Chaos;
 
 /**
@@ -14,10 +15,10 @@ import tw.waterball.chaos.core.md5.Md5Chaos;
 @ChaosEngineering
 @Aspect
 @Component
-public class UploadLatestLocationAPIBlocked extends Md5Chaos {
+public class UpdateUserLocationDelay extends Md5Chaos {
     @Override
     public String getName() {
-        return "user.UploadLatestLocationAPIBlocked";
+        return "user.UpdateUserLocationDelay";
     }
 
     @Override
@@ -25,10 +26,10 @@ public class UploadLatestLocationAPIBlocked extends Md5Chaos {
         return or(positiveNumberAtPositions(0, 2, 5), negativeNumberAtPositions(12));
     }
 
-    @Before("execution(* tw.waterball.ddd.waber.springboot.user.controllers.UserController.updateLatestLocation(..))")
+    @Before("execution(* tw.waterball.ddd.waber.springboot.user.repositories.jpa.SpringBootUserRepository.updateLatestLocation(..))")
     public void before(JoinPoint joinPoint) {
         if (isAlive()) {
-            throw new ChaosTriggeredException();
+            delay(3000);
         }
     }
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
@@ -29,8 +30,6 @@ public class StartMatchingHandler {
     @RabbitListener(queues = QUEUE_NAME)
     public void handleStartMatching(@Header(name = "traceparent", required = false) String traceparent,
                                     StartMatchingCommand command) {
-        log.info("Traceparent: {}", traceparent);
-        log.info("Start Matching: {}", command);
         matchUseCase.execute(new MatchRequest(command.getMatchId()));
     }
 }

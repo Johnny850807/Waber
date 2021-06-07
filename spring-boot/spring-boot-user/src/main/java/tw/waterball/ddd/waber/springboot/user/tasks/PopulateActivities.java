@@ -27,7 +27,7 @@ public class PopulateActivities {
 
     @PostConstruct
     public void execute() {
-        log.info("Save activities: {}", String.join(", ", activityNames));
+        log.info("Save activities={}", String.join(", ", activityNames));
         dataPort.saveAll(activityNames.stream()
                 .map(ActivityData::new)
                 .collect(Collectors.toList()));

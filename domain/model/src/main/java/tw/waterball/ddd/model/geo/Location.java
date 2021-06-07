@@ -67,7 +67,7 @@ public class Location {
 
     @Override
     public String toString() {
-        return String.format("(%f, %f)", latitude, longitude);
+        return String.format("(%f,%f)", latitude, longitude);
     }
 
     public static void main(String[] args) {

@@ -12,6 +12,7 @@ import java.util.Random;
  */
 public abstract class AbstractUserBot extends Life {
     protected Random random = new Random();
+    protected String name;
 
     protected Location randomLocation() {
         return new Location(random.nextInt(501) - 250, random.nextInt(501) - 250);
@@ -24,4 +25,15 @@ public abstract class AbstractUserBot extends Life {
     }
 
     public abstract Optional<Location> getLocation();
+
+    public AbstractUserBot(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public abstract String getState();
 }

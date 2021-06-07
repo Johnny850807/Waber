@@ -7,6 +7,8 @@ import tw.waterball.ddd.api.match.MatchServiceDriver;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.api.trip.TripServiceDriver;
 import tw.waterball.ddd.api.trip.TripView;
+import tw.waterball.ddd.events.CheckoutPaymentEvent;
+import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.model.payment.Payment;
 import tw.waterball.ddd.model.payment.PricingItem;
 import tw.waterball.ddd.model.payment.PricingStrategy;
@@ -29,6 +31,7 @@ public class CheckoutPayment {
     private final PricingStrategy pricingStrategy;
     private final TripServiceDriver tripServiceDriver;
     private final PaymentRepository paymentRepository;
+    private final EventBus eventBus;
 
     @WithSpan
     public void execute(Request request, Presenter presenter) {
@@ -39,9 +42,10 @@ public class CheckoutPayment {
 
         List<PricingItem> pricingItems = pricingStrategy.pricing(trip);
         Payment payment = new Payment(trip.getId(), pricingItems);
-        log.info("<Checkout Payment> PricingStrategy={}, Payment={}", pricingStrategy.getClass().getSimpleName(), payment);
 
         payment = paymentRepository.save(payment);
+        eventBus.publish(new CheckoutPaymentEvent(pricingStrategy, payment));
+
         presenter.present(payment);
     }
 

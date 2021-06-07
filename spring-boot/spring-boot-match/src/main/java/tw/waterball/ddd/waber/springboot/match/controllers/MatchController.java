@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
+import tw.waterball.ddd.commons.utils.OpenTelemetryUtils;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
@@ -22,6 +23,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import static tw.waterball.ddd.api.match.MatchView.toViewModel;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.attr;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.currentSpan;
+import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.event;
 
 /**
  * @author - johnny850807@gmail.com (Waterball)
@@ -40,7 +44,13 @@ public class MatchController {
     @PostMapping("/users/{passengerId}/matches")
     public MatchView startMatching(@PathVariable int passengerId,
                                    @RequestBody MatchPreferences matchPreferences) {
-        log.info("<Start matching> passenger(id={}), {}}.", passengerId, matchPreferences);
+        currentSpan(event("StartMatching"),
+                attr("passengerId", passengerId),
+                attr("startLocation", matchPreferences.getStartLocation()),
+                attr("carType", matchPreferences.getCarType()),
+                attr("activityName", matchPreferences.getActivityName()))
+                .asLog(log::info);
+
         matchUseCase.execute(new StartMatchingRequest(passengerId, matchPreferences), matchPresenter);
         return matchPresenter.getMatchView();
     }

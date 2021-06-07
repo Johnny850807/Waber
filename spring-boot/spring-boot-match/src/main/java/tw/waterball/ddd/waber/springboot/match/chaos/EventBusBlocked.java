@@ -22,7 +22,7 @@ public class EventBusBlocked extends Md5Chaos {
 
     @Override
     protected Criteria criteria() {
-        return and(negativeNumberAtPositions(7, 9, 14));
+        return negativeNumberAtPositions(7, 9, 14);
     }
 
     @Around("execution(* tw.waterball.ddd.waber.springboot.match.config.RabbitEventBusConfiguration.rabbitEventBusSubscriber(..))")

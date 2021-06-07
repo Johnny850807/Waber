@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/users/{userId}/trips")
 @RestController
 public class TripHistoryController {
-    private SpringBootTripRepository tripRepository;
+    private final SpringBootTripRepository tripRepository;
 
     @GetMapping
     public List<TripView> queryTripHistory(@PathVariable int userId) {

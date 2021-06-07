@@ -20,7 +20,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Slf4j
 public class DriverBot extends AbstractUserBot {
     public static final double SPEED = 2;
-    private final String name;
     private Driver driver;
     private final StompAPI stompAPI;
     private final API api;
@@ -40,7 +39,7 @@ public class DriverBot extends AbstractUserBot {
     }
 
     public DriverBot(String name, StompAPI stompAPI, API api, Framework framework) {
-        this.name = name;
+        super(name);
         this.stompAPI = stompAPI;
         this.api = api;
         this.framework = framework;
@@ -160,6 +159,20 @@ public class DriverBot extends AbstractUserBot {
     public Optional<Location> getLocation() {
         return Optional.ofNullable(driver)
                 .map(Driver::getLocation);
+    }
+
+    @Override
+    public String getState() {
+        switch (state) {
+            case ACTIVE:
+                return "Matching...";
+            case PICKING_UP_PASSENGER:
+                return "Picking...";
+            case DRIVING_TO_DESTINATION:
+                return "Driving to destination...";
+            default:
+                return "";
+        }
     }
 
     public Optional<Location> getDestination() {
