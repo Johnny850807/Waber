@@ -4,7 +4,7 @@ services:
   user-service:
     build: spring-boot/spring-boot-user
     environment:
-      SPRING_PROFILES_ACTIVE: ${chaos}microservice,mysql
+      SPRING_PROFILES_ACTIVE: ${chaos},microservice,mysql
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/waber_user
       SPRING_RABBITMQ_HOST: rabbitmq
       CHAOS_HOST: chaos-service
@@ -12,7 +12,6 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
-      LOGGING_PATTERN_CONSOLE: $LOGGING_PATTERN
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.user-service.rule=PathPrefix(`/api/users`) || PathPrefix(`/api/passengers`) || PathPrefix(`/api/drivers`)"
@@ -28,7 +27,7 @@ services:
   match-service:
     build: spring-boot/spring-boot-match
     environment:
-      SPRING_PROFILES_ACTIVE: ${chaos}microservice,mysql
+      SPRING_PROFILES_ACTIVE: ${chaos},microservice,mysql
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/waber_match
       SPRING_RABBITMQ_HOST: rabbitmq
       CHAOS_HOST: chaos-service
@@ -36,7 +35,6 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
-      LOGGING_PATTERN_CONSOLE: $LOGGING_PATTERN
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.match-service.rule=PathPrefix(`/api/users/{passengerId:[0-9]+}/matches`) || PathPrefix(`/api/matches`)"
@@ -52,7 +50,7 @@ services:
   trip-service:
     build: spring-boot/spring-boot-trip
     environment:
-      SPRING_PROFILES_ACTIVE: ${chaos}microservice
+      SPRING_PROFILES_ACTIVE: ${chaos},microservice
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/waber_trip
       SPRING_RABBITMQ_HOST: rabbitmq
       CHAOS_HOST: chaos-service
@@ -60,7 +58,6 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
-      LOGGING_PATTERN_CONSOLE: $LOGGING_PATTERN
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.trip-service.rule=PathPrefix(`/api/trips`) || PathPrefix(`/api/users/{passengerId:[0-9]+}/trips`)"
@@ -76,7 +73,7 @@ services:
   payment-service:
     build: spring-boot/spring-boot-payment
     environment:
-      SPRING_PROFILES_ACTIVE: ${chaos}microservice
+      SPRING_PROFILES_ACTIVE: ${chaos},microservice
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/waber_payment
       SPRING_RABBITMQ_HOST: rabbitmq
       CHAOS_HOST: chaos-service
@@ -84,7 +81,6 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
-      LOGGING_PATTERN_CONSOLE: $LOGGING_PATTERN
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.payment-service.rule=PathPrefix(`/api/payments`)"
@@ -105,7 +101,6 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
-      LOGGING_PATTERN_CONSOLE: $LOGGING_PATTERN
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.broker.rule=PathPrefix(`/broker`) || PathPrefix(`/topic`)"

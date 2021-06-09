@@ -32,8 +32,9 @@ public class FindCurrentTrip {
     public void execute(Request request, TripPresenter presenter) {
         Match match = getCurrentMatch(request.userId);
         var mayHaveTrip = tripRepository.findByMatchId(match.getId());
-        Trip trip = request.startNewTripIfNotFound ? mayHaveTrip.orElseGet(() -> startNewTrip(match))
-                :mayHaveTrip.orElseThrow(NotFoundException::new);
+        Trip trip = request.startNewTripIfNotFound ?
+                mayHaveTrip.orElseGet(() -> startNewTrip(match))
+                : mayHaveTrip.orElseThrow(NotFoundException::new);
         presenter.present(match, trip);
     }
 
@@ -57,6 +58,7 @@ public class FindCurrentTrip {
 
     public interface Presenter {
         void setMatch(Match match);
+
         void setTrip(Trip trip);
     }
 

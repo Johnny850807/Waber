@@ -25,6 +25,7 @@ public class CheckoutPaymentEvent extends Event {
     private BigDecimal totalPrice;
 
     public CheckoutPaymentEvent(PricingStrategy pricingStrategy, Payment payment) {
+        super("CheckoutPaymentEvent");
         this.pricingStrategy = pricingStrategy.getClass().getSimpleName();
         this.tripId = payment.getTripId();
         this.pricingItems = payment.getPricingItems();
