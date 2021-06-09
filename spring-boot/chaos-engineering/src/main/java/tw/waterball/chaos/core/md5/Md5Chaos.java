@@ -12,25 +12,24 @@ import tw.waterball.chaos.api.FunValue;
  */
 public abstract class Md5Chaos implements Chaos {
     private final Criteria criteria;
-    private final String name;
     private boolean executed;
     private boolean killed;
 
     public Md5Chaos() {
         this.criteria = criteria();
-        this.name = getName();
     }
 
     protected abstract Criteria criteria();
 
     @Override
     public String getName() {
-        return getClass().getSimpleName();
+        return getClass().getName();
     }
 
     @Override
     public void execute(FunValue funValue) {
         byte[] digest = ((Md5FunValue) funValue).getDigest();
+        killed = false;
         executed = criteria.match(digest);
         if (executed) {
             onPerform(digest);
@@ -48,7 +47,6 @@ public abstract class Md5Chaos implements Chaos {
     protected void onKilled() {
 
     }
-
     @Override
     public void kill() {
         if (isExecuted()) {
@@ -73,7 +71,6 @@ public abstract class Md5Chaos implements Chaos {
     }
 
     public interface Criteria {
-
         boolean match(byte[] digest);
     }
 

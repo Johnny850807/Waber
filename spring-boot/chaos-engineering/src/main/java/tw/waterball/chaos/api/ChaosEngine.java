@@ -9,7 +9,7 @@ import java.util.Optional;
  * @author Waterball (johnny850807@gmail.com)
  */
 public interface ChaosEngine {
-    void start(FunValue funValue);
+    void effect(FunValue funValue);
 
     void addChaos(Chaos chaos);
 
@@ -20,6 +20,8 @@ public interface ChaosEngine {
     void addListener(ChaosEngineListener listener);
 
     void removeListener(ChaosEngineListener listener);
+
+    void clear();
 
     default Optional<Chaos> getChaos(String chaosName) {
         return getChaosCollection().stream().filter(c -> c.getName().equals(chaosName.trim()))

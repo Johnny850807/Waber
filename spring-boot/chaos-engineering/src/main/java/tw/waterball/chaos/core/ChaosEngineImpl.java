@@ -24,7 +24,7 @@ public class ChaosEngineImpl implements ChaosEngine {
     private FunValue funValue;
 
     @Override
-    public void start(FunValue funValue) {
+    public void effect(FunValue funValue) {
         nameMustNotDuplicate(chaosCollection);
         chaosCollection.forEach(c -> c.execute(funValue));
         this.funValue = funValue;
@@ -80,6 +80,11 @@ public class ChaosEngineImpl implements ChaosEngine {
     @Override
     public void removeListener(ChaosEngineListener listener) {
         listeners.remove(listener);
+    }
+
+    @Override
+    public void clear() {
+
     }
 
 

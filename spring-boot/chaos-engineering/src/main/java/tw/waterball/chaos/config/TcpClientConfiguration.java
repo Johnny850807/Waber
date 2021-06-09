@@ -47,8 +47,6 @@ public class TcpClientConfiguration {
         return new TcpChaosClient(funValuePacker, chaosCollection, host, port);
     }
 
-
-
     @Bean
     public SmartInitializingSingleton runChaosClient(ChaosEngine chaosEngine, TcpChaosClient chaosClient) {
         return () -> {
@@ -57,7 +55,7 @@ public class TcpClientConfiguration {
                     @Override
                     public void onFunValueInitialized(FunValue funValue) {
                         log.debug("Starting the chaos engine...");
-                        chaosEngine.start(funValue);
+                        chaosEngine.effect(funValue);
                         log.debug("Chaos engine started.");
                     }
 

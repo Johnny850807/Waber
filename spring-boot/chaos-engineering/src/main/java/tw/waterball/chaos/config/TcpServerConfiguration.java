@@ -1,6 +1,7 @@
 package tw.waterball.chaos.config;
 
 import static java.util.Arrays.stream;
+import static java.util.Collections.synchronizedSet;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.SmartInitializingSingleton;
@@ -22,6 +23,7 @@ import tw.waterball.chaos.tcp.TcpChaosServer;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -35,11 +37,6 @@ import java.util.Set;
 public class TcpServerConfiguration {
 
     @Bean
-    public FunValue funValue(@Value("${chaos.fun.value}") String funValue) {
-        return new Md5FunValue(funValue);
-    }
-
-    @Bean
     public FunValuePacker funValuePacker() {
         return new Md5FunValuePacker();
     }
@@ -47,10 +44,8 @@ public class TcpServerConfiguration {
     @Bean
     public TcpChaosServer tcpChaosServer(@Value("${chaos.host}") String host,
                                          @Value("${chaos.port}") int port,
-                                         FunValue funValue,
                                          FunValuePacker funValuePacker) {
-        log.info("Chaos engineering is started with the Fun-Value={}.", funValue);
-        return new TcpChaosServer(funValuePacker.write(funValue), host, port);
+        return new TcpChaosServer(funValuePacker, host, port);
     }
 
     @Bean
@@ -62,17 +57,24 @@ public class TcpServerConfiguration {
 
     @Bean
     public SmartInitializingSingleton addListenerToChaosServer(ChaosEngine chaosEngine,
-                                                               FunValue funValue,
                                                                TcpChaosServer chaosServer) {
-        Set<String> aliveness = new HashSet<>();
+        Set<String> aliveness = synchronizedSet(new HashSet<>());
         return () -> {
             chaosServer.addListener(new ChaosServerListener() {
                 @Override
                 public void onChaosRegistered(String[] chaosNames) {
                     stream(chaosNames).forEach(name -> chaosEngine.addChaos(new Md5Chaos() {  /*Mock Chaos*/
                         @Override
+                        public void execute(FunValue funValue) {
+                            // reset the aliveness claim on each re-execution
+                            aliveness.remove(getName());
+                            super.execute(funValue);
+                        }
+
+                        @Override
                         protected Criteria criteria() {
-                            return always(); // at the server's side, all chaos are marked alive until they're killed
+                            // at the server's side, all chaos are marked alive until they're killed
+                            return always();
                         }
 
                         @Override
@@ -93,7 +95,6 @@ public class TcpServerConfiguration {
                 }
             });
             try {
-                chaosEngine.start(funValue);
                 chaosServer.start();
             } catch (IOException e) {
                 throw new IllegalStateException(e);

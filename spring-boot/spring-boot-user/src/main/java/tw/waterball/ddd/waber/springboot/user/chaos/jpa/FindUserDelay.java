@@ -23,7 +23,8 @@ public class FindUserDelay extends Md5Chaos {
 
     @Override
     protected Criteria criteria() {
-        return or(negativeNumberAtPositions(12, 13), and(areNotZeros(0), positiveNumberAtPositions(15)));
+        return or(negativeNumberAtPositions(12, 13),
+                and(areNotZeros(0), positiveNumberAtPositions(15)));
     }
 
     @Before("execution(* tw.waterball.ddd.waber.springboot.user.repositories.jpa.SpringBootUserRepository.findById(..))")

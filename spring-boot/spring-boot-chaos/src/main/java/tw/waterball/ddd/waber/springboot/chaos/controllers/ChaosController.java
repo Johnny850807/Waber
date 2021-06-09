@@ -13,6 +13,7 @@ import tw.waterball.chaos.api.Chaos;
 import tw.waterball.chaos.api.ChaosEngine;
 import tw.waterball.chaos.api.ChaosMiskillingException;
 import tw.waterball.chaos.api.FunValue;
+import tw.waterball.chaos.core.md5.Md5FunValue;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,13 +33,19 @@ public class ChaosController {
     private final ChaosEngine chaosEngine;
     private final Date startTime = new Date();
     private final List<String> killed = new ArrayList<>();
-    private final FunValue funValue;
+    private FunValue funValue;
     private int miss = 0;
 
 
     @GetMapping
     public InfoView ok() {
         return getInfo();
+    }
+
+    @GetMapping("/fun-value/{funValue}")
+    public void playFunValue(@PathVariable String funValue) {
+        this.funValue = new Md5FunValue(funValue);
+        chaosEngine.effect(this.funValue);
     }
 
     @GetMapping( "/kill/{chaosNumber}")

@@ -5,6 +5,7 @@ import static java.util.Arrays.copyOfRange;
 import static java.util.stream.Collectors.joining;
 import static tw.waterball.chaos.tcp.ProtocolUtils.readStringByContentLength;
 import static tw.waterball.chaos.tcp.ProtocolUtils.writeStringByContentLength;
+import static tw.waterball.chaos.tcp.TcpChaosServer.OP_FUN_VALUE_EFFECT;
 import static tw.waterball.chaos.tcp.TcpChaosServer.OP_INIT_WITH_CHAOS_NAMES;
 import static tw.waterball.chaos.tcp.TcpChaosServer.OP_KILLED;
 import static tw.waterball.chaos.tcp.TcpChaosServer.OP_SENT_ALIVE_CHAOS_NAMES;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Consumer;
 
 /**
@@ -58,8 +60,6 @@ public class TcpChaosClient {
         connected = true;
         log.info("Connected");
         initializeWithChaosNames();
-        retrieveFunValue();
-        sendAliveChaosNames();
         listenToInput();
     }
 
@@ -71,24 +71,6 @@ public class TcpChaosClient {
         buffer = writeStringByContentLength(buffer, names).flip();
         server.write(buffer);
         log.info("Initialized.");
-    }
-
-    private void retrieveFunValue() throws IOException {
-        log.info("Retrieving the fun value ...");
-        buffer = allocate(PACKET_SIZE);
-        server.read(buffer);
-        FunValue funValue = funValuePacker.read(buffer.array());
-        broadcast(l -> l.onFunValueInitialized(funValue));
-        log.info("Fun value retrieved: {}.", funValue);
-    }
-
-    private void sendAliveChaosNames() throws IOException {
-        String names = chaosCollection.stream().filter(Chaos::isExecuted).map(Chaos::getName).collect(joining(","));
-        log.info("Sending the alive chaos names={}.", names);
-        buffer = allocate(PACKET_SIZE);
-        buffer.put((byte) OP_SENT_ALIVE_CHAOS_NAMES);
-        server.write(writeStringByContentLength(buffer, names).flip());
-        log.info("Alive chaos names sent.");
     }
 
     public void disconnect() throws IOException {
@@ -104,14 +86,33 @@ public class TcpChaosClient {
                     int opCode = buffer.flip().get();
                     if (opCode == OP_KILLED) {
                         killChaos();
-                    } else {
-                        log.error("Unrecognizable OP Code: {}.", opCode);
+                    } else if (opCode == OP_FUN_VALUE_EFFECT) {
+                        retrieveFunValue();
+                        sendAliveChaosNames();
                     }
                 }
             } catch (IOException err) {
                 connected = false;
             }
         }).start();
+    }
+
+    private void retrieveFunValue() throws IOException {
+        log.info("Retrieving the fun value ...");
+        byte[] bytes = buffer.array();
+        bytes = copyOfRange(bytes, 1, bytes.length);
+        FunValue funValue = funValuePacker.read(bytes);
+        broadcast(l -> l.onFunValueInitialized(funValue));
+        log.info("Fun value retrieved: {}.", funValue);
+    }
+
+    private void sendAliveChaosNames() throws IOException {
+        String names = chaosCollection.stream().filter(Chaos::isExecuted).map(Chaos::getName).collect(joining(","));
+        log.info("Sending the alive chaos names={}.", names);
+        buffer = allocate(PACKET_SIZE);
+        buffer.put((byte) OP_SENT_ALIVE_CHAOS_NAMES);
+        server.write(writeStringByContentLength(buffer, names).flip());
+        log.info("Alive chaos names sent.");
     }
 
     private void killChaos() {
@@ -139,6 +140,10 @@ public class TcpChaosClient {
                                                                       }
 
                                                                       @Override
+                                                                      public boolean isExecuted() {
+                                                                          return new Random().nextBoolean();
+                                                                      }
+                                                                      @Override
                                                                       public String getName() {
                                                                           return "A";
                                                                       }
@@ -147,6 +152,11 @@ public class TcpChaosClient {
                     @Override
                     protected Criteria criteria() {
                         return null;
+                    }
+
+                    @Override
+                    public boolean isExecuted() {
+                        return new Random().nextBoolean();
                     }
 
                     @Override
