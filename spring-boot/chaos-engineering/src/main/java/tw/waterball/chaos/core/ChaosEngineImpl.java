@@ -28,6 +28,7 @@ public class ChaosEngineImpl implements ChaosEngine {
         nameMustNotDuplicate(chaosCollection);
         chaosCollection.forEach(c -> c.execute(funValue));
         this.funValue = funValue;
+        listeners.forEach(l -> l.onFunValueInitialized(funValue));
     }
 
     private void nameMustNotDuplicate(Collection<Chaos> chaosCollection) {
@@ -69,7 +70,6 @@ public class ChaosEngineImpl implements ChaosEngine {
 
         chaos.kill();
         listeners.forEach(l -> l.onChaosKilled(chaos));
-        chaosCollection.remove(chaos);
     }
 
     @Override
@@ -83,13 +83,15 @@ public class ChaosEngineImpl implements ChaosEngine {
     }
 
     @Override
-    public void clear() {
-
-    }
-
-
-    @Override
     public Collection<Chaos> getChaosCollection() {
         return chaosCollection;
+    }
+
+    @Override
+    public void killAll() {
+        getAliveChaos().forEach(chaos -> {
+            chaos.kill();
+            listeners.forEach(l -> l.onChaosKilled(chaos));
+        });
     }
 }

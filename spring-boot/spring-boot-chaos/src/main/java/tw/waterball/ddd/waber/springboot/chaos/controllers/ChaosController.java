@@ -1,7 +1,13 @@
 package tw.waterball.ddd.waber.springboot.chaos.controllers;
 
+import static java.util.Map.entry;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toUnmodifiableList;
+
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +21,15 @@ import tw.waterball.chaos.api.ChaosMiskillingException;
 import tw.waterball.chaos.api.FunValue;
 import tw.waterball.chaos.core.md5.Md5FunValue;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -31,8 +41,8 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class ChaosController {
     private final ChaosEngine chaosEngine;
-    private final Date startTime = new Date();
-    private final List<String> killed = new ArrayList<>();
+    private List<String> killed = new ArrayList<>();
+    private Date startTime = new Date();
     private FunValue funValue;
     private int miss = 0;
 
@@ -42,26 +52,44 @@ public class ChaosController {
         return getInfo();
     }
 
-    @GetMapping("/fun-value/{funValue}")
-    public void playFunValue(@PathVariable String funValue) {
-        this.funValue = new Md5FunValue(funValue);
-        chaosEngine.effect(this.funValue);
+    @GetMapping("/kill/all")
+    public void reset(HttpServletResponse response) throws IOException {
+        killed.addAll(chaosEngine.getAliveChaos().stream().map(Chaos::getName).collect(toList()));
+        chaosEngine.killAll();
+        response.sendRedirect("/api/chaos");
     }
 
-    @GetMapping( "/kill/{chaosNumber}")
-    public ResponseEntity<?> kill(@PathVariable int chaosNumber) {
+    @GetMapping("/fun/replay")
+    public void replay(HttpServletResponse response) throws IOException {
+        playFunValue(UUID.randomUUID().toString(), response);
+    }
+
+    @GetMapping("/fun/{funValue}")
+    public void playFunValue(@PathVariable String funValue, HttpServletResponse response) throws IOException {
+        this.funValue = new Md5FunValue(funValue);
+        chaosEngine.effect(this.funValue);
+        killed = new ArrayList<>();
+        startTime = new Date();
+        miss = 0;
+        response.sendRedirect("/api/chaos");
+    }
+
+    @GetMapping(value = "/kill/{chaosNumber}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void kill(@PathVariable int chaosNumber, HttpServletResponse response) throws IOException {
         String chaosName = generateNumberToChaosMap().get(chaosNumber);
         if (chaosName == null) {
-            return ResponseEntity.badRequest().body("Number " + chaosNumber + " doesn't exist.");
+            response.setStatus(400);
+            IOUtils.copy(new StringReader("Number " + chaosNumber + " doesn't exist."), response.getWriter());
         }
         chaosEngine.kill(generateNumberToChaosMap().get(chaosNumber));
         killed.add(chaosName);
-        return ResponseEntity.ok(getInfo());
+
+        response.sendRedirect("/api/chaos");
     }
 
     public InfoView getInfo() {
         return new InfoView(funValue, miss, startTime, killed,
-                chaosEngine.getAliveChaos().stream().map(Chaos::getName).collect(Collectors.toList()),
+                chaosEngine.getAliveChaos().stream().map(Chaos::getName).collect(toList()),
                 generateNumberToChaosMap());
     }
 
@@ -69,7 +97,7 @@ public class ChaosController {
         var list = new ArrayList<>(chaosEngine.getChaosCollection());
         return new LinkedHashMap<>() {{
             IntStream.range(0, list.size())
-                    .mapToObj(i -> Map.entry(i, list.get(i)))
+                    .mapToObj(i -> entry(i, list.get(i)))
                     .forEach(e -> put(e.getKey(), e.getValue().getName()));
         }};
     }
@@ -77,8 +105,9 @@ public class ChaosController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ChaosMiskillingException.class})
     public ResponseEntity<String> handleException(ChaosMiskillingException err) {
-        miss ++;
-        return ResponseEntity.badRequest().body(err.getMessage());
+        miss++;
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON)
+                .body("{\"error\": \""+err.getMessage()+"\"}");
     }
 
 }

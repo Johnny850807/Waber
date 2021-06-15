@@ -24,21 +24,27 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class InfoView {
     public String funValue;
-    public int miss;
+    public Integer miss;
     public List<Item> chaos;
     public List<String> killed;
-    public int remaining;
+    public String replay = "/api/chaos/fun/replay";
+    public String killAll = "/api/chaos/kill/all";
+    public Integer remaining;
     public String elapsedTime;
 
     public InfoView(FunValue funValue, int miss, Date startTime, List<String> killed, List<String> aliveChaosNames, Map<Integer, String> numberToChaosName) {
-        this.funValue = funValue.toString();
-        this.miss = miss;
-        this.killed = killed;
-        this.chaos = numberToChaosName.entrySet()
-                .stream().map(e -> new Item(e.getValue(), new Item.Link("/api/chaos/kill/" + e.getKey())))
-                .collect(Collectors.toUnmodifiableList());
-        this.remaining = aliveChaosNames.size();
-        this.elapsedTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime.getTime()) + "s";
+        if (funValue != null) {
+            this.funValue = funValue.toString();
+            this.miss = miss;
+            this.killed = killed;
+            this.chaos = numberToChaosName.entrySet()
+                    .stream()
+                    .filter(e -> !killed.contains(e.getValue()))
+                    .map(e -> new Item(e.getValue(), new Item.Link("/api/chaos/kill/" + e.getKey())))
+                    .collect(Collectors.toUnmodifiableList());
+            this.remaining = aliveChaosNames.size();
+            this.elapsedTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime.getTime()) + "s";
+        }
     }
 
     @Data

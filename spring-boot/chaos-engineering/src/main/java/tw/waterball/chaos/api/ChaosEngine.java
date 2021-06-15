@@ -21,8 +21,6 @@ public interface ChaosEngine {
 
     void removeListener(ChaosEngineListener listener);
 
-    void clear();
-
     default Optional<Chaos> getChaos(String chaosName) {
         return getChaosCollection().stream().filter(c -> c.getName().equals(chaosName.trim()))
                 .findFirst();
@@ -34,4 +32,5 @@ public interface ChaosEngine {
         return getChaosCollection().stream().filter(Chaos::isAlive).collect(toSet());
     }
 
+    void killAll();
 }

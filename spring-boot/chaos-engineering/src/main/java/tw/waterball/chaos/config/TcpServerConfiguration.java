@@ -72,6 +72,11 @@ public class TcpServerConfiguration {
                         }
 
                         @Override
+                        protected void onKilled() {
+                            aliveness.remove(this.getName());
+                        }
+
+                        @Override
                         protected Criteria criteria() {
                             // at the server's side, all chaos are marked alive until they're killed
                             return always();
