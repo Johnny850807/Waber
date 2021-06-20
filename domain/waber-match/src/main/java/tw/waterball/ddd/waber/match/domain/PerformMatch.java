@@ -30,7 +30,6 @@ public class PerformMatch {
         currentSpan(attr("candidates", drivers.size()),
                 attr("preferences", match.getPreferences()));
 
-
         Location startLocation = match.getPreferences().getStartLocation();
 
         drivers.stream()

@@ -1,10 +1,15 @@
 package tw.waterball.ddd.waber.springboot.user.chaos.eventbus;
 
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.context.annotation.Configuration;
 import tw.waterball.chaos.annotations.ChaosEngineering;
+import tw.waterball.chaos.api.ChaosMiskillingException;
+import tw.waterball.chaos.api.ChaosTriggeredException;
 import tw.waterball.chaos.core.md5.Md5Chaos;
 import tw.waterball.ddd.events.EventBus;
 
@@ -12,9 +17,9 @@ import tw.waterball.ddd.events.EventBus;
  * @author Waterball (johnny850807@gmail.com)
  */
 @ChaosEngineering
-@Aspect
+@Aspect @Slf4j
 @Configuration
-public class EventBusBlocked extends Md5Chaos {
+public class EventBusPublishBlocked extends Md5Chaos {
     @Override
     public String getName() {
         return "user.EventBusBlocked";
@@ -25,13 +30,11 @@ public class EventBusBlocked extends Md5Chaos {
         return and(positiveNumberAtPositions(1, 5, 8, 12), areZeros(13, 14));
     }
 
-    @Around("execution(* tw.waterball.ddd.waber.springboot.user.config.RabbitEventBusConfiguration.rabbitEventBusSubscriber(..))")
-    public Object before(ProceedingJoinPoint joinPoint) throws Throwable {
-        EventBus.Subscriber subscriber = (EventBus.Subscriber) joinPoint.proceed();
-        return (EventBus.Subscriber) event -> {
-            if (!isAlive()) {
-                subscriber.onEvent(event);
-            }
-        };
+    @Before("execution(* tw.waterball.ddd.events.EventBus.publish(..))")
+    public void before(JoinPoint joinPoint) throws Throwable {
+        log.trace("Chaos CUT");
+        if (isAlive()) {
+            throw new ChaosTriggeredException();
+        }
     }
 }

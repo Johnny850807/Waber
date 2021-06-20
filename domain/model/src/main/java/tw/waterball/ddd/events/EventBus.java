@@ -1,7 +1,5 @@
 package tw.waterball.ddd.events;
 
-import io.opentelemetry.extension.annotations.WithSpan;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;

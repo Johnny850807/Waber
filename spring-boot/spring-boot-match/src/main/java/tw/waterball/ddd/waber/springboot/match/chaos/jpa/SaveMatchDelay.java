@@ -18,7 +18,7 @@ import tw.waterball.chaos.core.md5.Md5Chaos;
 public class SaveMatchDelay extends Md5Chaos {
     @Override
     public String getName() {
-        return "Match.SaveMatchDelay";
+        return "match.SaveMatchDelay";
     }
 
     @Override
@@ -26,7 +26,7 @@ public class SaveMatchDelay extends Md5Chaos {
         return or(positiveNumberAtPositions(5, 13), negativeNumberAtPositions(15));
     }
 
-    @Before("execution(* tw.waterball.ddd.waber.springboot.match.repositories.jpa.SpringBootMatchRepository.save(..))")
+    @Before("execution(* tw.waterball.ddd.waber.springboot.match.repositories.jpa.SpringBootMatchRepository.save*c(..))")
     public void before(JoinPoint joinPoint) {
         if (isAlive()) {
             delay(6000);

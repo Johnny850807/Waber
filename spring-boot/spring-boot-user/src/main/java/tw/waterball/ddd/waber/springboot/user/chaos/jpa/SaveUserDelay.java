@@ -2,6 +2,7 @@ package tw.waterball.ddd.waber.springboot.user.chaos.jpa;
 
 import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -15,12 +16,12 @@ import tw.waterball.ddd.commons.utils.DelayUtils;
  * @author Waterball (johnny850807@gmail.com)
  */
 @ChaosEngineering
-@Aspect
+@Aspect @Slf4j
 @Component
 public class SaveUserDelay extends Md5Chaos {
     @Override
     public String getName() {
-        return "user.CantSaveUser";
+        return "user.SaveUserDelay";
     }
 
     @Override
@@ -28,8 +29,9 @@ public class SaveUserDelay extends Md5Chaos {
         return or(positiveNumberAtPositions(12, 13), and(areNotZeros(1, 2), positiveNumberAtPositions(5)));
     }
 
-    @Before("execution(* tw.waterball.ddd.waber.springboot.user.repositories.jpa.SpringBootUserRepository.save(..))")
+    @Before("execution(* tw.waterball.ddd.waber.springboot.user.repositories.jpa.SpringBootUserRepository.save*(..))")
     public void before(JoinPoint joinPoint) {
+        log.trace("Chaos CUT");
         if (isAlive()) {
             delay(6000);
         }

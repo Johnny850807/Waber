@@ -1,4 +1,4 @@
-package tw.waterball.ddd.waber.springboot.trip.chaos;
+package tw.waterball.ddd.waber.springboot.user.chaos.eventbus;
 
 import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
 
@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import tw.waterball.chaos.annotations.ChaosEngineering;
 import tw.waterball.chaos.api.ChaosTriggeredException;
 import tw.waterball.chaos.core.md5.Md5Chaos;
@@ -17,23 +17,24 @@ import tw.waterball.ddd.commons.utils.DelayUtils;
  */
 @ChaosEngineering
 @Aspect @Slf4j
-@Component
-public class ArriveAPIDelay extends Md5Chaos {
+@Configuration
+public class EventBusPublishDelay extends Md5Chaos {
     @Override
     public String getName() {
-        return "trip.ArriveAPIDelay";
+        return "user.EventBusPublishDelay";
     }
 
     @Override
     protected Criteria criteria() {
-        return or(areNotZeros(0, 15), negativeNumberAtPositions(10, 11));
+        return or(positiveNumberAtPositions(1, 2, 7),
+                areZeros(0, 5, 7, 11));
     }
 
-    @Before("execution(* tw.waterball.ddd.waber.springboot.trip.controllers.TripController.arrive(..))")
-    public void before(JoinPoint joinPoint) {
+    @Before("execution(* tw.waterball.ddd.events.EventBus.publish(..))")
+    public void before(JoinPoint joinPoint) throws Throwable {
         log.trace("Chaos CUT");
         if (isAlive()) {
-            delay(5000);
+            delay(3000);
         }
     }
 }

@@ -3,6 +3,7 @@ package tw.waterball.ddd.waber.springboot.trip.chaos;
 import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -16,7 +17,7 @@ import tw.waterball.ddd.commons.utils.DelayUtils;
  * @author Waterball (johnny850807@gmail.com)
  */
 @ChaosEngineering
-@Aspect
+@Aspect @Slf4j
 @Component
 public class GetCurrentTripAPIDelay extends Md5Chaos {
     @Override
@@ -31,6 +32,7 @@ public class GetCurrentTripAPIDelay extends Md5Chaos {
 
     @Before("execution(* tw.waterball.ddd.waber.springboot.trip.controllers.TripController.getCurrentTrip(..))")
     public void before(JoinPoint joinPoint) {
+        log.trace("Chaos CUT");
         if (isAlive()) {
             delay(3000);
         }

@@ -1,9 +1,10 @@
-package tw.waterball.ddd.waber.springboot.user.chaos.api;
+package tw.waterball.ddd.waber.springboot.trip.chaos;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import tw.waterball.chaos.annotations.ChaosEngineering;
 import tw.waterball.chaos.api.ChaosTriggeredException;
 import tw.waterball.chaos.core.md5.Md5Chaos;
@@ -12,22 +13,22 @@ import tw.waterball.chaos.core.md5.Md5Chaos;
  * @author Waterball (johnny850807@gmail.com)
  */
 @ChaosEngineering
-@Aspect
-@Component
-public class SetDriverStatusAPIChaosBlocked extends Md5Chaos {
+@Aspect @Slf4j
+@Configuration
+public class EventBusPublishBlocked extends Md5Chaos {
     @Override
     public String getName() {
-        return "user.SetDriverStatusAPIChaosBlocked";
+        return "trip.EventBusBlocked";
     }
 
     @Override
     protected Criteria criteria() {
-        return or(positiveNumberAtPositions(4, 7, 9),
-                negativeNumberAtPositions(2, 3), positiveNumberAtPositions(6, 13));
+        return and(negativeNumberAtPositions(1, 5, 6, 12), areZeros(13, 14));
     }
 
-    @Before("execution(* tw.waterball.ddd.waber.springboot.user.controllers.DriverController.setDriverStatus(..))")
-    public void before(JoinPoint joinPoint) {
+    @Before("execution(* tw.waterball.ddd.events.EventBus.publish(..))")
+    public void before(JoinPoint joinPoint) throws Throwable {
+        log.trace("Chaos CUT");
         if (isAlive()) {
             throw new ChaosTriggeredException();
         }
