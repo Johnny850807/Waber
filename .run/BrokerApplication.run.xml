@@ -15,6 +15,7 @@
     <option name="ACTIVE_PROFILES" value="microservice" />
     <option name="VM_PARAMETERS" value="-javaagent:spring-boot/spring-boot-broker/bin/opentelemetry-javaagent-all.jar" />
     <option name="ALTERNATIVE_JRE_PATH" />
+    <option name="PASS_PARENT_ENVS" value="false" />
     <envs>
       <env name="server.port" value="9004" />
       <env name="chaos.host" value="localhost" />
@@ -23,6 +24,7 @@
       <env name="OTEL_METRICS_EXPORTER" value="none" />
       <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=waber-user" />
       <env name="OTEL_EXPORTER_JAEGER_ENDPOINT" value="http://localhost:14250" />
+      <env name="logging.level.tw.waterball" value="trace" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

@@ -28,6 +28,7 @@
       <env name="spring.datasource.url" value="jdbc:mysql://localhost:3306/waber_match" />
       <env name="spring.rabbitmq.host" value="localhost" />
       <env name="spring.rabbitmq.port" value="5672" />
+      <env name="logging.level.tw.waterball" value="trace" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

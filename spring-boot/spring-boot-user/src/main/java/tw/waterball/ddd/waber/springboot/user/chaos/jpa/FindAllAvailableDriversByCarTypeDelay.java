@@ -29,7 +29,7 @@ public class FindAllAvailableDriversByCarTypeDelay extends Md5Chaos {
 
     @Before("execution(* tw.waterball.ddd.waber.springboot.user.repositories.jpa.SpringBootUserRepository.findAllAvailableDriversByCarType(..))")
     public void beforeFindById(JoinPoint joinPoint) {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             delay(6000);
         }

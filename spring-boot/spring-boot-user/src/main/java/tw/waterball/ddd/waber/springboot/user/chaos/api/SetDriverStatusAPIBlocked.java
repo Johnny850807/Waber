@@ -29,7 +29,7 @@ public class SetDriverStatusAPIBlocked extends Md5Chaos {
 
     @Before("execution(* tw.waterball.ddd.waber.springboot.user.controllers.DriverController.setDriverStatus(..))")
     public void before(JoinPoint joinPoint) {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             throw new ChaosTriggeredException();
         }

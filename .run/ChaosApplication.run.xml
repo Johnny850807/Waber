@@ -15,7 +15,7 @@
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
       <env name="server.port" value="9005" />
-      <env name="chaos.fun.value" value="HelloWorld" />
+      <env name="logging.level.tw.waterball" value="trace" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

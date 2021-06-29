@@ -48,7 +48,7 @@ public class Driver extends User {
 
     public void setStatus(Status status) {
         if (this.status == Status.MATCHED && status == Status.MATCHED) {
-            throw new DriverIsNotAvailableException(this);
+            throw new DriverNotAvailableException(this);
         }
         this.status = status;
     }

@@ -10,13 +10,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import tw.waterball.ddd.events.StartMatchingCommand;
 import tw.waterball.ddd.events.TripStateChangedEvent;
 import tw.waterball.ddd.model.trip.TripStateType;
-import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 import tw.waterball.ddd.waber.match.usecases.FinalizeMatch;
-import tw.waterball.ddd.waber.match.usecases.MatchUseCase;
-import tw.waterball.ddd.waber.match.usecases.MatchUseCase.MatchRequest;
 
 /**
  * @author Waterball (johnny850807@gmail.com)

@@ -2,6 +2,7 @@ package tw.waterball.ddd.waber.match.usecases;
 
 import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
+import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 
 import javax.inject.Named;

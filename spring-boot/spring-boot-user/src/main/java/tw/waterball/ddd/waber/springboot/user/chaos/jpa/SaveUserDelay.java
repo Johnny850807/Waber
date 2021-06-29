@@ -31,7 +31,7 @@ public class SaveUserDelay extends Md5Chaos {
 
     @Before("execution(* tw.waterball.ddd.waber.springboot.user.repositories.jpa.SpringBootUserRepository.save*(..))")
     public void before(JoinPoint joinPoint) {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             delay(6000);
         }

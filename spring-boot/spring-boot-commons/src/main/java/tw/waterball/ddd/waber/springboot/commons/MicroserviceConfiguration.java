@@ -7,10 +7,10 @@ import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import tw.waterball.ddd.api.match.RestMatchServiceDriver;
-import tw.waterball.ddd.api.trip.RestTripServiceDriver;
-import tw.waterball.ddd.waber.api.payment.RestPaymentServiceDriver;
-import tw.waterball.ddd.waber.api.payment.RestUserServiceDriver;
+import tw.waterball.ddd.api.match.RestMatchContext;
+import tw.waterball.ddd.api.trip.RestTripContext;
+import tw.waterball.ddd.waber.api.payment.RestPaymentContext;
+import tw.waterball.ddd.waber.api.payment.RestUserContext;
 import tw.waterball.ddd.waber.springboot.commons.profiles.Microservice;
 
 /**
@@ -22,27 +22,27 @@ import tw.waterball.ddd.waber.springboot.commons.profiles.Microservice;
 public class MicroserviceConfiguration {
 
     @Bean
-    public RestUserServiceDriver restUserServiceDriver(WaberProperties waberProperties,
+    public RestUserContext restUserServiceDriver(WaberProperties waberProperties,
+                                                 RestTemplate restTemplate) {
+        return new RestUserContext(waberProperties.getClient().getUserService(), restTemplate);
+    }
+
+    @Bean
+    public RestTripContext restTripServiceDriver(WaberProperties waberProperties,
+                                                 RestTemplate restTemplate) {
+        return new RestTripContext(waberProperties.getClient().getTripService(), restTemplate);
+    }
+
+    @Bean
+    public RestMatchContext restMatchServiceDriver(WaberProperties waberProperties,
+                                                   RestTemplate restTemplate) {
+        return new RestMatchContext(waberProperties.getClient().getMatchService(), restTemplate);
+    }
+
+    @Bean
+    public RestPaymentContext restPaymentServiceDriver(WaberProperties waberProperties,
                                                        RestTemplate restTemplate) {
-        return new RestUserServiceDriver(waberProperties.getClient().getUserService(), restTemplate);
-    }
-
-    @Bean
-    public RestTripServiceDriver restTripServiceDriver(WaberProperties waberProperties,
-                                                       RestTemplate restTemplate) {
-        return new RestTripServiceDriver(waberProperties.getClient().getTripService(), restTemplate);
-    }
-
-    @Bean
-    public RestMatchServiceDriver restMatchServiceDriver(WaberProperties waberProperties,
-                                                         RestTemplate restTemplate) {
-        return new RestMatchServiceDriver(waberProperties.getClient().getMatchService(), restTemplate);
-    }
-
-    @Bean
-    public RestPaymentServiceDriver restPaymentServiceDriver(WaberProperties waberProperties,
-                                                             RestTemplate restTemplate) {
-        return new RestPaymentServiceDriver(waberProperties.getClient().getPaymentService(), restTemplate);
+        return new RestPaymentContext(waberProperties.getClient().getPaymentService(), restTemplate);
     }
 
     @Bean

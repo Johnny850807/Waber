@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import tw.waterball.ddd.api.match.FakeMatchServiceDriver;
-import tw.waterball.ddd.api.trip.FakeTripServiceDriver;
+import tw.waterball.ddd.api.match.FakeMatchContext;
+import tw.waterball.ddd.api.trip.FakeTripContext;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.payment.PricingItem;
 import tw.waterball.ddd.model.payment.PricingStrategy;
@@ -41,10 +41,10 @@ class PaymentControllerTest extends AbstractSpringBootTest {
     private final Trip trip = TripStubs.ARRIVED_TRIP;
 
     @Autowired
-    private FakeMatchServiceDriver matchServiceDriver;
+    private FakeMatchContext matchServiceDriver;
 
     @Autowired
-    private FakeTripServiceDriver tripServiceDriver;
+    private FakeTripContext tripServiceDriver;
 
     @Autowired
     private PaymentRepository paymentRepository;

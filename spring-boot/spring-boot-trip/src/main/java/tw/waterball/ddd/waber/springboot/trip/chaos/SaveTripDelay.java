@@ -29,7 +29,7 @@ public class SaveTripDelay extends Md5Chaos {
 
     @Before("execution(* tw.waterball.ddd.waber.springboot.trip.repositories.jpa.SpringBootTripRepository.saveTrip*(..))")
     public void before(JoinPoint joinPoint) {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             delay(6000);
         }

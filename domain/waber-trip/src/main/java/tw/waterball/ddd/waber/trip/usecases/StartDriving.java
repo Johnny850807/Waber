@@ -24,7 +24,7 @@ public class StartDriving {
 
     @WithSpan
     public void execute(Request req) {
-        var result = findCurrentTrip.executeAndGetResult(
+        var result = findCurrentTrip.executeAndGet(
                 new FindCurrentTrip.Request(req.passengerId, true));
 
         Trip trip = result.getTrip();

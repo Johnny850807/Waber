@@ -1,5 +1,6 @@
 package tw.waterball.chaos.tcp;
 
+import static java.lang.Thread.sleep;
 import static java.nio.ByteBuffer.allocate;
 import static java.util.Arrays.stream;
 import static java.util.Collections.synchronizedMap;
@@ -203,8 +204,12 @@ public class TcpChaosServer implements ChaosEngineListener {
         }
     }
 
+    @SneakyThrows
     protected synchronized void kill(String chaosName) {
         log.info("Killing {}...", chaosName);
+        // [DRUNK CODE] The delay is necessary, as the client won't be able to consume the data so instantly
+        // TODO: figure out a better way to solve this
+        sleep(800);
         for (SocketChannel client : chaosNameToClientMap.get(chaosName)) {
             try {
                 buffer = allocate(PACKET_SIZE);

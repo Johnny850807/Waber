@@ -28,9 +28,9 @@ public class PerformMatchIgnored extends Md5Chaos {
         return positiveNumberAtPositions(1, 2, 3, 4, 5, 6, 7);
     }
 
-    @Around("execution(* tw.waterball.ddd.waber.match.domain.PerformMatch.execute(..))")
+    @Around("execution(* tw.waterball.ddd.waber.match.domain.CarHailingMatcher.match(..))")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             // ignore: do nothing
             return null; // void

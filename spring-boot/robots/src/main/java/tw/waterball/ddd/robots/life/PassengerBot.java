@@ -14,7 +14,7 @@ import tw.waterball.ddd.model.trip.TripStateType;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.robots.Framework;
 import tw.waterball.ddd.robots.api.API;
-import tw.waterball.ddd.robots.api.StompAPI;
+import tw.waterball.ddd.robots.api.BrokerAPI;
 
 import java.util.Optional;
 
@@ -23,16 +23,16 @@ import java.util.Optional;
  */
 @Slf4j
 public class PassengerBot extends AbstractUserBot {
-    private final StompAPI stompAPI;
+    private final BrokerAPI brokerAPI;
     private final API api;
     private Framework framework;
     private State state = State.NEWBORN;
     private Passenger passenger;
     private MatchView currentMatch;
 
-    public PassengerBot(String name, StompAPI stompAPI, API api, Framework framework) {
+    public PassengerBot(String name, BrokerAPI brokerAPI, API api, Framework framework) {
         super(name);
-        this.stompAPI = stompAPI;
+        this.brokerAPI = brokerAPI;
         this.api = api;
         this.framework = framework;
     }
@@ -72,7 +72,7 @@ public class PassengerBot extends AbstractUserBot {
     }
 
     private void subscribeToMatchedCompletionEvent() {
-        stompAPI.subscribe(new StompAPI.MatchedSubscription(passenger.getId()),
+        brokerAPI.subscribe(new BrokerAPI.MatchedSubscription(passenger.getId()),
                 (event, subscription) -> {
                     if (state != State.MATCHING) {
                         throw new IllegalStateException("Bug, get MATCHED in the states other than the MATCHING state.");
@@ -87,7 +87,7 @@ public class PassengerBot extends AbstractUserBot {
 
 
     private void subscribeToTripStateChangedEvent() {
-        stompAPI.subscribe(new StompAPI.TripStateChangedSubscription(passenger.getId()),
+        brokerAPI.subscribe(new BrokerAPI.TripStateChangedSubscription(passenger.getId()),
                 (event, subscription) -> {
                     String content = (String) event;
                     TripStateType tripState = TripStateType.valueOf(content);
@@ -104,7 +104,7 @@ public class PassengerBot extends AbstractUserBot {
     }
 
     private void subscribeToDriverLocationUpdatedEvent() {
-        stompAPI.subscribe(new StompAPI.UserLocationChangedSubscription(currentMatch.driver.id),
+        brokerAPI.subscribe(new BrokerAPI.UserLocationChangedSubscription(currentMatch.driver.id),
                 (event, subscription) -> {
                     // only update while passenger is in the car
                     if (state == DRIVING_TO_DESTINATION) {

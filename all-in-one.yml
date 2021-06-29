@@ -12,6 +12,7 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
+      LOGGING_LEVEL_TW_WATERBALL: ${loggingLevel}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.user-service.rule=PathPrefix(`/api/users`) || PathPrefix(`/api/passengers`) || PathPrefix(`/api/drivers`)"
@@ -35,6 +36,7 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
+      LOGGING_LEVEL_TW_WATERBALL: ${loggingLevel}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.match-service.rule=PathPrefix(`/api/users/{passengerId:[0-9]+}/matches`) || PathPrefix(`/api/matches`)"
@@ -58,6 +60,7 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
+      LOGGING_LEVEL_TW_WATERBALL: ${loggingLevel}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.trip-service.rule=PathPrefix(`/api/trips`) || PathPrefix(`/api/users/{passengerId:[0-9]+}/trips`)"
@@ -81,6 +84,7 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
+      LOGGING_LEVEL_TW_WATERBALL: ${loggingLevel}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.payment-service.rule=PathPrefix(`/api/payments`)"
@@ -101,6 +105,7 @@ services:
       OTEL_TRACES_EXPORTER: jaeger
       OTEL_EXPORTER_JAEGER_ENDPOINT: http://tempo:14250
       OTEL_METRICS_EXPORTER: none
+      LOGGING_LEVEL_TW_WATERBALL: ${loggingLevel}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.broker.rule=PathPrefix(`/broker`) || PathPrefix(`/topic`)"

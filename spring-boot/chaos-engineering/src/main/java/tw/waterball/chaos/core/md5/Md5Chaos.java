@@ -2,6 +2,7 @@ package tw.waterball.chaos.core.md5;
 
 import static java.util.Arrays.stream;
 
+import lombok.extern.slf4j.Slf4j;
 import tw.waterball.chaos.api.Chaos;
 import tw.waterball.chaos.api.FunValue;
 
@@ -10,6 +11,7 @@ import tw.waterball.chaos.api.FunValue;
  *
  * @author Waterball (johnny850807@gmail.com)
  */
+@Slf4j
 public abstract class Md5Chaos implements Chaos {
     private final Criteria criteria;
     private boolean executed;
@@ -50,6 +52,7 @@ public abstract class Md5Chaos implements Chaos {
     @Override
     public void kill() {
         if (isExecuted()) {
+            log.trace("{} is killed", getName());
             killed = true;
             onKilled();
         }

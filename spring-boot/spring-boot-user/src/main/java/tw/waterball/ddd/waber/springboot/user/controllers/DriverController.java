@@ -9,9 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tw.waterball.ddd.commons.model.ErrorMessage;
-import tw.waterball.ddd.commons.utils.OpenTelemetryUtils;
 import tw.waterball.ddd.model.user.Driver;
-import tw.waterball.ddd.model.user.DriverIsNotAvailableException;
+import tw.waterball.ddd.model.user.DriverNotAvailableException;
 import tw.waterball.ddd.waber.driver.usecases.SetDriverStatus;
 import tw.waterball.ddd.waber.driver.usecases.SignUpToBeDriver;
 import tw.waterball.ddd.waber.user.usecases.FindAvailableDrivers;
@@ -57,7 +56,7 @@ public class DriverController {
 
     @PatchMapping("/{driverId}")
     public void setDriverStatus(@PathVariable int driverId,
-                                @RequestBody String status) throws DriverIsNotAvailableException {
+                                @RequestBody String status) throws DriverNotAvailableException {
         currentSpan(event("SetDriverStatus"), attr("driverId", driverId), attr("status", status))
                 .asLog(log::info);
 
@@ -67,8 +66,8 @@ public class DriverController {
 
     // survey if this handler can be shared in spring-boot-commons
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({DriverIsNotAvailableException.class})
-    public ErrorMessage handleDriverHasBeenMatchedException(DriverIsNotAvailableException err) {
+    @ExceptionHandler({DriverNotAvailableException.class})
+    public ErrorMessage handleDriverHasBeenMatchedException(DriverNotAvailableException err) {
         return ErrorMessage.fromException(err);
     }
 

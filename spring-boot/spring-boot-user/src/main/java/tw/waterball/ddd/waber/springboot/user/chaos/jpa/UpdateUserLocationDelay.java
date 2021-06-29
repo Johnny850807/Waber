@@ -29,7 +29,7 @@ public class UpdateUserLocationDelay extends Md5Chaos {
 
     @Before("execution(* tw.waterball.ddd.waber.springboot.user.repositories.jpa.SpringBootUserRepository.updateLatestLocation(..))")
     public void before(JoinPoint joinPoint) {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             delay(3000);
         }

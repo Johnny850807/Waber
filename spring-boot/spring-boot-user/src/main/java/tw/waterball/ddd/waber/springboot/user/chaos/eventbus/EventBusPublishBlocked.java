@@ -32,7 +32,7 @@ public class EventBusPublishBlocked extends Md5Chaos {
 
     @Before("execution(* tw.waterball.ddd.events.EventBus.publish(..))")
     public void before(JoinPoint joinPoint) throws Throwable {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             throw new ChaosTriggeredException();
         }

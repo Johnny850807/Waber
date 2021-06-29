@@ -30,7 +30,7 @@ public class AllUsecasesDelay extends Md5Chaos {
 
     @Before("execution(* tw.waterball.ddd.waber.*.usecases..execute(..))")
     public void before(JoinPoint joinPoint) throws Throwable {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             delay(2000);
         }

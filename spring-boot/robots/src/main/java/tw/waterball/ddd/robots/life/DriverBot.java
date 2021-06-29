@@ -7,12 +7,10 @@ import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.robots.Framework;
 import tw.waterball.ddd.robots.api.API;
-import tw.waterball.ddd.robots.api.StompAPI;
+import tw.waterball.ddd.robots.api.BrokerAPI;
 
 import java.util.Optional;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author Waterball (johnny850807@gmail.com)
@@ -21,7 +19,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class DriverBot extends AbstractUserBot {
     public static final double SPEED = 2;
     private Driver driver;
-    private final StompAPI stompAPI;
+    private final BrokerAPI brokerAPI;
     private final API api;
     private Framework framework;
     private State state = State.NEWBORN;
@@ -38,9 +36,9 @@ public class DriverBot extends AbstractUserBot {
         NEWBORN, ACTIVE, PICKING_UP_PASSENGER, DRIVING_TO_DESTINATION
     }
 
-    public DriverBot(String name, StompAPI stompAPI, API api, Framework framework) {
+    public DriverBot(String name, BrokerAPI brokerAPI, API api, Framework framework) {
         super(name);
-        this.stompAPI = stompAPI;
+        this.brokerAPI = brokerAPI;
         this.api = api;
         this.framework = framework;
     }
@@ -72,7 +70,7 @@ public class DriverBot extends AbstractUserBot {
     }
 
     private void subscribeToMatchedCompletionEvent() {
-        stompAPI.subscribe(new StompAPI.MatchedSubscription(driver.getId()),
+        brokerAPI.subscribe(new BrokerAPI.MatchedSubscription(driver.getId()),
                 (event, subscription) -> {
                     if (state == State.ACTIVE) {
                         currentMatch = api.getCurrentMatch(driver.getId());
@@ -96,7 +94,6 @@ public class DriverBot extends AbstractUserBot {
                 currentPassenger = framework.getPassengerById(currentMatch.passengerId);
                 state = State.DRIVING_TO_DESTINATION;
                 log.info("<{}> Start driving to the destination {}", name, destination);
-
             });
         }
     }
@@ -129,7 +126,6 @@ public class DriverBot extends AbstractUserBot {
         }
     }
 
-    private int i = 0;
     private static final ConcurrentLinkedQueue<Runnable> updateLocationTaskQueue = new ConcurrentLinkedQueue<>();
 
     @SneakyThrows

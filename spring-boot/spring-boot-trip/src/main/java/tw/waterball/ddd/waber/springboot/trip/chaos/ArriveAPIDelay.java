@@ -31,7 +31,7 @@ public class ArriveAPIDelay extends Md5Chaos {
 
     @Before("execution(* tw.waterball.ddd.waber.springboot.trip.controllers.TripController.arrive(..))")
     public void before(JoinPoint joinPoint) {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             delay(5000);
         }

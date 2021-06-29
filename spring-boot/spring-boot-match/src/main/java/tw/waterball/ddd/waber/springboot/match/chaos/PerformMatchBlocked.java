@@ -26,9 +26,9 @@ public class PerformMatchBlocked extends Md5Chaos {
         return positiveNumberAtPositions(1, 2, 3, 4, 5, 6, 7);
     }
 
-    @Before("execution(* tw.waterball.ddd.waber.match.domain.PerformMatch.execute(..))")
+    @Before("execution(* tw.waterball.ddd.waber.match.domain.CarHailingMatcher.match(..))")
     public void before(JoinPoint joinPoint) {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             throw new ChaosTriggeredException();
         }

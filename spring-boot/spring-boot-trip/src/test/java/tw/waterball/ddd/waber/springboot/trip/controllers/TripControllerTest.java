@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import tw.waterball.ddd.api.match.FakeMatchServiceDriver;
+import tw.waterball.ddd.api.match.FakeMatchContext;
 import tw.waterball.ddd.api.trip.TripView;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
@@ -27,8 +27,8 @@ import tw.waterball.ddd.model.trip.states.Arrived;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.stubs.UserStubs;
-import tw.waterball.ddd.waber.api.payment.FakeUserServiceDriver;
-import tw.waterball.ddd.waber.api.payment.PaymentServiceDriver;
+import tw.waterball.ddd.waber.api.payment.FakeUserContext;
+import tw.waterball.ddd.waber.api.payment.PaymentContext;
 import tw.waterball.ddd.waber.springboot.commons.profiles.FakeServiceDrivers;
 import tw.waterball.ddd.waber.springboot.testkit.AbstractSpringBootTest;
 import tw.waterball.ddd.waber.springboot.trip.TripApplication;
@@ -61,11 +61,11 @@ class TripControllerTest extends AbstractSpringBootTest {
     @Autowired
     StartTripHandler startTripHandler;
     @Autowired
-    FakeMatchServiceDriver matchServiceDriver;
+    FakeMatchContext matchServiceDriver;
     @Autowired
-    FakeUserServiceDriver userServiceDriver;
+    FakeUserContext userServiceDriver;
     @MockBean
-    PaymentServiceDriver paymentServiceDriver;
+    PaymentContext paymentContext;
 
     @Autowired
     SpringBootTripRepository tripRepository;
@@ -106,7 +106,7 @@ class TripControllerTest extends AbstractSpringBootTest {
         Trip trip = tripRepository.findById(this.tripView.id).orElseThrow();
         assertEquals(TripStateType.ARRIVED, trip.getState().getType());
 
-        verify(paymentServiceDriver).checkoutPayment(trip.getId());
+        verify(paymentContext).checkoutPayment(trip.getId());
     }
 
     @Test

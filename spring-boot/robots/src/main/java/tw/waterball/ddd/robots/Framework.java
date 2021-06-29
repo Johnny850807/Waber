@@ -3,14 +3,10 @@ package tw.waterball.ddd.robots;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import tw.waterball.ddd.api.match.MatchServiceDriver;
-import tw.waterball.ddd.api.trip.TripServiceDriver;
-import tw.waterball.ddd.model.user.Passenger;
 import tw.waterball.ddd.robots.api.API;
-import tw.waterball.ddd.robots.api.StompAPI;
+import tw.waterball.ddd.robots.api.BrokerAPI;
 import tw.waterball.ddd.robots.life.Life;
 import tw.waterball.ddd.robots.life.PassengerBot;
-import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -26,21 +22,18 @@ public class Framework {
     private final Collection<Life> lives = new CopyOnWriteArrayList<>();
     private boolean running = false;
     private final List<LivesListener> livesListeners = new LinkedList<>();
-    private final StompAPI stompAPI;
+    private final BrokerAPI brokerAPI;
 
     public Framework(@Value("${maxDrivers}") int maxDrivers,
                      @Value("${maxPassengers}") int maxPassengers,
-                     StompAPI stompAPI, UserServiceDriver userServiceDriver,
-                     MatchServiceDriver matchServiceDriver,
-                     TripServiceDriver tripServiceDriver) {
-        this.stompAPI = stompAPI;
-        lives.add(new UserGenerator(maxDrivers, maxPassengers, this, stompAPI,
-                new API(userServiceDriver, matchServiceDriver, tripServiceDriver)));
+                     BrokerAPI brokerAPI, API api) {
+        this.brokerAPI = brokerAPI;
+        lives.add(new UserGenerator(maxDrivers, maxPassengers, this, brokerAPI, api));
     }
 
     @SneakyThrows
     public void start() {
-        stompAPI.start();
+        brokerAPI.start();
         running = true;
         for (long i = 0; i < Long.MAX_VALUE && running; i++) {
             final long time = i;

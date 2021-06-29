@@ -18,12 +18,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.ResultActions;
 import tw.waterball.ddd.api.match.MatchView;
-import tw.waterball.ddd.commons.utils.StreamUtils;
 import tw.waterball.ddd.events.TripStateChangedEvent;
 import tw.waterball.ddd.model.geo.Location;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.trip.TripStateType;
-import tw.waterball.ddd.waber.api.payment.FakeUserServiceDriver;
+import tw.waterball.ddd.waber.api.payment.FakeUserContext;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
 import tw.waterball.ddd.model.user.Passenger;
@@ -48,7 +47,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static tw.waterball.ddd.api.match.MatchView.DriverView.toViewModel;
 import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
-import static tw.waterball.ddd.commons.utils.SneakyUtils.sneakyThrows;
 import static tw.waterball.ddd.commons.utils.StreamUtils.count;
 import static tw.waterball.ddd.waber.springboot.match.config.RabbitEventBusConfiguration.EVENTS_EXCHANGE;
 
@@ -63,7 +61,7 @@ public class MatchControllerTest extends AbstractSpringBootTest {
     MatchRepository matchRepository;
 
     @Autowired
-    FakeUserServiceDriver userServiceDriver;
+    FakeUserContext userServiceDriver;
 
     @Autowired
     AmqpTemplate amqpTemplate;

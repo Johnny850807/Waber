@@ -15,7 +15,6 @@ import java.util.List;
 public class PricingStrategyConfiguration {
 
     @Bean
-    @Primary
     public CompositePricingStrategy compositePricingStrategy(List<PricingStrategy> pricingStrategies) {
         return new CompositePricingStrategy(pricingStrategies);
     }

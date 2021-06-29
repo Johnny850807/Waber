@@ -32,7 +32,7 @@ public class GetCurrentTripAPIDelay extends Md5Chaos {
 
     @Before("execution(* tw.waterball.ddd.waber.springboot.trip.controllers.TripController.getCurrentTrip(..))")
     public void before(JoinPoint joinPoint) {
-        log.trace("Chaos CUT");
+
         if (isAlive()) {
             delay(3000);
         }

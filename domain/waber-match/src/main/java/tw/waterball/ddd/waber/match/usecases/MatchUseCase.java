@@ -1,25 +1,22 @@
 package tw.waterball.ddd.waber.match.usecases;
 
 import static tw.waterball.ddd.commons.utils.DelayUtils.delay;
-import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.attr;
 import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.currentSpan;
-import static tw.waterball.ddd.commons.utils.OpenTelemetryUtils.event;
+import static tw.waterball.ddd.model.user.Driver.Status.MATCHED;
 
-import io.opentelemetry.extension.annotations.WithSpan;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tw.waterball.ddd.commons.exceptions.NotFoundException;
-import tw.waterball.ddd.commons.utils.OpenTelemetryUtils;
 import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.events.MatchCompleteEvent;
 import tw.waterball.ddd.events.StartMatchingCommand;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.match.MatchPreferences;
 import tw.waterball.ddd.model.user.Driver;
-import tw.waterball.ddd.model.user.DriverIsNotAvailableException;
+import tw.waterball.ddd.model.user.DriverNotAvailableException;
 import tw.waterball.ddd.model.user.Passenger;
-import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
-import tw.waterball.ddd.waber.match.domain.PerformMatch;
+import tw.waterball.ddd.waber.api.payment.UserContext;
+import tw.waterball.ddd.waber.match.domain.CarHailingMatcher;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 
 import java.util.List;
@@ -30,53 +27,55 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class MatchUseCase {
-    private final UserServiceDriver userServiceDriver;
+    private final UserContext userContext;
     private final MatchRepository matchRepository;
     private final FindCurrentMatch findCurrentMatch;
-    private final PerformMatch performMatch;
+    private final CarHailingMatcher carHailingMatcher;
     private final long rescheduleDelayTimeInMs;
     private final EventBus eventBus;
 
-    @WithSpan
-    public void execute(StartMatchingRequest req, Presenter presenter) {
-        Passenger passenger = userServiceDriver.getPassenger(req.passengerId);
-        Match match = findCurrentMatch.execute(req.passengerId)
-                .orElseGet(() -> startNewMatch(req, passenger));
+    public void execute(StartMatchingRequest request, Presenter presenter) {
+        Passenger passenger = userContext.getPassenger(request.passengerId);
+        Match match = findCurrentMatch.execute(request.passengerId)
+                .orElseGet(() -> startNewMatch(request, passenger));
         presenter.present(match);
     }
 
-    private Match startNewMatch(StartMatchingRequest req, Passenger passenger) {
-        Match newMatch = Match.start(passenger.getId(), req.matchPreferences);
+    private Match startNewMatch(StartMatchingRequest request, Passenger passenger) {
+        Match newMatch = Match.start(passenger.getId(), request.matchPreferences);
         newMatch = matchRepository.save(newMatch);
         eventBus.publish(new StartMatchingCommand(newMatch.getId(), passenger.getId()));
         return newMatch;
     }
 
-    @WithSpan
-    public void execute(MatchRequest req) {
-        Match match = matchRepository.findById(req.matchId).orElseThrow(NotFoundException::new);
-        List<Driver> drivers = userServiceDriver.filterDrivers(match.getPreferences());
+    public void execute(PerformMatchRequest request) {
+        Match match = findMatch(request);
+        List<Driver> drivers = userContext.getDrivers(match.getPreferences());
 
-        performMatch.execute(match, drivers);
+        carHailingMatcher.match(match, drivers);
 
         if (match.isCompleted()) {
             try {
                 saveIfMatchedDriverIsAvailable(match);
-            } catch (DriverIsNotAvailableException err) {
-                delayAndReplublishStartMatchingCommand(match);
+            } catch (DriverNotAvailableException err) {
+                reschedule(match);
             }
         } else {
-            delayAndReplublishStartMatchingCommand(match);
+            reschedule(match);
         }
     }
 
-    private void saveIfMatchedDriverIsAvailable(Match match) {
-        userServiceDriver.setDriverStatus(match.getDriverId(), Driver.Status.MATCHED);
-        matchRepository.save(match);
+    private Match findMatch(PerformMatchRequest req) {
+        return matchRepository.findById(req.matchId).orElseThrow(NotFoundException::new);
+    }
+
+    private void saveIfMatchedDriverIsAvailable(Match match) throws DriverNotAvailableException {
+        userContext.askDriverToMatch(match.getDriverId());
+        match = matchRepository.save(match);
         eventBus.publish(new MatchCompleteEvent(match));
     }
 
-    private void delayAndReplublishStartMatchingCommand(Match match) {
+    private void reschedule(Match match) {
         delay(rescheduleDelayTimeInMs);
         eventBus.publish(new StartMatchingCommand(match.getId(), match.getPassengerId()));
     }
@@ -89,7 +88,7 @@ public class MatchUseCase {
 
 
     @AllArgsConstructor
-    public static class MatchRequest {
+    public static class PerformMatchRequest {
         public int matchId;
     }
 

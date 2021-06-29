@@ -32,7 +32,6 @@ public class TripController {
     private final TripRepository tripRepository;
     private final EventBus eventBus;
 
-
     @GetMapping("/trips/health")
     public String health() {
         return "OK";
@@ -52,8 +51,7 @@ public class TripController {
     @PatchMapping("/users/{userId}/trips/current/arrive")
     public void arrive(@PathVariable int userId) {
         currentSpan(event("TripArrive"), attr("userId", userId)).asLog(log::info);
-
-        arriveDestination.execute(new ArriveDestination.Request(userId), eventBus);
+        arriveDestination.execute(new ArriveDestination.Request(userId));
     }
 
     @GetMapping("/trips/{tripId}")
@@ -69,6 +67,5 @@ public class TripController {
         findCurrentTrip.execute(new FindCurrentTrip.Request(userId), tripPresenter);
         return tripPresenter.getTripView();
     }
-
 
 }

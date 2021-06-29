@@ -10,7 +10,7 @@ import org.springframework.web.context.WebApplicationContext;
 import tw.waterball.ddd.api.match.MatchView;
 import tw.waterball.ddd.model.match.Match;
 import tw.waterball.ddd.model.user.Driver;
-import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
+import tw.waterball.ddd.waber.api.payment.UserContext;
 import tw.waterball.ddd.waber.match.usecases.MatchUseCase;
 
 /**
@@ -20,7 +20,7 @@ import tw.waterball.ddd.waber.match.usecases.MatchUseCase;
 @Component
 @RequiredArgsConstructor
 public class MatchPresenter implements MatchUseCase.Presenter {
-    private final UserServiceDriver userServiceDriver;
+    private final UserContext userContext;
     private Match match;
 
     @Override
@@ -33,7 +33,7 @@ public class MatchPresenter implements MatchUseCase.Presenter {
 
     public MatchView getMatchView() {
         return match.mayHaveDriverId()
-                .map(userServiceDriver::getDriver)
+                .map(userContext::getDriver)
                 .map(Driver::getName)
                 .map(driverName -> toViewModel(match, driverName))
                 .orElse(MatchView.toViewModel(match));

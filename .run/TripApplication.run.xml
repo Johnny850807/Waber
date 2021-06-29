@@ -27,6 +27,9 @@
       <env name="OTEL_METRICS_EXPORTER" value="none" />
       <env name="OTEL_RESOURCE_ATTRIBUTES" value="service.name=waber-user" />
       <env name="OTEL_EXPORTER_JAEGER_ENDPOINT" value="http://localhost:14250" />
+      <env name="logging.level.tw.waterball" value="trace" />
+      <env name="waber.client.payment-service.host" value="localhost" />
+      <env name="waber.client.payment-service.port" value="9003" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

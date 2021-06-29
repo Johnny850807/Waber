@@ -8,13 +8,11 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import tw.waterball.ddd.events.EventBus;
 import tw.waterball.ddd.model.Jobs;
-import tw.waterball.ddd.model.geo.DistanceCalculator;
-import tw.waterball.ddd.waber.api.payment.UserServiceDriver;
-import tw.waterball.ddd.waber.match.domain.PerformMatch;
+import tw.waterball.ddd.waber.api.payment.UserContext;
+import tw.waterball.ddd.waber.match.domain.CarHailingMatcher;
 import tw.waterball.ddd.waber.match.repositories.MatchRepository;
 import tw.waterball.ddd.waber.match.usecases.FindCurrentMatch;
 import tw.waterball.ddd.waber.match.usecases.MatchUseCase;
-import tw.waterball.ddd.waber.springboot.match.handler.StartMatchingHandler;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -42,14 +40,14 @@ public class MatchApplication {
     }
 
     @Bean
-    public MatchUseCase matchingUseCase(UserServiceDriver userServiceDriver,
+    public MatchUseCase matchingUseCase(UserContext userContext,
                                         MatchRepository matchRepository,
-                                        PerformMatch performMatch,
+                                        CarHailingMatcher carHailingMatcher,
                                         FindCurrentMatch findCurrentMatch,
                                         EventBus eventBus,
                                         @Value("${waber.match.schedule.rescheduleDelayTimeInMs}") long rescheduleDelayTimeInMs) {
-        return new MatchUseCase(userServiceDriver, matchRepository,
-                findCurrentMatch, performMatch, rescheduleDelayTimeInMs, eventBus);
+        return new MatchUseCase(userContext, matchRepository,
+                findCurrentMatch, carHailingMatcher, rescheduleDelayTimeInMs, eventBus);
     }
 
 }
